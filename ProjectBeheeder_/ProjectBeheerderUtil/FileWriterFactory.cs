@@ -1,8 +1,8 @@
 ﻿using ProjectBeheerderBL.Interfaces;
 
-namespace ProjectBeheerderBL.Factories
+namespace ProjectBeheerderUtil
 {
-    public static class FileWriterFactory
+    public class FileWriterFactory
     {
         public static IFileWriter GetWriter(string type)
         {
