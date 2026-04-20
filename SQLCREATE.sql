@@ -62,7 +62,7 @@ CREATE TABLE Project_Partner (
 -- STADDETAIL - subtype
 CREATE TABLE StadDetail (
  StadDetailID INT NOT NULL IDENTITY(1,1),
- Vergunningsstatus INT NOT NULL, /*ENUM*/
+ Vergunningstatus INT NOT NULL, /*ENUM*/
  ArchitecturaleWaarde BIT NOT NULL DEFAULT 0,
  Toegankelijkheid INT NOT NULL, /*ENUM*/
  Bezienswaardigheid BIT NOT NULL DEFAULT 0,
