@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectBeheerderBL.Beheerder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +18,17 @@ namespace WpfAppProjectBeheeder
     /// <summary>
     /// Interaction logic for PartnerManagerWindow.xaml
     /// </summary>
-    public partial class PartnerManagerWindow : Window
+    public partial class PartnerBeheerderWindow : Window
     {
-        public PartnerManagerWindow()
+        private readonly ProjectService _service;
+        public PartnerBeheerderWindow(ProjectService service)
         {
             InitializeComponent();
+            _service = service;
+            Laad();
         }
+
+        private void Laad() => DgPartners.ItemsSource = _service.GetAllPartners();
+
     }
 }
