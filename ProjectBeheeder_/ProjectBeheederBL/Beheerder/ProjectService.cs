@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ProjectBeheerderBL.Beheerder {
-    internal class ProjectService {
+    public class ProjectService {
     }
 }

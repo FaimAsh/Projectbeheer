@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ProjectBeheerderBL.DomeinDetails {
-    internal class WonenDetail {
+    public class WonenDetail {
     }
 }

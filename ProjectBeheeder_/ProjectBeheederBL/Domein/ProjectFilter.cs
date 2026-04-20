@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ProjectBeheerderBL.Domein {
-    internal class ProjectFilter {
+    public class ProjectFilter {
     }
 }

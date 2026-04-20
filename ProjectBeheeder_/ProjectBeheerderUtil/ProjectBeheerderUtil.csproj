@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectBeheederBL\ProjectBeheerderBL.csproj" />
+    <ProjectReference Include="..\ProjectBeheederDL\ProjectBeheederDL_SQL.csproj" />
+  </ItemGroup>
+
 </Project>
