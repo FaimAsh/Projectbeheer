@@ -21,10 +21,10 @@ namespace WpfAppProjectBeheeder
         {
             InitializeComponent();
             Title = $"Detail — {project.Titel}";
-            Toon(project);
+            ToonDetails(project);
         }
 
-        private void Toon(Project p)
+        private void ToonDetails(Project p)
         {
             Rij("Type", p.GetType().Name);
             Rij("Titel", p.Titel);
