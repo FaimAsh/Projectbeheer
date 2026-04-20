@@ -66,7 +66,7 @@ namespace ProjectBeheederDL {
 
 
                 cmdStadDetail.CommandText = StadDetailQuery;
-                cmdStadDetail.Parameters.Add(new SqlParameter("@Veregunningstatus", System.Data.SqlDbType.Int));
+                cmdStadDetail.Parameters.Add(new SqlParameter("@Vergunningstatus", System.Data.SqlDbType.Int));
                 cmdStadDetail.Parameters.Add(new SqlParameter("@AchitecturaleWaarde", System.Data.SqlDbType.Bit));
                 cmdStadDetail.Parameters.Add(new SqlParameter("@Toegankelijkheid", System.Data.SqlDbType.Int));
                 cmdStadDetail.Parameters.Add(new SqlParameter("@Bezienswaardigheid", System.Data.SqlDbType.Bit));
