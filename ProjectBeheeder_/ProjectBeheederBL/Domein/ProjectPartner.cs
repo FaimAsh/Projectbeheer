@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectBeheerderBL.Beheerder {
-    internal class ProjectFilter {
+namespace ProjectBeheerderBL.Domein {
+    internal class ProjectPartner {
     }
 }

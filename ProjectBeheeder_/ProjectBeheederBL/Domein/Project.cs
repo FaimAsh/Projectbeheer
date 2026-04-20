@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectBeheerderBL.Beheerder {
+namespace ProjectBeheerderBL.Domein {
     internal class Project {
     }
 }
