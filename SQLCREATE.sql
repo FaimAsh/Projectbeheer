@@ -1,0 +1,126 @@
+ 
+IF OBJECT_ID('Project_Partner', 'U') IS NOT NULL DROP TABLE Project_Partner;
+IF OBJECT_ID('StadsOntwikkeling_Partner', 'U') IS NOT NULL DROP TABLE StadsOntwikkeling_Partner;
+IF OBJECT_ID('StadDetail', 'U') IS NOT NULL DROP TABLE StadDetail;
+IF OBJECT_ID('InnovatiefwonenDetail', 'U') IS NOT NULL DROP TABLE InnovatiefwonenDetail;
+IF OBJECT_ID('GroenDetail', 'U') IS NOT NULL DROP TABLE GroenDetail;
+IF OBJECT_ID('Project', 'U') IS NOT NULL DROP TABLE Project;
+IF OBJECT_ID('Locatie', 'U') IS NOT NULL DROP TABLE Locatie;
+IF OBJECT_ID('Partner', 'U') IS NOT NULL DROP TABLE Partner;
+GO
+ 
+-- LOCATIE
+CREATE TABLE Locatie (
+ LocatieID INT NOT NULL IDENTITY(1,1),
+ Gemeente NVARCHAR(100) NOT NULL,
+ Postcode NVARCHAR(10) NOT NULL,
+ Straat NVARCHAR(150) NOT NULL,
+ Huisnummer NVARCHAR(20) NOT NULL,
+ Wijk NVARCHAR(100) NOT NULL,
+ CONSTRAINT PK_Locatie PRIMARY KEY (LocatieID)
+);
+ 
+-- PARTNER
+CREATE TABLE Partner (
+ PartnerID INT NOT NULL IDENTITY(1,1),
+ Naam NVARCHAR(150) NOT NULL,
+ TypePartner NVARCHAR(100) NOT NULL,
+ CONSTRAINT PK_Partner PRIMARY KEY (PartnerID)
+);
+ 
+-- PROJECT
+CREATE TABLE Project (
+ ID INT NOT NULL IDENTITY(1,1),
+ Titel NVARCHAR(200) NOT NULL,
+ StartDatum DATE NOT NULL,
+ Beschrijving NVARCHAR(MAX) NOT NULL,
+ Status NVARCHAR(50) NOT NULL,
+ LocatieID INT NOT NULL,
+ CONSTRAINT PK_Project PRIMARY KEY (ID),
+ CONSTRAINT FK_Project_Locatie FOREIGN KEY (LocatieID)
+  REFERENCES Locatie (LocatieID)
+  ON UPDATE CASCADE
+  ON DELETE NO ACTION
+);
+ 
+-- PROJECT_PARTNER
+CREATE TABLE Project_Partner (
+ ProjectID INT NOT NULL,
+ PartnerID INT NOT NULL,
+ Rolomschrijving NVARCHAR(255) NOT NULL,
+ CONSTRAINT PK_Project_Partner PRIMARY KEY (ProjectID, PartnerID),
+ CONSTRAINT FK_PP_Project FOREIGN KEY (ProjectID)
+  REFERENCES Project (ID)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE,
+ CONSTRAINT FK_PP_Partner FOREIGN KEY (PartnerID)
+  REFERENCES Partner (PartnerID)
+  ON UPDATE NO ACTION
+  ON DELETE NO ACTION
+);
+ 
+-- STADDETAIL - subtype
+CREATE TABLE StadDetail (
+ StadDetailID INT NOT NULL IDENTITY(1,1),
+ Vergunningsstatus INT NOT NULL, /*ENUM*/
+ ArchitecturaleWaarde BIT NOT NULL DEFAULT 0,
+ Toegankelijkheid INT NOT NULL, /*ENUM*/
+ Bezienswaardigheid BIT NOT NULL DEFAULT 0,
+ Infobordvoorzien BIT NOT NULL DEFAULT 0,
+ ProjectID INT NOT NULL,
+ CONSTRAINT PK_StadDetail PRIMARY KEY (StadDetailID),
+ CONSTRAINT FK_StadDetail_Project FOREIGN KEY (ProjectID)
+  REFERENCES Project (ID)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
+);
+ 
+-- STADSONTWIKKELING_PARTNER - StadDetail <-> Partner
+CREATE TABLE StadsOntwikkeling_Partner (
+ StadDetailID INT NOT NULL,
+ PartnerID INT NOT NULL,
+ CONSTRAINT PK_SOP PRIMARY KEY (StadDetailID, PartnerID),
+ CONSTRAINT FK_SOP_StadDetail FOREIGN KEY (StadDetailID)
+  REFERENCES StadDetail (StadDetailID)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE,
+ CONSTRAINT FK_SOP_Partner FOREIGN KEY (PartnerID)
+  REFERENCES Partner (PartnerID)
+  ON UPDATE NO ACTION
+  ON DELETE NO ACTION
+);
+ 
+-- INNOVATIEFWONENDETAIL - subtype
+CREATE TABLE InnovatiefwonenDetail (
+ InnovatiefwonenDetailID INT NOT NULL IDENTITY(1,1),
+ AantalWooneenheden INT NOT NULL,
+ TypeWoonVorm NVARCHAR(100) NOT NULL,
+ RondLeidingMogelijk BIT NOT NULL DEFAULT 0,
+ ShowWoningMogelijk BIT NOT NULL DEFAULT 0,
+ ArchitecturaleScore INT NOT NULL,
+ SamenwerkingErfgoed BIT NOT NULL DEFAULT 0,
+ ProjectID INT NOT NULL,
+ CONSTRAINT PK_InnovatiefwonenDetail PRIMARY KEY (InnovatiefwonenDetailID),
+ CONSTRAINT FK_IWD_Project FOREIGN KEY (ProjectID)
+  REFERENCES Project (ID)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
+);
+ 
+-- GROENDETAIL - subtype
+CREATE TABLE GroenDetail (
+ GroenDetailID INT NOT NULL IDENTITY(1,1),
+ Oppervlakte DECIMAL(10,2) NOT NULL,
+ Biodiversiteitscore INT NOT NULL,
+ AantalWandelpaden INT NOT NULL,
+ BeschikbareFaciliteit NVARCHAR(255) NOT NULL,
+ ToeristischeRoute BIT NOT NULL DEFAULT 0,
+ BezoekersBeoordering INT NOT NULL,
+ ProjectID INT NOT NULL,
+ CONSTRAINT PK_GroenDetail PRIMARY KEY (GroenDetailID),
+ CONSTRAINT FK_GD_Project FOREIGN KEY (ProjectID)
+  REFERENCES Project (ID)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
+);
+ 
