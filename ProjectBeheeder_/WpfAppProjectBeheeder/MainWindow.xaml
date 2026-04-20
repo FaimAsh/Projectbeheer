@@ -5,8 +5,66 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppProjectBeheeder"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="640" Width="1060"
+        WindowStartupLocation="CenterScreen">
+    <DockPanel Margin="10">
+        <GroupBox DockPanel.Dock="Top" Header="Zoeken &amp; Filteren" Margin="0 0 0 8">
+            <WrapPanel Margin="6">
+                <Label Content="Type:" VerticalAlignment="Center"/>
+                <ComboBox Name="CmbType" Width="150" Margin="0 0 10 0">
+                    <ComboBoxItem Content="(alle)" IsSelected="True"/>
+                    <ComboBoxItem Content="StadsProject"/>
+                    <ComboBoxItem Content="WonenProject"/>
+                    <ComboBoxItem Content="GroenProject"/>
+                </ComboBox>
 
-    </Grid>
+                <Label Content="Status:" VerticalAlignment="Center"/>
+                <ComboBox Name="CmbStatus" Width="120" Margin="0 0 10 0">
+                    <ComboBoxItem Content="(alle)" IsSelected="True"/>
+                    <ComboBoxItem Content="Planning"/>
+                    <ComboBoxItem Content="UitVoering"/>
+                    <ComboBoxItem Content="Afgerond"/>
+                </ComboBox>
+
+                <Label Content="Wijk:" VerticalAlignment="Center"/>
+                <TextBox Name="TxtWijk" Width="100" Margin="0 0 10 0" VerticalAlignment="Center"/>
+
+                <Label Content="Partner:" VerticalAlignment="Center"/>
+                <TextBox Name="TxtPartner" Width="120" Margin="0 0 10 0" VerticalAlignment="Center"/>
+
+                <Label Content="Van:" VerticalAlignment="Center"/>
+                <DatePicker Name="DpVan" Width="120" Margin="0 0 6 0" VerticalAlignment="Center"/>
+                <Label Content="Tot:" VerticalAlignment="Center"/>
+                <DatePicker Name="DpTot" Width="120" Margin="0 0 10 0" VerticalAlignment="Center"/>
+
+                <Button Content="Zoeken" Width="80" Click="Zoeken_Click"/>
+                <Button Content="Reset" Width="60" Margin="6 0 0 0" Click="Reset_Click"/>
+            </WrapPanel>
+        </GroupBox>
+        
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0 0 0 8">
+            <Button Content="Nieuw"      Width="90" Click="NieuwProject_Click"/>
+            <Button Content="Wijzig"     Width="80" Margin="6 0" Click="WijzigProject_Click"/>
+            <Button Content="Verwijder"  Width="85" Click="VerwijderProject_Click"/>
+            <Button Content="Detail"     Width="75" Margin="6 0" Click="Detail_Click"/>
+            <Button Content="Partners"   Width="80" Click="Partners_Click"/>
+            <Button Content="Export CSV" Width="90" Margin="16 0 0 0" Click="ExportCSV_Click"/>
+            <Button Content="Export PDF" Width="90" Margin="6 0 0 0" Click="ExportPDF_Click"/>
+        </StackPanel>
+
+        <DataGrid Name="DgProjecten" AutoGenerateColumns="False"
+                  IsReadOnly="True" SelectionMode="Single"
+                  SelectionChanged="DgProjecten_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
+                <DataGridTextColumn Header="Naam" Binding="{Binding Naam}" Width="*"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="Auto"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="Auto"/>
+                <DataGridTextColumn Header="Wijk" Binding="{Binding Wijk}" Width="Auto"/>
+                <DataGridTextColumn Header="Partner" Binding="{Binding Partner}" Width="Auto"/>
+                <DataGridTextColumn Header="StartDatum" Binding="{Binding StartDatum, StringFormat=d}" Width="Auto"/>
+                <DataGridTextColumn Header="EindDatum" Binding="{Binding EindDatum, StringFormat=d}" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
 </Window>
