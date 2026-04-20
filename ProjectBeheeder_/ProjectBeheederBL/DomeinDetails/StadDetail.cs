@@ -13,8 +13,9 @@ namespace ProjectBeheerderBL.DomeinDetails {
         public bool ArchitecturaleWaarde {  get; set; }
         public Toegankelijkheid Toegankelijkheid { get; set; }
         public bool ToeristischeWaarde { get; set; }
+        public bool Bezienswaardigheid { get; set; }
 
-        public bool Infowandeling {  get; set; }
+        public bool InfoBordVoorzien {  get; set; }
 
         public List <Partner> Bouwfirmas { get; set; }
     }

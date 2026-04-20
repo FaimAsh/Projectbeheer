@@ -13,5 +13,6 @@ namespace ProjectBeheerderBL.DomeinDetails {
         public bool Showwoningen { get; set; }
         public int InnovatieScore { get; set; }
         public bool ErfgoedSamenwerking { get; set; }
+       public int ArchitecturaleScore { get; set; }
     }
 }

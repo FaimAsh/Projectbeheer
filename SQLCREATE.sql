@@ -24,7 +24,7 @@ CREATE TABLE Locatie (
 CREATE TABLE Partner (
  PartnerID INT NOT NULL IDENTITY(1,1),
  Naam NVARCHAR(150) NOT NULL,
- TypePartner NVARCHAR(100) NOT NULL,
+ TypePartner INT NOT NULL, /*ENUM*/
  CONSTRAINT PK_Partner PRIMARY KEY (PartnerID)
 );
  
@@ -34,7 +34,7 @@ CREATE TABLE Project (
  Titel NVARCHAR(200) NOT NULL,
  StartDatum DATE NOT NULL,
  Beschrijving NVARCHAR(MAX) NOT NULL,
- Status NVARCHAR(50) NOT NULL,
+ Status INT NOT NULL, /*ENUM*/
  LocatieID INT NOT NULL,
  CONSTRAINT PK_Project PRIMARY KEY (ID),
  CONSTRAINT FK_Project_Locatie FOREIGN KEY (LocatieID)
@@ -62,7 +62,7 @@ CREATE TABLE Project_Partner (
 -- STADDETAIL - subtype
 CREATE TABLE StadDetail (
  StadDetailID INT NOT NULL IDENTITY(1,1),
- Vergunningsstatus INT NOT NULL, /*ENUM*/
+ Vergunningstatus INT NOT NULL, /*ENUM*/
  ArchitecturaleWaarde BIT NOT NULL DEFAULT 0,
  Toegankelijkheid INT NOT NULL, /*ENUM*/
  Bezienswaardigheid BIT NOT NULL DEFAULT 0,
