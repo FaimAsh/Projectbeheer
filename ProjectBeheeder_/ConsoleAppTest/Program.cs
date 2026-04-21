@@ -12,6 +12,9 @@ using static ProjectBeheerderBL.Domein.Enums;
 //ProjectBeheerder projectBeheerder = new ProjectBeheerder(,IFileWriter);
 
 Console.WriteLine("dadada");
+IProjectRepository repository = null;
+ConsoleAppTest lala;
+lala = new ConsoleAppTest( repository);
 
 
 public class ConsoleAppTest {
