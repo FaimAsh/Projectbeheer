@@ -43,8 +43,8 @@ namespace WpfAppProjectBeheeder
                         Rij("Vergunningstatus", sd.VergunningStatus.ToString());
                         Rij("Architecturale waarde", sd.ArchitecturaleWaarde ? "Ja" : "Nee");
                         Rij("Toegankelijkheid", sd.Toegankelijkheid.ToString());
-                        Rij("Toeristische waarde", sd.ToeristischeWaarde ? "Ja" : "Nee");
-                        Rij("Infowandeling", sd.Bezienswaardigheid ? "Ja" : "Nee");
+                        Rij("Bezienswaardigheid", sd.Bezienswaardigheid ? "Ja" : "Nee");
+                        Rij("Infowandeling", sd.InfoBordVoorzien ? "Ja" : "Nee");
                         if (sd.Bouwfirmas.Count > 0)
                             Rij("Bouwfirmas", string.Join(", ", sd.Bouwfirmas.Select(b => b.Naam)));
                         break;
@@ -65,7 +65,7 @@ namespace WpfAppProjectBeheeder
                         Rij("Woning types", string.IsNullOrWhiteSpace(wd.Woningtypes) ? "/" : wd.Woningtypes);
                         Rij("Rondleidingen", wd.Rondleidingen ? "Ja" : "Nee");
                         Rij("Showwoning", wd.Showwoningen ? "Ja" : "Nee");
-                        Rij("Innovatie score", wd.InnovatieScore + "/10");
+                        Rij("Innovatie score", wd.ArchitecturaleScore + "/10");
                         Rij("Erfgoed samenwerking", wd.ErfgoedSamenwerking ? "Ja" : "Nee");
                         break;
                 }

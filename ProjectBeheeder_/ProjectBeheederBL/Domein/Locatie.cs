@@ -18,7 +18,7 @@ namespace ProjectBeheerderBL.Domein {
             this.Wijk = wijk;
         }
 
-        public int LocatieId {  get; set; }
+        public int? LocatieId {  get; set; }
         public string Gemeente { get; set; }
         public string Postcode { get; set; }
         public string Straat { get; set; }

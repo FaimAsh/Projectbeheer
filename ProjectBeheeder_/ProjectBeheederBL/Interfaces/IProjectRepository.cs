@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace ProjectBeheerderBL.Interfaces {
     public interface IProjectRepository {
-
+        void AllesImporteren(Project project);
+        void ProjectVerwijderen(Project project);
+        void PartnerVerwijderen(Partner partner);
+        Project GeefProject(int id);
+        void UpdateProject(Project project);
     }
 }

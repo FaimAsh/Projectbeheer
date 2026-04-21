@@ -76,7 +76,7 @@ namespace WpfAppProjectBeheeder {
             LaadProjecten();
         }
 
-        private void DgProjecten_SelectionChanged(object sender, RoutedEventArgs e) { }
+        private void DgProjecten_SelectionChanged(object sender, RoutedEventArgs e){ }
         private void NieuwProject_Click(object sender, SelectionChangedEventArgs e)
         {
             var w = new NieuwProjectWindow(_service);
@@ -91,7 +91,7 @@ namespace WpfAppProjectBeheeder {
             }
             try
             {
-                var volledig = _service.GeefProject(geselecteerd.Id!.Value);
+                var volledig = _service.GeefProject(geselecteerd.Id);
                 var w = new NieuwProjectWindow(_service, volledig);
                 if (w.ShowDialog() == true) LaadProjecten();
             }
@@ -112,7 +112,7 @@ namespace WpfAppProjectBeheeder {
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (res == MessageBoxResult.Yes)
             {
-                try { _service.VerwijderProject(selected.Id!.Value); LaadProjecten(); }
+                try { _service.VerwijderProject(selected.Id); LaadProjecten(); }
                 catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
             }
         }
@@ -126,7 +126,7 @@ namespace WpfAppProjectBeheeder {
             }
             try
             {
-                var volledig = _service.GeefProject(selected.Id!.Value);
+                var volledig = _service.GeefProject(selected.Id);
                 new DetailProjectWindow(volledig).ShowDialog();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);}
