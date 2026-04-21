@@ -9,7 +9,7 @@ using static ProjectBeheerderBL.Domein.Enums;
 
 var builder = new ConfigurationBuilder()
        .SetBasePath(Directory.GetCurrentDirectory())
-       .AddJsonFile("appsetting.json", optional: false, reloadOnChange: true);
+       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 var config = builder.Build();
 string connectionstring = config.GetConnectionString("SQLServerConnection");
@@ -71,7 +71,7 @@ public class ConsoleAppTest {
         project1.Details.Add(stad);
 
         // 4. Partner aan het project koppelen
-        ProjectPartner projectPartner = new ProjectPartner(besix, "Hoofdaannemer"); // Aanname van constructor
+        ProjectPartner projectPartner = new ProjectPartner(1,2,besix, "Hoofdaannemer"); // Aanname van constructor
         project1.Partners.Add(projectPartner);
 
 
@@ -106,7 +106,7 @@ public class ConsoleAppTest {
         project2.Details.Add(wonen);
 
         // Koppel de partner
-        ProjectPartner adviesPartner = new ProjectPartner(natuurpunt, "Adviseur Biodiversiteit");
+        ProjectPartner adviesPartner = new ProjectPartner(1,2,natuurpunt, "Adviseur Biodiversiteit");
         project2.Partners.Add(adviesPartner);
 
 
