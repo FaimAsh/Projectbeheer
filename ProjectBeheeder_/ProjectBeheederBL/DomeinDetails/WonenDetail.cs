@@ -9,13 +9,13 @@ namespace ProjectBeheerderBL.DomeinDetails {
     {
        
 
-        public WonenDetail(int id, int aantalEenheden, string woningtypes, bool rondleiding, bool showwoning, int innovatieScore, bool erfgoedSamenwerking ) {
+        public WonenDetail(int id, int aantalEenheden, string woningtypes, bool rondleiding, bool showwoning, int architecturaleScore, bool erfgoedSamenwerking ) {
             this.Id = id;
             this.AantalEenheden = aantalEenheden;
             this.Woningtypes = woningtypes;
             this.Rondleidingen = rondleiding;
             this.Showwoningen = showwoning;
-            this.InnovatieScore = innovatieScore;
+            this.ArchitecturaleScore = architecturaleScore;
             this.ErfgoedSamenwerking = erfgoedSamenwerking;
         }
 
@@ -24,7 +24,7 @@ namespace ProjectBeheerderBL.DomeinDetails {
         public string Woningtypes { get; set; }
         public bool Rondleidingen { get; set; }
         public bool Showwoningen { get; set; }
-        public int InnovatieScore { get; set; }
+        public int ArchitecturaleScore { get; set; }
         public bool ErfgoedSamenwerking { get; set; }
      
     }

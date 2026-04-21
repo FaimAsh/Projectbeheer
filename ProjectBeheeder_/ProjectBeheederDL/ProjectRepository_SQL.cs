@@ -1,10 +1,12 @@
 ﻿using Microsoft.Data.Sql;
-using ProjectBeheerderBL.Interfaces;
-using ProjectBeheerderBL.Domein;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.DomeinDetails;
+using ProjectBeheerderBL.Interfaces;
+using System.Data.Common;
+using System.Transactions;
 
 
 namespace ProjectBeheederDL {
@@ -159,7 +161,7 @@ namespace ProjectBeheederDL {
             using (SqlConnection conn = new SqlConnection(_connectionstring))
             using (SqlCommand cmd = conn.CreateCommand()) {
 
-                string sql = "DELETE FROM Project WHERE id=@id";
+                string sql = "DELETE FROM Project WHERE Projectid=@id";
 
                 cmd.CommandText = sql;
                 cmd.Parameters.AddWithValue("@id", project.Id);
@@ -196,11 +198,11 @@ namespace ProjectBeheederDL {
                 conn.Open();
 
 
-                string ProLocQuery = "SELECT p.ID, p.Titel, p.StartDatum, p.Beschrijving, p.Status, p.LocatieID, l.Gemeente, l.Postcode, l.Straat, l.Huisnummer, l.Wijk FROM Project p INNER JOIN Locatie l ON p.LocatieID = l.LocatieID WHERE p.ID = @id;";
+                string ProLocQuery = "SELECT p.ID, p.Titel, p.StartDatum, p.Beschrijving, p.Status, p.LocatieID, l.Gemeente, l.Postcode, l.Straat, l.Huisnummer, l.Wijk FROM Project p INNER JOIN Locatie l ON p.LocatieID = l.LocatieID WHERE p.ProjectID = @id;";
 
                 using (SqlCommand cmd = conn.CreateCommand()) {
                     cmd.CommandText = ProLocQuery;
-                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@ProjectId", id);
 
 
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
@@ -219,7 +221,7 @@ namespace ProjectBeheederDL {
 
 
                             project = new Project(
-                                (int)reader["ID"],
+                                (int)reader["ProjectID"],
                                 (string)reader["Titel"],
                                 (DateTime)reader["StartDatum"],
                                 (string)reader["Beschrijving"],
@@ -239,7 +241,7 @@ namespace ProjectBeheederDL {
                 string StadQuery = "SELECT * FROM StadDetail WHERE ProjectID = @id";
                 using (SqlCommand cmd = conn.CreateCommand()) {
                     cmd.CommandText = StadQuery;
-                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@ProjectId", id);
 
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
                         while (reader.Read()) {
@@ -261,7 +263,7 @@ namespace ProjectBeheederDL {
                 string WonenQuery = "SELECT * FROM InnovatiefwonenDetail WHERE ProjectID = @id";
                 using (SqlCommand cmd = conn.CreateCommand()) {
                     cmd.CommandText = WonenQuery;
-                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@ProjectId", id);
 
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
                         while (reader.Read()) {
@@ -284,7 +286,7 @@ namespace ProjectBeheederDL {
                 string GroenQuery = "SELECT * FROM GroenDetail WHERE ProjectID = @id";
                 using (SqlCommand cmd = conn.CreateCommand()) {
                     cmd.CommandText = GroenQuery;
-                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@ProjectId", id);
 
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
                         while (reader.Read()) {
@@ -309,12 +311,53 @@ namespace ProjectBeheederDL {
 
         public void UpdateProject(Project project) {
 
-            string LocatieQuery = "UPDATE Locatie SET "
-            string ProjectQuery = "UPDATE Project SET 
+            string LocatieQuery = "UPDATE Locatie SET Gemeente=@Gemeente,Postcode=@Postcode,Straat=@Straat,Huisnummer=@Huisnummer,wijk=@wijk WHERE id = LocatieID;";
+            string ProjectQuery = "UPDATE Project SET Titel=@Titel,StartDatum=@StartDatum,Status=@Status,Beschrijving=@BeSchrijving,Locatie=@Locatie WHERE id = ProjectID;";
+
+
+            using (SqlConnection conn = new SqlConnection(_connectionstring))
+            using (SqlCommand ProjectCmd = conn.CreateCommand())
+            using (SqlCommand LocatieCmd = conn.CreateCommand()) {
+
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+
+                try {
+
+                   
+
+                    LocatieCmd.Transaction = transaction;
+                    ProjectCmd.Transaction = transaction;
+
+                    LocatieCmd.CommandText = LocatieQuery;
+                    LocatieCmd.Parameters.AddWithValue("@LocatieID", project.Locatie.LocatieId);
+                    LocatieCmd.Parameters.AddWithValue("@Gemeente", project.Locatie.Gemeente);
+                    LocatieCmd.Parameters.AddWithValue("@Postcode", project.Locatie.Postcode);
+                    LocatieCmd.Parameters.AddWithValue("@Straat", project.Locatie.Straat);
+                    LocatieCmd.Parameters.AddWithValue("@Huisnummer", project.Locatie.Huisnummer);
+                    LocatieCmd.Parameters.AddWithValue("@Wijk", project.Locatie.Wijk);
+
+                    LocatieCmd.ExecuteNonQuery();
+
+                    ProjectCmd.CommandText = ProjectQuery;
+                    ProjectCmd.Parameters.AddWithValue("@ProjectID", project.Id);
+                    ProjectCmd.Parameters.AddWithValue("@Titel", project.Titel);
+                    ProjectCmd.Parameters.AddWithValue("@StartDatum", project.StartDatum);
+                    ProjectCmd.Parameters.AddWithValue("@Status", project.Status);
+                    ProjectCmd.Parameters.AddWithValue("@Beschriving", project.Beschrijving);
+                    ProjectCmd.Parameters.AddWithValue("@Locatie", project.Locatie);
+
+                    ProjectCmd.ExecuteNonQuery();
+
+                    transaction.Commit();
+
+                }
+                catch (Exception ex) {
+                    transaction.Rollback();
+                    throw ex;
+                }
             
-                
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = conn.CreateCommand())
+            }
 
         }
     }
