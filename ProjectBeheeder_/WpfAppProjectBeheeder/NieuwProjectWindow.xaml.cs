@@ -21,9 +21,9 @@ namespace WpfAppProjectBeheeder
     /// </summary>
     public partial class NieuwProjectWindow : Window
     {
-        private readonly ProjectService _service;
+        private readonly ProjectBeheerder _service;
         private readonly Project? _bestaand;
-        public NieuwProjectWindow(ProjectService service, Project? bestaand = null)
+        public NieuwProjectWindow(ProjectBeheerder service, Project? bestaand = null)
         {
             InitializeComponent();
             _service = service;

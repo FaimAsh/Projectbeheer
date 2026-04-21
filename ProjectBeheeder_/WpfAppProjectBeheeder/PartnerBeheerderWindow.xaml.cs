@@ -1,4 +1,5 @@
 ﻿using ProjectBeheerderBL.Beheerder;
+using ProjectBeheerderBL.Domein;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static ProjectBeheerderBL.Domein.Enums;
 
 namespace WpfAppProjectBeheeder
 {
-    /// <summary>
-    /// Interaction logic for PartnerManagerWindow.xaml
-    /// </summary>
     public partial class PartnerBeheerderWindow : Window
     {
         private readonly ProjectService _service;
@@ -25,10 +24,23 @@ namespace WpfAppProjectBeheeder
         {
             InitializeComponent();
             _service = service;
-            Laad();
         }
 
-        private void Laad() => DgPartners.ItemsSource = _service.GetAllPartners();
+        private void Toevoegen_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var type = Enum.Parse<PartnerType>(((ComboBoxItem)CmbTypePartner.SelectedItem).Content.ToString()!);
+                var partner = new Partner(TxtNaam.Text, type);
+                _service.AddPartner(partner);
+                TxtNaam.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
+        private void Sluiten_Click(object sender, RoutedEventArgs e) => Close();
     }
 }

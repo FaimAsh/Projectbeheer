@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using ProjectBeheerderBL.Beheerder;
 using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.DomeinDetails;
+using ProjectBeheerderBL.Interfaces;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -14,14 +15,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static ProjectBeheerderBL.Domein.Enums;
 
 namespace WpfAppProjectBeheeder {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private ProjectService _service;
+        private ProjectBeheerder _service;
         public MainWindow() {
             InitializeComponent();
             LeesConfig();
@@ -34,13 +33,13 @@ namespace WpfAppProjectBeheeder {
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
             string cs = config.GetConnectionString("SQLServerConnection");
-            _service = new ProjectService- (new Project- (cs));
+            _service = new ProjectBeheerder(new ProjectRepository_SQL(cs));
         }
 
-        private void LaadProjecten() {
+        private void LaadProjecten(ProjectFilter? filter = null) {
             try
             {
-                DgProjecten.ItemsSource = _service.Search(filter ?? new ProjectFilter());
+                DgProjecten.ItemsSource = _service.Search(new ProjectFilter());
             }
             catch (Exception ex)
             {
@@ -56,7 +55,7 @@ namespace WpfAppProjectBeheeder {
 
             var filter = new ProjectFilter
             {
-                ProjectDetail = type,
+                Type = type,
                 Status = status == null ? null : Enum.Parse<ProjectStatus>(status),
                 Wijk = string.IsNullOrWhiteSpace(TxtWijk.Text) ? null : TxtWijk.Text.Trim(),
                 PartnerNaam = string.IsNullOrWhiteSpace(TxtPartner.Text) ? null : TxtPartner.Text.Trim(),
@@ -77,12 +76,12 @@ namespace WpfAppProjectBeheeder {
             LaadProjecten();
         }
 
-        private void DgProjecten_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DgProjecten_SelectionChanged(object sender, RoutedEventArgs e) { }
+        private void NieuwProject_Click(object sender, SelectionChangedEventArgs e)
         {
             var w = new NieuwProjectWindow(_service);
             if (w.ShowDialog() == true) LaadProjecten();
         }
-
         private void WijzigProject_Click(object sender, RoutedEventArgs e)
         {
             if (DgProjecten.SelectedItem is not Project geselecteerd)
@@ -92,7 +91,7 @@ namespace WpfAppProjectBeheeder {
             }
             try
             {
-                var volledig = _service.GetById(geselecteerd.Id!.Value);
+                var volledig = _service.GeefProject(geselecteerd.Id!.Value);
                 var w = new NieuwProjectWindow(_service, volledig);
                 if (w.ShowDialog() == true) LaadProjecten();
             }
@@ -113,12 +112,12 @@ namespace WpfAppProjectBeheeder {
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (res == MessageBoxResult.Yes)
             {
-                try { _service.DeleteProject(selected.Id!.Value); LaadProjecten(); }
+                try { _service.VerwijderProject(selected.Id!.Value); LaadProjecten(); }
                 catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
             }
         }
 
-        private void DetailProject_Click(object sender, RoutedEventArgs e)
+        private void Info_Click(object sender, RoutedEventArgs e)
         {
             if (DgProjecten.SelectedItem is not Project selected)
             {
@@ -127,7 +126,7 @@ namespace WpfAppProjectBeheeder {
             }
             try
             {
-                var volledig = _service.GetById(selected.Id!.Value);
+                var volledig = _service.GeefProject(selected.Id!.Value);
                 new DetailProjectWindow(volledig).ShowDialog();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);}
@@ -160,11 +159,6 @@ namespace WpfAppProjectBeheeder {
                 MessageBox.Show("Export klaar.", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
-        }
-
-        private void Info_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

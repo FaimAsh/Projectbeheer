@@ -8,11 +8,12 @@ namespace ProjectBeheerderBL.Beheerder
 {
     public class ProjectBeheerder
     {
+        private readonly IProjectRepository _repository;
         private IFileWriter _writer;
 
-        public ProjectBeheerder(string type)
+        public ProjectBeheerder(IProjectRepository repository)
         {
-            _writer = FileWriterFactory.Create(type);
+            _repository = repository;
         }
 
         public void Export(string path, List<Project> projecten)

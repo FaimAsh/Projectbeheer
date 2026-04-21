@@ -42,14 +42,14 @@
             </WrapPanel>
         </GroupBox>
         
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0 0 0 8">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0 0 0 8" RenderTransformOrigin="0.729,0.709">
             <Button Content="Nieuw"      Width="90" Click="NieuwProject_Click"/>
             <Button Content="Wijzig"     Width="80" Margin="6 0" Click="WijzigProject_Click"/>
             <Button Content="Verwijder"  Width="85" Click="VerwijderProject_Click"/>
             <Button Content="Meer Info"     Width="85" Margin="6 0" Click="Info_Click"/>
             <Button Content="Voeg Partner toe"   Width="110" Click="Partners_Click"/>
             <Button Content="Export CSV" Width="90" Margin="16 0 0 0" Click="ExportCSV_Click"/>
-            <Button Content="Export PDF" Width="90" Margin="6 0 0 0" Click="ExportPDF_Click" HorizontalAlignment="Right"/>
+            <Button Content="Export PDF" Width="90" Margin="6 0 0 0" Click="ExportPDF_Click"/>
         </StackPanel>
 
         <DataGrid Name="DgProjecten" AutoGenerateColumns="False"
