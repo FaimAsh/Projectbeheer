@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using ProjectBeheerderBL.Domein;
+﻿using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.Interfaces;
-using ProjectBeheerderUtil;
+using System;
 
 namespace ProjectBeheerderBL.Beheerder
 {
     public class ProjectBeheerder
     {
-        private readonly IProjectRepository _repository;
         private IFileWriter _writer;
 
-        public ProjectBeheerder(IProjectRepository repository)
+        public ProjectBeheerder(string type, IFileWriter writer)
         {
-            _repository = repository;
+            _writer = writer;
         }
 
         public void Export(string path, List<Project> projecten)
@@ -24,6 +21,15 @@ namespace ProjectBeheerderBL.Beheerder
             }
 
             _writer.Write(path, projecten);
+        }
+        public void ExportCsv(List<Project> projecten, string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ExportPdf(List<Project> projecten, string fileName)
+        {
+            throw new NotImplementedException();
         }
     }
 }
