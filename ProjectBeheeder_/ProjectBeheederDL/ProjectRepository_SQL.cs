@@ -540,13 +540,18 @@ namespace ProjectBeheederDL
             if (!set.Add(partnerId))
                 return;
 
-            Partner Partner;
-            project.Partners.Add(new ProjectPartner(projectId, partnerId,
+            var partner = new Partner(
+                partnerId,
+                reader["PartnerNaam"]?.ToString(),
+                (PartnerType)Convert.ToInt32(reader["PartnerType"])
+            );
 
-                Partner = new Partner(partnerId, reader["PartnerNaam"]?.ToString(), (PartnerType)Convert.ToInt32(reader["PartnerType"])),reader["Rolomschrijving"]?.ToString()));
-                
-            
-        }
+            var rol = reader["Rolomschrijving"]?.ToString();
+
+            var projectPartner = new ProjectPartner(partner, rol);
+
+            project.Partners.Add(projectPartner);
+        }   
 
         private void AddStadPartner(SqlDataReader reader, Project project, int projectId,
             Dictionary<int, HashSet<int>> stadPartnerIds)
