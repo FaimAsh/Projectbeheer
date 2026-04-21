@@ -16,6 +16,7 @@ namespace ProjectBeheerderBL.Beheerder
             _repository = repository;
             _writer = writer;
         }
+       
         public List<Project> GetAll() =>    _repository.Search(new ProjectFilter());
         public List<Project> Search(ProjectFilter filter) =>    _repository.Search(filter);
         public Project GetByID(int id) =>    _repository.GeefProject(id);

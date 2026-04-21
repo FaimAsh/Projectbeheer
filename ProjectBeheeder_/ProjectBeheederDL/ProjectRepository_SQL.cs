@@ -26,7 +26,7 @@ namespace ProjectBeheederDL
 
         public void AllesImporteren(Project project)
         {
-            string ProjectQuery = "INSERT INTO Project (Titel,StartDatum,Beschrijving,Status,LocatieID) OUTPUT INSERTED.ID VALUES (@Titel,@StartDatum,@Beschrijving,@Status,@LocatieID);";
+            string ProjectQuery = "INSERT INTO Project (Titel,StartDatum,Beschrijving,Status,LocatieID) OUTPUT INSERTED.ProjectID VALUES (@Titel,@StartDatum,@Beschrijving,@Status,@LocatieID);";
             string LocatieQuery = "INSERT INTO Locatie (Gemeente,Postcode,Straat,Huisnummer,wijk) OUTPUT INSERTED.LocatieID VALUES (@Gemeente,@Postcode,@Straat,@Huisnummer,@wijk);";
             string StadDetailQuery = "INSERT INTO StadDetail (Vergunningstatus,ArchitecturaleWaarde,Toegankelijkheid,Bezienswaardigheid,InfobordVoorzien,ProjectID) OUTPUT INSERTED.StadDetailID VALUES (@Vergunningstatus,@ArchitecturaleWaarde,@Toegankelijkheid,@Bezienswaardigheid,@InfobordVoorzien,@ProjectID);";
             string WonenDetailQuery = "INSERT INTO InnovatiefwonenDetail (AantalWooneenheden,TypeWoonVorm,RondLeidingMogelijk,ShowWoningMogelijk,ArchitecturaleScore,SamenwerkingErfgoed,ProjectID) VALUES (@AantalWooneenheden,@TypeWoonVorm,@RondLeidingMogelijk,@ShowWoningMogelijk,@ArchitecturaleScore,@SamenwerkingErfgoed,@ProjectID);";
@@ -55,6 +55,37 @@ namespace ProjectBeheederDL
                 cmdBouwFirma.Transaction = transaction;
                 cmdExternePartner.Transaction = transaction;
 
+                cmdProject.CommandText = ProjectQuery;
+                cmdProject.Parameters.Add(new SqlParameter("@Titel", System.Data.SqlDbType.NVarChar));
+                cmdProject.Parameters.Add(new SqlParameter("@StartDatum", System.Data.SqlDbType.DateTime));
+                cmdProject.Parameters.Add(new SqlParameter("@Beschrijving", System.Data.SqlDbType.NVarChar));
+                cmdProject.Parameters.Add(new SqlParameter("@Status", System.Data.SqlDbType.Int));
+                cmdProject.Parameters.Add(new SqlParameter("@LocatieID", System.Data.SqlDbType.Int));
+
+                cmdGroenDetail.CommandText = GroenDetailQuery;
+                cmdGroenDetail.Parameters.Add(new SqlParameter("@Oppervlakte", System.Data.SqlDbType.Decimal));
+                cmdGroenDetail.Parameters.Add(new SqlParameter("@Biodiversiteitscore", System.Data.SqlDbType.Int));
+                cmdGroenDetail.Parameters.Add(new SqlParameter("@AantalwandelPaden", System.Data.SqlDbType.Int));
+                cmdGroenDetail.Parameters.Add(new SqlParameter("@BeschikbareFaciliteit", System.Data.SqlDbType.NVarChar));
+                cmdGroenDetail.Parameters.Add(new SqlParameter("@ToeristischeRoute", System.Data.SqlDbType.Bit));
+                cmdGroenDetail.Parameters.Add(new SqlParameter("@BezoekersBeoordeling", System.Data.SqlDbType.Int));
+                cmdGroenDetail.Parameters.Add(new SqlParameter("@ProjectID", System.Data.SqlDbType.Int));
+
+                cmdWonenDetail.CommandText = WonenDetailQuery;
+                cmdWonenDetail.Parameters.Add(new SqlParameter("@AantalWooneenheden", System.Data.SqlDbType.Int));
+                cmdWonenDetail.Parameters.Add(new SqlParameter("@TypeWoonVorm", System.Data.SqlDbType.NVarChar));
+                cmdWonenDetail.Parameters.Add(new SqlParameter("@RondLeidingMogelijk", System.Data.SqlDbType.Bit));
+                cmdWonenDetail.Parameters.Add(new SqlParameter("@ShowWoningMogelijk", System.Data.SqlDbType.Bit));
+                cmdWonenDetail.Parameters.Add(new SqlParameter("@ArchitecturaleScore", System.Data.SqlDbType.Int));
+                cmdWonenDetail.Parameters.Add(new SqlParameter("@SamenwerkingErfgoed", System.Data.SqlDbType.Bit));
+                cmdWonenDetail.Parameters.Add(new SqlParameter("@ProjectID", System.Data.SqlDbType.Int));
+
+                cmdLocatie.CommandText = LocatieQuery;
+                cmdLocatie.Parameters.Add(new SqlParameter("@Gemeente", System.Data.SqlDbType.NVarChar));
+                cmdLocatie.Parameters.Add(new SqlParameter("@Postcode", System.Data.SqlDbType.VarChar));
+                cmdLocatie.Parameters.Add(new SqlParameter("@Straat", System.Data.SqlDbType.NVarChar));
+                cmdLocatie.Parameters.Add(new SqlParameter("@Huisnummer", System.Data.SqlDbType.NVarChar));
+                cmdLocatie.Parameters.Add(new SqlParameter("@Wijk", System.Data.SqlDbType.NVarChar));
 
                 cmdStadDetail.CommandText = StadDetailQuery;
                 cmdStadDetail.Parameters.Add(new SqlParameter("@Vergunningstatus", System.Data.SqlDbType.Int));
@@ -68,6 +99,11 @@ namespace ProjectBeheederDL
                 cmdBouwFirma.CommandText = BouwfirmaQuery;
                 cmdBouwFirma.Parameters.Add(new SqlParameter("@StadDetailID", System.Data.SqlDbType.Int));
                 cmdBouwFirma.Parameters.Add(new SqlParameter("@PartnerID", System.Data.SqlDbType.Int));
+
+                cmdExternePartner.CommandText = ExternePartnerQuery;
+                cmdExternePartner.Parameters.Add(new SqlParameter("@ProjectID", System.Data.SqlDbType.Int));
+                cmdExternePartner.Parameters.Add(new SqlParameter("@PartnerID", System.Data.SqlDbType.Int));
+                cmdExternePartner.Parameters.Add(new SqlParameter("@RolOmschrijving", System.Data.SqlDbType.NVarChar));
 
                 try
                 {
