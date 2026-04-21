@@ -2,31 +2,29 @@
 using ProjectBeheerderBL.Interfaces;
 <<<<<<< HEAD
 
-=======
 using System;
 using System.IO;
->>>>>>> 9523682d1b95f96e270e42ad17aae71041e26b77
+
 
 namespace ProjectBeheerderBL.Beheerder
 {
     public class ProjectBeheerder
     {
-<<<<<<< HEAD
+
         private readonly IProjectRepository repository;
         private IFileWriter writer;
-=======
+
         private IProjectRepository _repository;
         private IFileWriter _writer;
->>>>>>> 9523682d1b95f96e270e42ad17aae71041e26b77
+
 
         public ProjectBeheerder(string type,IProjectRepository repository, IFileWriter writer)
         {
-<<<<<<< HEAD
+
             this.repository = repository;
-=======
+
             _repository = repository;
             _writer = writer;
->>>>>>> 9523682d1b95f96e270e42ad17aae71041e26b77
         }
 
         public void Export(string path, List<Project> projecten)
@@ -38,7 +36,6 @@ namespace ProjectBeheerderBL.Beheerder
 
             this.writer.Write(path, projecten);
         }
-<<<<<<< HEAD
 
         public void UpdateProject(Project project) {
 
@@ -73,7 +70,7 @@ namespace ProjectBeheerderBL.Beheerder
         }
 
      
-=======
+
         public void ExportCsv(List<Project> projecten, string path)
         {
             if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");
@@ -85,6 +82,6 @@ namespace ProjectBeheerderBL.Beheerder
             if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");
             _writer.Write(path, projecten);
         }
->>>>>>> 9523682d1b95f96e270e42ad17aae71041e26b77
+
     }
 }
