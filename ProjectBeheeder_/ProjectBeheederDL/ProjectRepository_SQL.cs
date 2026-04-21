@@ -150,7 +150,7 @@ namespace ProjectBeheederDL
                     {
                         cmdExternePartner.Parameters["@ProjectID"].Value = idProject;
                         cmdExternePartner.Parameters["@PartnerID"].Value = p.Partner.Id;
-                        cmdExternePartner.Parameters["@Rolomschrijving"].Value = p.Rolbeschrijving;
+                        cmdExternePartner.Parameters["@Rolomschrijving"].Value = p.RolBeschrijving ;
                         cmdExternePartner.ExecuteNonQuery();
                     }
 
