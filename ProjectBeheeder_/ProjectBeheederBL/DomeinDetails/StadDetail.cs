@@ -9,22 +9,18 @@ using static ProjectBeheerderBL.Domein.Enums;
 namespace ProjectBeheerderBL.DomeinDetails {
     public class StadDetail :ProjectDetail
     {
-        //private int v1;
-        //private VergunningStatus vergunningStatus;
-        //private bool v2;
-        //private Toegankelijkheid toegankelijkheid;
-        //private bool v3;
-        //private bool v4;
+       
 
-        public StadDetail(int v1, VergunningStatus vergunningStatus, bool v2, Toegankelijkheid toegankelijkheid, bool v3, bool infobordenVoorzien) {
-            this.id = v1;
+        public StadDetail(int id, VergunningStatus vergunningStatus, bool architecturaleWaarde, Toegankelijkheid toegankelijkheid, bool bezienswaardigheid, bool infobordenVoorzien) {
+            this.Id = id;
             this.VergunningStatus = vergunningStatus;
-            this.v2 = v2;
+            this.ArchitecturaleWaarde = architecturaleWaarde;
             this.Toegankelijkheid = toegankelijkheid;
-            this.v3 = v3;
-            this.InfoBordVoorzien = ;
+            this.Bezienswaardigheid = bezienswaardigheid;
+            this.InfoBordVoorzien = infobordenVoorzien;
         }
 
+        public int Id { get; set; }
         public VergunningStatus VergunningStatus { get; set; }
         public bool ArchitecturaleWaarde {  get; set; }
         public Toegankelijkheid Toegankelijkheid { get; set; }

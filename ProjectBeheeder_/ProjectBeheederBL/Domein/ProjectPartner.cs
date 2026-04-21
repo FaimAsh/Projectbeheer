@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectBeheerderBL.Domein {
     public class ProjectPartner {
-        public ProjectPartner Partner { get; set; }
+        public Partner Partner { get; set; }
         public string Rolbeschrijving { get; set; }
     }
 }
