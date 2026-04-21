@@ -5,14 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppProjectBeheeder"
         mc:Ignorable="d"
-<<<<<<< HEAD
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-=======
         Title="MainWindow" Height="640" Width="1060"
         WindowStartupLocation="CenterScreen">
     <DockPanel Margin="10">
@@ -25,7 +17,6 @@
                     <ComboBoxItem Content="WonenProject"/>
                     <ComboBoxItem Content="GroenProject"/>
                 </ComboBox>
->>>>>>> ed70dae1011c06511c5c50da19c4c9b5ffdeb3c4
 
                 <Label Content="Status:" VerticalAlignment="Center"/>
                 <ComboBox Name="CmbStatus" Width="120" Margin="0 0 10 0">
@@ -55,10 +46,10 @@
             <Button Content="Nieuw"      Width="90" Click="NieuwProject_Click"/>
             <Button Content="Wijzig"     Width="80" Margin="6 0" Click="WijzigProject_Click"/>
             <Button Content="Verwijder"  Width="85" Click="VerwijderProject_Click"/>
-            <Button Content="Detail"     Width="75" Margin="6 0" Click="Detail_Click"/>
-            <Button Content="Partners"   Width="80" Click="Partners_Click"/>
+            <Button Content="Meer Info"     Width="85" Margin="6 0" Click="Info_Click"/>
+            <Button Content="Voeg Partner toe"   Width="110" Click="Partners_Click"/>
             <Button Content="Export CSV" Width="90" Margin="16 0 0 0" Click="ExportCSV_Click"/>
-            <Button Content="Export PDF" Width="90" Margin="6 0 0 0" Click="ExportPDF_Click"/>
+            <Button Content="Export PDF" Width="90" Margin="6 0 0 0" Click="ExportPDF_Click" HorizontalAlignment="Right"/>
         </StackPanel>
 
         <DataGrid Name="DgProjecten" AutoGenerateColumns="False"

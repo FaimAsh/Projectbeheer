@@ -5,22 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppProjectBeheeder"
         mc:Ignorable="d"
-        Title="PartnerManagerWindow" Height="450" Width="800"
+        Title="PartnerBeheerderWindow" Height="180" Width="800"
         WindowStartupLocation="CenterOwner">
     <DockPanel Margin="10">
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
-                HorizontalAlignment="Right" Margin="0 8 0 0">
-            <Button Content="Sluiten" Width="80" Click="Sluiten_Click"/>
-        </StackPanel>
         <GroupBox DockPanel.Dock="Bottom" Header="Nieuwe partner" Margin="0 8 0 0">
             <Grid Margin="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="90"/>
                     <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="90"/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
                 <Label Grid.Column="0" Content="Naam:" VerticalAlignment="Center"/>
                 <TextBox Grid.Column="1" Name="TxtNaam" VerticalContentAlignment="Center" Margin="0 0 6 0"/>
                 <Label Grid.Column="2" Content="Type:" VerticalAlignment="Center"/>
@@ -30,14 +30,10 @@
                     <ComboBoxItem Content="Burger"/>
                 </ComboBox>
                 <Button Grid.Column="4" Content="Toevoegen" Click="Toevoegen_Click"/>
-            </Grid>
+                    <Label Grid.Column="2" Grid.Row="2" Content="BouwFirma:" Margin="0 0 0 0"  VerticalAlignment="Center"/>
+                <CheckBox Grid.Column="3" Grid.Row="2" Name="ChkBouwfirma" Margin="0 0 40 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Button Grid.Column="4" Grid.Row="2" Content="Sluiten" Width="80" Height="30" Margin="0 16 0 0" Click="Sluiten_Click"/>
+                </Grid>
         </GroupBox>
-        <DataGrid Name="DgPartners" AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID"   Binding="{Binding Id}"   Width="50"/>
-                <DataGridTextColumn Header="Naam" Binding="{Binding Naam}" Width="*"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="120"/>
-            </DataGrid.Columns>
-        </DataGrid>
     </DockPanel>
 </Window>
