@@ -23,7 +23,7 @@ namespace ProjectBeheerderBL.Beheerder
         public void AddProject(Project p) =>    _repository.AllesImporteren(p);
         public void UpdateProject(Project p) =>    _repository.UpdateProject(p);
         public void DeleteProject(Project p) =>    _repository.ProjectVerwijderen(p);
-        public void DeletePArtner(Partner p) =>    _repository.PartnerVerwijderen(p);
+        public void DeletePartner(Partner p) =>    _repository.PartnerVerwijderen(p);
         public void ExportCsv(List<Project> projecten, string path)
         {
             if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");

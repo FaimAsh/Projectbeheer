@@ -28,9 +28,9 @@ namespace ProjectBeheerderBL.Domein
 
         public string PartnerNaam { get; set; }
 
-        public DateTime StartDatumVan { get; set; }
+        public DateTime? StartDatumVan { get; set; }
 
-        public DateTime StartDatumTot { get; set; }
+        public DateTime? StartDatumTot { get; set; }
         public List<ProjectDetail> Details { get; set; } = new List<ProjectDetail>();
 
     }

@@ -4,6 +4,7 @@ using ProjectBeheerderBL.Beheerder;
 using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.DomeinDetails;
 using ProjectBeheerderBL.Interfaces;
+using ProjectBeheerderUtil;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -34,14 +35,18 @@ namespace WpfAppProjectBeheeder {
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
             string cs = config.GetConnectionString("SQLServerConnection");
-            var repo = RepositoryFactory.GeefRepository("SQL"cs);
-            _service = new ProjectBeheerder(repo, cs);
+            var repo = RepositoryFactory.GeefRepository("SQL", cs);
+            
+            string fileWriterType = "CSV";
+            var fileWriter = FileWriterFactory.GetWriter(fileWriterType);
+            _service = new ProjectBeheerder(repo);
+            _factory = new ProjectFactory();
         }
 
         private void LaadProjecten(ProjectFilter? filter = null) {
             try
             {
-                DgProjecten.ItemsSource = _service.Search(new ProjectFilter());
+                DgProjecten.ItemsSource = _service.Search(filter ?? new ProjectFilter());
             }
             catch (Exception ex)
             {
@@ -55,14 +60,26 @@ namespace WpfAppProjectBeheeder {
             string? status = (CmbStatus.SelectedItem as ComboBoxItem)?.Content?.ToString() is "(alle)" ? null
                               : (CmbStatus.SelectedItem as ComboBoxItem)?.Content?.ToString();
 
+            var details = new List<ProjectDetail>();
+            if (!string.IsNullOrEmpty(type))
+            {
+                details = type switch
+                {
+                    "Stad" => new List<ProjectDetail> { new StadDetail(0, VergunningStatus.In_Behandeling, false, Toegankelijkheid.Goed, false, false) },
+                    "Groen" => new List<ProjectDetail> { new GroenDetail(0, 0, 0, 0, "", false, 0) },
+                    "Wonen" => new List<ProjectDetail> { new WonenDetail(0, 0, "", false, false, 0, false) },
+                    _ => new List<ProjectDetail>()
+                };
+            }
+
             var filter = new ProjectFilter
             {
-                Type = type,
-                Status = status == null ? null : Enum.Parse<ProjectStatus>(status),
+                Details = CmbType.SelectedIndex > 0 ? details : null,
+                Status = CmbStatus.SelectedIndex > 0 ? Enum.Parse<Enums.ProjectStatus>((CmbStatus.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Concept") : 0,
                 Wijk = string.IsNullOrWhiteSpace(TxtWijk.Text) ? null : TxtWijk.Text.Trim(),
                 PartnerNaam = string.IsNullOrWhiteSpace(TxtPartner.Text) ? null : TxtPartner.Text.Trim(),
                 StartDatumVan = DpVan.SelectedDate,
-                EndDatumVan = DpTot.SelectedDate
+                StartDatumTot = DpTot.SelectedDate
             };
             LaadProjecten(filter);
         }
@@ -93,7 +110,7 @@ namespace WpfAppProjectBeheeder {
             }
             try
             {
-                var volledig = _service.GeefProject(geselecteerd.Id);
+                var volledig = _service.GetByID(geselecteerd.Id!.Value);
                 var w = new NieuwProjectWindow(_service, volledig);
                 if (w.ShowDialog() == true) LaadProjecten();
             }
@@ -105,16 +122,16 @@ namespace WpfAppProjectBeheeder {
 
         private void VerwijderProject_Click(object sender, RoutedEventArgs e)
         {
-            if (DgProjecten.SelectedItem is not Project selected)
+            if (DgProjecten.SelectedItem is not Project geselecteerd)
             {
                 MessageBox.Show("Selecteer een project.", "Geen selectie", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            var res = MessageBox.Show($"Project '{selected.Titel}' verwijderen?", "Bevestigen",
+            var res = MessageBox.Show($"Project '{geselecteerd.Titel}' verwijderen?", "Bevestigen",
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (res == MessageBoxResult.Yes)
             {
-                try { _service.VerwijderProject(selected.Id); LaadProjecten(); }
+                try { _service.DeleteProject(geselecteerd); LaadProjecten(); }
                 catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
             }
         }
@@ -128,14 +145,16 @@ namespace WpfAppProjectBeheeder {
             }
             try
             {
-                var volledig = _service.GeefProject(selected.Id);
+                var volledig = _service.GetByID(selected.Id!.Value);
                 new DetailProjectWindow(volledig).ShowDialog();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);}
         }
 
         private void Partners_Click(object sender, RoutedEventArgs e)
-            => new PartnerBeheerderWindow(_service).ShowDialog();
+        {
+            new PartnerBeheerderWindow(_service).ShowDialog();
+        }
 
         private void ExportCSV_Click(object sender, RoutedEventArgs e)
         {
