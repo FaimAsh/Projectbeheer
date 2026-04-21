@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace ProjectBeheerderBL.Domein {
     public class Locatie {
+       
+
+        public Locatie(int id, string gemeente, string postcode, string straat, string huisnummer,string wijk) {
+
+            this.LocatieId = id;
+            this.Gemeente = gemeente;
+            this.Postcode = postcode;
+            this.Straat = straat;
+            this.Huisnummer = huisnummer;
+            this.Wijk = wijk;
+        }
+
         public int LocatieId {  get; set; }
         public string Gemeente { get; set; }
         public string Postcode { get; set; }

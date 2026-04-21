@@ -11,6 +11,18 @@ namespace ProjectBeheerderBL.Domein
 
     public class Project
     {
+      
+
+        public Project(int id, string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) {
+
+            this.Id = id;
+            this.Titel = titel;
+            this.StartDatum = startdatum;
+            this.Beschrijving = beschrijving;
+            this.Status = projectStatus;
+            this.Locatie = locatie;
+        }
+
         public int Id { get; set; }
         public string Titel { get; set; }
         public ProjectStatus Status { get; set; }
@@ -21,4 +33,6 @@ namespace ProjectBeheerderBL.Domein
         public List<ProjectDetail> Details { get; set; } = new List<ProjectDetail>();
 
     }
+
+
 }

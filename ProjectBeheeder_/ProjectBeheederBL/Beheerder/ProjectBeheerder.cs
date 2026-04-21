@@ -2,7 +2,7 @@
 using System.IO;
 using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.Interfaces;
-using ProjectBeheerderDL_SQL;
+using ProjectBeheerderUtil;
 
 namespace ProjectBeheerderBL.Beheerder
 {

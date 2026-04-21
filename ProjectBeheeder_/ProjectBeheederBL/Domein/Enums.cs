@@ -8,13 +8,11 @@ namespace ProjectBeheerderBL.Domein
 {
     public class Enums
     {
-        public enum ProjectStatus
-        {
-            Planning,
-            Uitvoering,
-            Afgerond
+        public enum ProjectStatus {
+            Planning = 0,
+            Uitvoering = 1,
+            Afgerond = 2
         }
-
         public enum VergunningStatus
         {
             InAanvraag,
