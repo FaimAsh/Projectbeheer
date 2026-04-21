@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static ProjectBeheerderBL.Domein.Enums;
+using ProjectBeheerderBL.Exeptions;
 
 namespace WpfAppProjectBeheeder
 {
@@ -48,7 +49,6 @@ namespace WpfAppProjectBeheeder
 
         private void VulFormulierIn(Project p)
         {
-            // Set type combobox
             foreach (ComboBoxItem item in CmbType.Items)
                 if (item.Content.ToString() == p.GetType().Name) { CmbType.SelectedItem = item; break; }
 
@@ -59,9 +59,9 @@ namespace WpfAppProjectBeheeder
             TxtBeschrijving.Text = p.Beschrijving;
 
             TxtGemeente.Text = p.Locatie.Gemeente;
-            TxtPostcode.Text = p.Locatie.Postcode;
+            TxtPostCode.Text = p.Locatie.Postcode;
             TxtStraat.Text = p.Locatie.Straat;
-            TxtHuisnr.Text = p.Locatie.Huisnummer;
+            TxtHuisNummer.Text = p.Locatie.Huisnummer;
             TxtWijk.Text = p.Locatie.Wijk;
             foreach (var detail in p.Details)
             {
@@ -104,8 +104,8 @@ namespace WpfAppProjectBeheeder
             {
                 string type = ((ComboBoxItem)CmbType.SelectedItem).Content.ToString()!;
                 var status = Enum.Parse<ProjectStatus>(((ComboBoxItem)CmbStatus.SelectedItem).Content.ToString()!);
-                var locatie = new Locatie(TxtGemeente.Text, TxtPostcode.Text,
-                                            TxtStraat.Text, TxtHuisnr.Text, TxtWijk.Text);
+                var locatie = new Locatie(TxtGemeente.Text, TxtPostCode.Text,
+                                            TxtStraat.Text, TxtHuisNummer.Text, TxtWijk.Text);
 
                 Project project = type switch
                 {
@@ -144,13 +144,13 @@ namespace WpfAppProjectBeheeder
                 if (_bestaand != null)
                 {
                     project.Id = _bestaand.Id;
-                    project.Locatie.LocatieID = _bestaand.Locatie.LocatieID;
-                    project.LaadPartners(_bestaand.ProjectPartners);
+                    project.Locatie.LocatieId = _bestaand.Locatie.LocatieId;
+                    project.LaadPartners(_bestaand.Partners);
                     _service.UpdateProject(project);
                 }
                 else
                 {
-                    _service.AddProject(project);
+                    _service.VoegProjectToe(project);
                 }
 
                 DialogResult = true;

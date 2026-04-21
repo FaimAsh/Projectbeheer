@@ -13,7 +13,7 @@ namespace ProjectBeheerderBL.Domein
     {
       
 
-        public Project(int id, string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) {
+        public Project(int? id, string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) {
 
             this.Id = id;
             this.Titel = titel;
@@ -23,7 +23,7 @@ namespace ProjectBeheerderBL.Domein
             this.Locatie = locatie;
         }
 
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Titel { get; set; }
         public ProjectStatus Status { get; set; }
         public DateTime StartDatum { get; set; }
@@ -31,7 +31,6 @@ namespace ProjectBeheerderBL.Domein
         public Locatie Locatie { get; set; }
         public List<ProjectPartner> Partners { get; set; } = new List<ProjectPartner>();
         public List<ProjectDetail> Details { get; set; } = new List<ProjectDetail>();
-
     }
 
 
