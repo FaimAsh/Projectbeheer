@@ -12,9 +12,9 @@ namespace ProjectBeheerderBL.Domein {
 
         public string PartnerNaam { get; set; }
 
-        public DateTime StartDatumVan { get; set; }
+        public DateTime? StartDatumVan { get; set; }
 
-        public DateTime EndDatumVan { get; set; }
+        public DateTime? EndDatumVan { get; set; }
     
     }
 }

@@ -66,7 +66,7 @@ namespace ProjectBeheederDL {
                     cmdLocatie.Parameters["@Postcode"].Value = project.Locatie.Postcode;
                     cmdLocatie.Parameters["@Straat"].Value = project.Locatie.Straat;
                     cmdLocatie.Parameters["@Huisnummer"].Value = project.Locatie.Huisnummer;
-                    cmdLocatie.Parameters["@Wijk"].Value = string.IsNullOrEmpty(project.Locatie.Wijk) ? DBNull.Value : project.Locatie.Wijk;
+                    cmdLocatie.Parameters["@Wijk"].Value = project.Locatie.Wijk;
 
                     
                     int idLocatie = (int)cmdLocatie.ExecuteScalar();
@@ -74,7 +74,7 @@ namespace ProjectBeheederDL {
                     
                     cmdProject.Parameters["@Titel"].Value = project.Titel;
                     cmdProject.Parameters["@StartDatum"].Value = project.StartDatum;
-                    cmdProject.Parameters["@Beschrijving"].Value = string.IsNullOrEmpty(project.Beschrijving) ? DBNull.Value : project.Beschrijving;
+                    cmdProject.Parameters["@Beschrijving"].Value = project.Beschrijving;
                     cmdProject.Parameters["@Status"].Value = (int)project.Status;
                     cmdProject.Parameters["@LocatieID"].Value = idLocatie; 
 
@@ -134,7 +134,7 @@ namespace ProjectBeheederDL {
 
                     foreach (ProjectPartner p in project.Partners) {
                         cmdExternePartner.Parameters["@ProjectID"].Value = idProject;
-                        cmdExternePartner.Parameters["@PartnerID"].Value = p.Partner.id;
+                        cmdExternePartner.Parameters["@PartnerID"].Value = p.Partner.Id;
                         cmdExternePartner.Parameters["@Rolomschrijving"].Value = p.Rolbeschrijving;
                         cmdExternePartner.ExecuteNonQuery();
                     }
@@ -195,20 +195,20 @@ namespace ProjectBeheederDL {
             using (SqlConnection conn = new SqlConnection(_connectionstring)) {
                 conn.Open();
 
-                
+
                 string ProLocQuery = "SELECT p.ID, p.Titel, p.StartDatum, p.Beschrijving, p.Status, p.LocatieID, l.Gemeente, l.Postcode, l.Straat, l.Huisnummer, l.Wijk FROM Project p INNER JOIN Locatie l ON p.LocatieID = l.LocatieID WHERE p.ID = @id;";
 
                 using (SqlCommand cmd = conn.CreateCommand()) {
                     cmd.CommandText = ProLocQuery;
                     cmd.Parameters.AddWithValue("@id", id);
 
-                 
+
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
                         if (reader.Read()) {
-                         
+
                             Locatie locatie1 = new Locatie(
                                 (int)reader["LocatieID"],
-                                (string)reader["Gemeente"], 
+                                (string)reader["Gemeente"],
                                 (string)reader["Postcode"],
                                 (string)reader["Straat"],
                                 (string)reader["Huisnummer"],
@@ -224,18 +224,18 @@ namespace ProjectBeheederDL {
                                 (DateTime)reader["StartDatum"],
                                 (string)reader["Beschrijving"],
                                 (Enums.ProjectStatus)reader["Status"],
-                                locatie1 
+                                locatie1
                             );
 
                             project.Details = new List<ProjectDetail>();
                             project.Partners = new List<ProjectPartner>();
                         }
-                    } 
+                    }
                 }
 
-          
 
-                
+
+
                 string StadQuery = "SELECT * FROM StadDetail WHERE ProjectID = @id";
                 using (SqlCommand cmd = conn.CreateCommand()) {
                     cmd.CommandText = StadQuery;
@@ -244,15 +244,15 @@ namespace ProjectBeheederDL {
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
                         while (reader.Read()) {
                             StadDetail staddetail = new StadDetail(
-                                (int)reader["StadDetailID"], 
+                                (int)reader["StadDetailID"],
                                 (Enums.VergunningStatus)reader["Vergunningstatus"],
-                                (bool)reader["ArchitecturaleWaarde"], 
+                                (bool)reader["ArchitecturaleWaarde"],
                                 (Enums.Toegankelijkheid)reader["Toegankelijkheid"],
                                 (bool)reader["Bezienswaardigheid"],
                                  (bool)reader["InfobordVoorzien"]
                             );
 
-                            
+
                             project.Details.Add(staddetail);
                         }
                     }
@@ -260,7 +260,7 @@ namespace ProjectBeheederDL {
 
                 string WonenQuery = "SELECT * FROM InnovatiefwonenDetail WHERE ProjectID = @id";
                 using (SqlCommand cmd = conn.CreateCommand()) {
-                    cmd.CommandText = WonenQuery; 
+                    cmd.CommandText = WonenQuery;
                     cmd.Parameters.AddWithValue("@id", id);
 
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
@@ -275,15 +275,15 @@ namespace ProjectBeheederDL {
                                 (bool)reader["SamenwerkingErfgoed"]
                             );
 
-                            project.Details.Add(wonenDetail); 
+                            project.Details.Add(wonenDetail);
                         }
                     }
                 }
 
-                
+
                 string GroenQuery = "SELECT * FROM GroenDetail WHERE ProjectID = @id";
                 using (SqlCommand cmd = conn.CreateCommand()) {
-                    cmd.CommandText = GroenQuery; 
+                    cmd.CommandText = GroenQuery;
                     cmd.Parameters.AddWithValue("@id", id);
 
                     using (SqlDataReader reader = cmd.ExecuteReader()) {
@@ -298,17 +298,23 @@ namespace ProjectBeheederDL {
                                 (int)reader["BezoekersBeoordeling"]
                             );
 
-                            project.Details.Add(groenDetail); 
+                            project.Details.Add(groenDetail);
                         }
                     }
                 }
             }
 
             return project; 
+        }
 
-        public Project UpdateProject(int id) {
+        public void UpdateProject(Project project) {
 
-            string sql = "UPDATE INTO Project"
+            string LocatieQuery = "UPDATE Locatie SET "
+            string ProjectQuery = "UPDATE Project SET 
+            
+                
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = conn.CreateCommand())
 
         }
     }

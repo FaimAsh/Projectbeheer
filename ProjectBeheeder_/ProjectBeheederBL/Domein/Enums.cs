@@ -15,23 +15,23 @@ namespace ProjectBeheerderBL.Domein
         }
         public enum VergunningStatus
         {
-            InAanvraag,
-            Goedgekeurd,
-            Geweigerd
+            InAanvraag = 0,
+            Goedgekeurd = 1,
+            Geweigerd = 2
         }
 
         public enum Toegankelijkheid
         {
-            VolledigOpenbaar,
-            Gedeeltelijk,
-            Gesloten
+            VolledigOpenbaar = 0,
+            Gedeeltelijk = 1,
+            Gesloten = 2
         }
 
         public enum PartnerType
         {
-            Bedrijf, 
-            Organisatie,
-            Burger
+            Bedrijf = 0, 
+            Organisatie = 1,
+            Burger = 2
         }
     }
 }
