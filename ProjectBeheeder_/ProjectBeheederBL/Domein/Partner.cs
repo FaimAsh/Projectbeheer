@@ -9,6 +9,13 @@ namespace ProjectBeheerderBL.Domein
 {
     public class Partner
     {
+        
+
+        public Partner(int id, string naam) {
+            this.Id = id;
+            this.Naam = naam;
+        }
+
         public int Id { get; set; }
         public string Naam { get; set; }
         public PartnerType PartnerType { get; set; }

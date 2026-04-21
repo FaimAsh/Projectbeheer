@@ -9,8 +9,8 @@ namespace ProjectBeheerderBL.DomeinDetails {
     {
       
 
-        public GroenDetail(int id, decimal oppervlakte, int biodiversiteit, int aantalWandelpaden, string faciliteiten, bool toeristischeRoute, int beoordeling) {
-            this.Id = id;
+        public GroenDetail(decimal oppervlakte, int biodiversiteit, int aantalWandelpaden, string faciliteiten, bool toeristischeRoute, int beoordeling) {
+            
             this.Oppervlakte = oppervlakte;
             this.Biodiversiteit = biodiversiteit;
             this.Wandelpaden = aantalWandelpaden;
@@ -19,7 +19,15 @@ namespace ProjectBeheerderBL.DomeinDetails {
             this.Beoordeling = beoordeling;
         }
 
-        public int Id { get; set; } 
+        public GroenDetail(int? id, decimal oppervlakte, int biodiversiteit, int aantalWandelpaden, string faciliteiten, bool toeristischeRoute, int beoordeling) : this(oppervlakte,biodiversiteit,aantalWandelpaden,faciliteiten,toeristischeRoute,beoordeling) { 
+
+            this.Id = id;
+        
+        }
+            
+          
+
+        public int? Id { get; set; } 
         public decimal Oppervlakte {  get; set; }
         public int Biodiversiteit { get; set; }
         public int Wandelpaden { get; set; }

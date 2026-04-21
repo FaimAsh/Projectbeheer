@@ -11,8 +11,8 @@ namespace ProjectBeheerderBL.DomeinDetails {
     {
        
 
-        public StadDetail(int id, VergunningStatus vergunningStatus, bool architecturaleWaarde, Toegankelijkheid toegankelijkheid, bool bezienswaardigheid, bool infobordenVoorzien) {
-            this.Id = id;
+        public StadDetail(VergunningStatus vergunningStatus, bool architecturaleWaarde, Toegankelijkheid toegankelijkheid, bool bezienswaardigheid, bool infobordenVoorzien) {
+            
             this.VergunningStatus = vergunningStatus;
             this.ArchitecturaleWaarde = architecturaleWaarde;
             this.Toegankelijkheid = toegankelijkheid;
@@ -20,7 +20,13 @@ namespace ProjectBeheerderBL.DomeinDetails {
             this.InfoBordVoorzien = infobordenVoorzien;
         }
 
-        public int Id { get; set; }
+        public StadDetail(int? id, VergunningStatus vergunningStatus, bool architecturaleWaarde, Toegankelijkheid toegankelijkheid, bool bezienswaardigheid, bool infobordenVoorzien) : this(vergunningStatus,architecturaleWaarde,toegankelijkheid,bezienswaardigheid,infobordenVoorzien) {
+
+            this.Id = id;          
+          
+        }
+
+        public int? Id { get; set; }
         public VergunningStatus VergunningStatus { get; set; }
         public bool ArchitecturaleWaarde {  get; set; }
         public Toegankelijkheid Toegankelijkheid { get; set; }

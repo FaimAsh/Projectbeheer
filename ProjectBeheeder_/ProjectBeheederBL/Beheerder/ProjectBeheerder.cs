@@ -2,18 +2,18 @@
 using System.IO;
 using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.Interfaces;
-using ProjectBeheerderUtil;
+
 
 namespace ProjectBeheerderBL.Beheerder
 {
     public class ProjectBeheerder
     {
-        private readonly IProjectRepository _repository;
-        private IFileWriter _writer;
+        private readonly IProjectRepository repository;
+        private IFileWriter writer;
 
         public ProjectBeheerder(IProjectRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
         public void Export(string path, List<Project> projecten)
@@ -23,7 +23,41 @@ namespace ProjectBeheerderBL.Beheerder
                 Directory.CreateDirectory(path);
             }
 
-            _writer.Write(path, projecten);
+            this.writer.Write(path, projecten);
         }
+
+        public void UpdateProject(Project project) {
+
+            repository.UpdateProject(project);
+
+        }
+
+        public void ProjectVerwijderen(Project project) {
+
+            repository.ProjectVerwijderen(project);
+
+        }
+
+        public void AllesImporteren(Project project) {
+
+            repository.AllesImporteren(project);
+        }
+
+        public void PartnerVerwijderen(Partner partner) {
+
+            repository.PartnerVerwijderen(partner);
+        }
+
+        public Project GeefProject(int id) {
+
+            return repository.GeefProject(id);
+        }
+
+        public List<Project> Search(ProjectFilter filter) {
+
+            return repository.Search(filter);
+        }
+
+     
     }
 }

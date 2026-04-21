@@ -13,4 +13,9 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectBeheederBL\ProjectBeheerderBL.csproj" />
+    <ProjectReference Include="..\ProjectBeheerderUtil\ProjectBeheerderUtil.csproj" />
+  </ItemGroup>
+
 </Project>

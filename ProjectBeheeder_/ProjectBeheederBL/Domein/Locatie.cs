@@ -8,14 +8,20 @@ namespace ProjectBeheerderBL.Domein {
     public class Locatie {
        
 
-        public Locatie(int? id, string gemeente, string postcode, string straat, string huisnummer,string wijk) {
+        public Locatie(string gemeente, string postcode, string straat, string huisnummer,string wijk) {
 
-            this.LocatieId = id;
+           
             this.Gemeente = gemeente;
             this.Postcode = postcode;
             this.Straat = straat;
             this.Huisnummer = huisnummer;
             this.Wijk = wijk;
+        }
+
+        public Locatie(int? id, string gemeente, string postcode, string straat, string huisnummer, string wijk) : this(gemeente,postcode,straat,huisnummer,wijk) {
+
+            this.LocatieId = id;
+           
         }
 
         public int? LocatieId {  get; set; }

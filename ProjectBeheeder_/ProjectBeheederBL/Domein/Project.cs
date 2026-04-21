@@ -13,14 +13,20 @@ namespace ProjectBeheerderBL.Domein
     {
       
 
-        public Project(int? id, string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) {
+        public Project(string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) {
 
-            this.Id = id;
+            
             this.Titel = titel;
             this.StartDatum = startdatum;
             this.Beschrijving = beschrijving;
             this.Status = projectStatus;
             this.Locatie = locatie;
+        }
+
+
+        public Project(int? id, string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) : this (titel,startdatum,beschrijving,projectStatus,locatie){
+
+            this.Id = id;
         }
 
         public int? Id { get; set; }
