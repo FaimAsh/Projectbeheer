@@ -7,18 +7,11 @@ using ProjectBeheerderUtil;
 using static ProjectBeheerderBL.Domein.Enums;
 
 
-var builder = new ConfigurationBuilder()
-       .SetBasePath(Directory.GetCurrentDirectory())
-       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-var config = builder.Build();
-string connectionstring = config.GetConnectionString("SQLServerConnection");
-string databaseType = config.GetSection("appsettings")["databasetype"];
 
 
 //ProjectBeheerder projectBeheerder = new ProjectBeheerder(,IFileWriter);
 
-
+Console.WriteLine("dadada");
 
 
 public class ConsoleAppTest {
@@ -27,7 +20,15 @@ public class ConsoleAppTest {
     public ConsoleAppTest(IProjectRepository repository) {
         this.repository = repository;
 
+        Console.WriteLine("adadaodnaondaon");
 
+        var builder = new ConfigurationBuilder()
+       .SetBasePath(Directory.GetCurrentDirectory())
+       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+        var config = builder.Build();
+        string connectionstring = config.GetConnectionString("SQLServerConnection");
+        string databaseType = config.GetSection("appsettings")["databasetype"];
 
 
 
@@ -36,6 +37,7 @@ public class ConsoleAppTest {
         // DUMMY PARTNERS 
         // (We gaan ervan uit dat je Partner constructor zo werkt: ID, Naam, Enum)
         // ==========================================
+        Console.WriteLine("adadaodnaondaon");
         Partner besix = new Partner(1, "Besix Bouwgroep",PartnerType.Organisatie); // Of voeg de enum toe als dat in je constructor staat
         Partner natuurpunt = new Partner(2, "Natuurpunt",PartnerType.Burger);
 
@@ -71,7 +73,7 @@ public class ConsoleAppTest {
         project1.Details.Add(stad);
 
         // 4. Partner aan het project koppelen
-        ProjectPartner projectPartner = new ProjectPartner(1,2,besix, "Hoofdaannemer"); // Aanname van constructor
+        ProjectPartner projectPartner = new ProjectPartner(besix, "Hoofdaannemer"); // Aanname van constructor
         project1.Partners.Add(projectPartner);
 
 
@@ -106,7 +108,7 @@ public class ConsoleAppTest {
         project2.Details.Add(wonen);
 
         // Koppel de partner
-        ProjectPartner adviesPartner = new ProjectPartner(1,2,natuurpunt, "Adviseur Biodiversiteit");
+        ProjectPartner adviesPartner = new ProjectPartner(natuurpunt, "Adviseur Biodiversiteit");
         project2.Partners.Add(adviesPartner);
 
 
