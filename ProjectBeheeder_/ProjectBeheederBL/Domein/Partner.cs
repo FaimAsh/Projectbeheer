@@ -11,6 +11,6 @@ namespace ProjectBeheerderBL.Domein
     {
         public int Id { get; set; }
         public string Naam { get; set; }
-        public PartnerType PartnerType {  get; set; }
+        public PartnerType PartnerType { get; set; }
     }
 }
