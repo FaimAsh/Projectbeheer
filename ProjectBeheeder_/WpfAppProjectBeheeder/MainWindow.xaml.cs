@@ -21,6 +21,7 @@ namespace WpfAppProjectBeheeder {
     public partial class MainWindow : Window
     {
         private ProjectBeheerder _service;
+        private ProjectFactory _factory;
         public MainWindow() {
             InitializeComponent();
             LeesConfig();
@@ -33,7 +34,8 @@ namespace WpfAppProjectBeheeder {
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
             string cs = config.GetConnectionString("SQLServerConnection");
-            _service = new ProjectBeheerder(new ProjectRepository_SQL(cs));
+            var repo = RepositoryFactory.GeefRepository("SQL"cs);
+            _service = new ProjectBeheerder(repo, cs);
         }
 
         private void LaadProjecten(ProjectFilter? filter = null) {
