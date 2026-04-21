@@ -19,9 +19,6 @@ using ProjectBeheerderBL.Exeptions;
 
 namespace WpfAppProjectBeheeder
 {
-    /// <summary>
-    /// Interaction logic for NewProjectWindow.xaml
-    /// </summary>
     public partial class NieuwProjectWindow : Window
     {
         private readonly ProjectBeheerder _service;
@@ -104,7 +101,7 @@ namespace WpfAppProjectBeheeder
             {
                 string type = ((ComboBoxItem)CmbType.SelectedItem).Content.ToString()!;
                 var status = Enum.Parse<ProjectStatus>(((ComboBoxItem)CmbStatus.SelectedItem).Content.ToString()!);
-                var locatie = new Locatie(TxtGemeente.Text, TxtPostCode.Text,
+                var locatie = new Locatie(null, TxtGemeente.Text, TxtPostCode.Text,
                                             TxtStraat.Text, TxtHuisNummer.Text, TxtWijk.Text);
 
                 Project project = type switch

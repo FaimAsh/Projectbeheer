@@ -11,7 +11,7 @@ namespace ProjectBeheerderUtil
 {
     public class ProjectFactory
     {
-        public Project CreateProject(string titel, DateTime startDatum, ProjectStatus status, Locatie locatie)
+        public Project CreateProject(string titel, DateTime startDatum, string beschrijving,ProjectStatus status, Locatie locatie)
         {
             return new Project(
                 null,

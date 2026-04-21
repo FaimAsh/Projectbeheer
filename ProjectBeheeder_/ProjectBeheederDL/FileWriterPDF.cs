@@ -9,14 +9,13 @@ namespace ProjectBeheerderDL_SQL
     {
         public void Write(string path, List<Project> projecten)
         {
-            string file = Path.Combine(path, "export.pdf");
-
-            using (StreamWriter sw = new StreamWriter(file))
+            using (StreamWriter sw = new StreamWriter(path))
             {
                 foreach (var p in projecten)
                 {
                     sw.WriteLine($"Project: {p.Titel}");
                     sw.WriteLine($"Status: {p.Status}");
+                    sw.WriteLine($"Wijk: {p.Locatie?.Wijk}");
                     sw.WriteLine("------");
                 }
             }
