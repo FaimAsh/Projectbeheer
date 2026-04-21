@@ -115,7 +115,7 @@ CREATE TABLE GroenDetail (
  AantalWandelpaden INT NOT NULL,
  BeschikbareFaciliteit NVARCHAR(255) NOT NULL,
  ToeristischeRoute BIT NOT NULL DEFAULT 0,
- BezoekersBeoordering INT NOT NULL,
+ BezoekersBeoordeling INT NOT NULL,
  ProjectID INT NOT NULL,
  CONSTRAINT PK_GroenDetail PRIMARY KEY (GroenDetailID),
  CONSTRAINT FK_GD_Project FOREIGN KEY (ProjectID)
