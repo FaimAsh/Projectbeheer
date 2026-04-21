@@ -161,5 +161,10 @@ namespace WpfAppProjectBeheeder {
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
+
+        private void Info_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
