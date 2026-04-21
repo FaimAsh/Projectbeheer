@@ -10,6 +10,9 @@ namespace ProjectBeheerderBL.Domein
 {
     public class ProjectFilter
     {
+        public ProjectFilter()
+        {
+        }
 
         public ProjectFilter(ProjectStatus status, string wijk, string partnernaam, DateTime startDatumVan, DateTime StartDatumTot)
         {

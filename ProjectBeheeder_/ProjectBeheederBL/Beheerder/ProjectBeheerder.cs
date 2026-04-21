@@ -1,15 +1,18 @@
 ﻿using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.Interfaces;
 using System;
+using System.IO;
 
 namespace ProjectBeheerderBL.Beheerder
 {
     public class ProjectBeheerder
     {
+        private IProjectRepository _repository;
         private IFileWriter _writer;
 
-        public ProjectBeheerder(string type, IFileWriter writer)
+        public ProjectBeheerder(string type,IProjectRepository repository, IFileWriter writer)
         {
+            _repository = repository;
             _writer = writer;
         }
 
@@ -22,14 +25,16 @@ namespace ProjectBeheerderBL.Beheerder
 
             _writer.Write(path, projecten);
         }
-        public void ExportCsv(List<Project> projecten, string fileName)
+        public void ExportCsv(List<Project> projecten, string path)
         {
-            throw new NotImplementedException();
+            if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");
+            _writer.Write(path, projecten);
         }
 
-        public void ExportPdf(List<Project> projecten, string fileName)
+        public void ExportPdf(List<Project> projecten, string path)
         {
-            throw new NotImplementedException();
+            if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");
+            _writer.Write(path, projecten);
         }
     }
 }
