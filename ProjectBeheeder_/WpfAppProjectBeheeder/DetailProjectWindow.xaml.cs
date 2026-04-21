@@ -1,4 +1,5 @@
 ﻿using ProjectBeheerderBL.Domein;
+using ProjectBeheerderBL.DomeinDetails;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,13 +34,41 @@ namespace WpfAppProjectBeheeder
             Rij("Beschrijving", p.Beschrijving ?? "/");
             Rij("Locatie",
                 $"{p.Locatie.Straat} {p.Locatie.Huisnummer}, {p.Locatie.Postcode} {p.Locatie.Gemeente} ({p.Locatie.Wijk})");
-
-            switch (p) 
+            foreach (var detail in p.Details)
             {
-                case StadsProject sp:
-                    Sep();
+                switch (detail)
+                {
+                    case StadDetail sd:
+                        Sep();
+                        Rij("Vergunningstatus", sd.VergunningStatus.ToString());
+                        Rij("Architecturale waarde", sd.ArchitecturaleWaarde ? "Ja" : "Nee");
+                        Rij("Toegankelijkheid", sd.Toegankelijkheid.ToString());
+                        Rij("Toeristische waarde", sd.ToeristischeWaarde ? "Ja" : "Nee");
+                        Rij("Infowandeling", sd.Bezienswaardigheid ? "Ja" : "Nee");
+                        if (sd.Bouwfirmas.Count > 0)
+                            Rij("Bouwfirmas", string.Join(", ", sd.Bouwfirmas.Select(b => b.Naam)));
+                        break;
 
-                    break;
+                    case GroenDetail gd:
+                        Sep();
+                        Rij("Oppervlakte", $"{gd.Oppervlakte} m²");
+                        Rij("Biodiversiteitscore", gd.Biodiversiteit + "/10");
+                        Rij("Wandelpaden", gd.Wandelpaden.ToString());
+                        Rij("Faciliteiten", string.IsNullOrWhiteSpace(gd.Faciliteiten) ? "/" : gd.Faciliteiten);
+                        Rij("Toeristische route", gd.ToeristischeRoute ? "Ja" : "Nee");
+                        Rij("Beoordeling", gd.Beoordeling + "/5");
+                        break;
+
+                    case WonenDetail wd:
+                        Sep();
+                        Rij("Aantal eenheden", wd.AantalEenheden.ToString());
+                        Rij("Woning types", string.IsNullOrWhiteSpace(wd.Woningtypes) ? "/" : wd.Woningtypes);
+                        Rij("Rondleidingen", wd.Rondleidingen ? "Ja" : "Nee");
+                        Rij("Showwoning", wd.Showwoningen ? "Ja" : "Nee");
+                        Rij("Innovatie score", wd.InnovatieScore + "/10");
+                        Rij("Erfgoed samenwerking", wd.ErfgoedSamenwerking ? "Ja" : "Nee");
+                        break;
+                }
             }
         }
 
