@@ -38,14 +38,14 @@
                 <CheckBox Grid.Column="1" Grid.Row="2" Name="ChkBouwfirma" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
 
                     <Label Grid.Column="2" Content="Status:" VerticalAlignment="Center"/>
-                <Label Grid.Column="3" Content="Planning:" Margin="0 0 0 0" VerticalAlignment="Center"/>
-                <CheckBox Grid.Column="3" Grid.Row="0" Name="ChkBowfirm" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
-                <Label Grid.Column="3" Grid.Row="1" Content="UitVoering:" Margin="0 0 0 0" VerticalAlignment="Center"/>
-                <CheckBox Grid.Column="3" Grid.Row="1" Name="ChkBuwfira" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
-                <Label Grid.Column="3" Grid.Row="2" Content="Afgerond:" Margin="0 0 0 0" VerticalAlignment="Center"/>
-                <CheckBox Grid.Column="3" Grid.Row="2" Name="ChkBouwfrma" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
+                <ComboBox Grid.Row="0" Grid.Column="3" Name="CmbStatus" VerticalContentAlignment="Center">
+                    <ComboBoxItem Content="(alle)"   IsSelected="True"/>
+                    <ComboBoxItem Content="Planning"/>
+                    <ComboBoxItem Content="UitVoering"/>
+                    <ComboBoxItem Content="Afgerond"/>
+                </ComboBox>
 
-                    <Label Grid.Column="4" Content="Wijk:" VerticalAlignment="Center"/>
+                <Label Grid.Column="4" Content="Wijk:" VerticalAlignment="Center"/>
                 <TextBox Grid.Column="5" Name="TxtWijk" Width="100" Margin="0 0 10 0" VerticalAlignment="Center"/>
 
                     <Label Grid.Column="6" Content="Partner:" VerticalAlignment="Center"/>

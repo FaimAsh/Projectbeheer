@@ -65,27 +65,29 @@ namespace WpfAppProjectBeheeder {
         }
 
         private void Zoeken_Click(object sender, RoutedEventArgs e) {
-            string? type = (CmbType.SelectedItem as ComboBoxItem)?.Content?.ToString() is "(alle)" ? null
-                              : (CmbType.SelectedItem as ComboBoxItem)?.Content?.ToString();
-            string? status = (CmbStatus.SelectedItem as ComboBoxItem)?.Content?.ToString() is "(alle)" ? null
-                              : (CmbStatus.SelectedItem as ComboBoxItem)?.Content?.ToString();
 
             var filter = new ProjectFilter
-            {
-                Details = type,
-                Status = status == null ? null : Enum.Parse<ProjectStatus>(status),
+            { 
                 Wijk = string.IsNullOrWhiteSpace(TxtWijk.Text) ? null : TxtWijk.Text.Trim(),
                 PartnerNaam = string.IsNullOrWhiteSpace(TxtPartner.Text) ? null : TxtPartner.Text.Trim(),
                 StartDatumVan = DpVan.SelectedDate,
                 StartDatumTot = DpTot.SelectedDate
             };
+
+            bool planningChecked = ChkBowfirm.IsChecked == true;
+            bool uitvoeringChecked = ChkBuwfira.IsChecked == true;
+            bool afgerondChecked = ChkBouwfrma.IsChecked == true;
             LaadProjecten(filter);
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
-            CmbType.SelectedIndex = 0;
-            CmbStatus.SelectedIndex = 0;
+            ChkBowfirma.IsChecked = true;
+            ChkBuwfirma.IsChecked = true;
+            ChkBouwfirma.IsChecked = true;
+            ChkBowfirm.IsChecked = true;
+            ChkBuwfira.IsChecked = true;
+            ChkBouwfrma.IsChecked = true;
             TxtWijk.Clear();
             TxtPartner.Clear();
             DpVan.SelectedDate = null;

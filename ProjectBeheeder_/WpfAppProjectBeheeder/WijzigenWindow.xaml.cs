@@ -7,7 +7,6 @@ using static ProjectBeheerderBL.Domein.Enums;
 
 namespace WpfAppProjectBeheeder
 {
-    // Helper: one row in the "gekoppeld" list
     // Holds partner + editable rol + optional kategorie (stads only)
     internal class PartnerRij
     {
@@ -31,9 +30,8 @@ namespace WpfAppProjectBeheeder
     {
         private readonly ProjectBeheerder _service;
         private readonly Project          _project;
-        private readonly bool             _isStads;  // initial type; use IsStads property for current
+        private readonly bool             _isStads;
 
-        // Reflects current CmbType selection (can change if user switches type)
         private bool IsStads =>
             (CmbType?.SelectedItem as ComboBoxItem)?.Content?.ToString() == "StadsProject";
 
@@ -61,7 +59,6 @@ namespace WpfAppProjectBeheeder
                 if (item.Content.ToString() == initType) { CmbType.SelectedItem = item; break; }
             CmbType.SelectionChanged += CmbType_SelectionChanged;
 
-            // Show correct type panel
             GbStads.Visibility = project.Details.Any(d => d is StadDetail) ? Visibility.Visible : Visibility.Collapsed;
             GbGroen.Visibility = project.Details.Any(d => d is GroenDetail) ? Visibility.Visible : Visibility.Collapsed;
             GbInno.Visibility  = project.Details.Any(d => d is WonenDetail) ? Visibility.Visible : Visibility.Collapsed;
@@ -77,7 +74,6 @@ namespace WpfAppProjectBeheeder
             LaadBeschikbarePartners();
         }
 
-        // Type change: switch visible detail GroupBox + update partner kategorie controls
         private void CmbType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string? type = (CmbType.SelectedItem as ComboBoxItem)?.Content?.ToString();
@@ -95,13 +91,9 @@ namespace WpfAppProjectBeheeder
                 foreach (var r in _partnerRijen) r.Kategorie = "algemeen";
         }
 
-        // ================================================================
-        // INIT
-        // ================================================================
 
         private void VulFormulierIn()
         {
-            // General
             TxtTitel.Text        = _project.Titel;
             DpStart.SelectedDate = _project.StartDatum;
             TxtBeschrijving.Text = _project.Beschrijving;
@@ -111,14 +103,12 @@ namespace WpfAppProjectBeheeder
                     StringComparison.OrdinalIgnoreCase))
                 { CmbStatus.SelectedItem = item; break; }
 
-            // Locatie
             TxtGemeente.Text   = _project.Locatie.Gemeente;
             TxtPostCode.Text   = _project.Locatie.Postcode;
             TxtStraat.Text     = _project.Locatie.Straat;
             TxtHuisNummer.Text = _project.Locatie.Huisnummer;
             TxtWijk.Text       = _project.Locatie.Wijk;
 
-            // Type-specific (type itself is read-only — only content is editable)
             var detail = _project.Details.FirstOrDefault();
             switch (detail)
             {
@@ -134,7 +124,6 @@ namespace WpfAppProjectBeheeder
                     ChkBeziens.IsChecked  = sd.Bezienswaardigheid;
                     ChkInfobord.IsChecked = sd.InfoBordVoorzien;
 
-                    // Load partners: algemeen from project.Partners, bouwfirma from sd.Bouwfirmas
                     _partnerRijen = _project.Partners
                         .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving, "algemeen"))
                         .ToList();
@@ -181,10 +170,6 @@ namespace WpfAppProjectBeheeder
             catch { _allPartners = new List<Partner>(); }
             RefreshBeschikbaar();
         }
-
-        // ================================================================
-        // PARTNER PANEL — GEKOPPELD LIST
-        // ================================================================
 
         private void RefreshGekoppeld()
         {
@@ -247,10 +232,6 @@ namespace WpfAppProjectBeheeder
             RefreshBeschikbaar();
         }
 
-        // ================================================================
-        // PARTNER PANEL — BESCHIKBAAR LIST
-        // ================================================================
-
         private void RefreshBeschikbaar()
         {
             string zoek       = TxtPartnerZoek?.Text.Trim().ToLower() ?? "";
@@ -292,10 +273,6 @@ namespace WpfAppProjectBeheeder
             RefreshBeschikbaar();
         }
 
-        // ================================================================
-        // SAVE
-        // ================================================================
-
         private void Opslaan_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -316,7 +293,7 @@ namespace WpfAppProjectBeheeder
                 _project.Locatie.Huisnummer = TxtHuisNummer.Text;
                 _project.Locatie.Wijk       = TxtWijk.Text;
 
-                // Build new detail based on CURRENT type selection (replaces old detail)
+                // update detail
                 ProjectDetail nieuweDetail;
                 switch (type)
                 {
