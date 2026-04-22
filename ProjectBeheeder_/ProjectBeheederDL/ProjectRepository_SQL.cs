@@ -237,7 +237,7 @@ namespace ProjectBeheederDL
         }
 
 
-        public void PartnerAanmaken(Project p) {
+        public void PartnerAanmaken(int projectID, ProjectPartner NieuwePartner) {
 
             string ExternePartnerQuery = "INSERT INTO Project_Partner (ProjectID,PartnerID,Rolomschrijving,FlagPartner) VALUES (@ProjectID,@PartnerID,@Rolomschrijving,@FlagPartner);";
 
@@ -258,25 +258,27 @@ namespace ProjectBeheederDL
                 cmdExternePartner.Parameters.Add(new SqlParameter("@RolOmschrijving", System.Data.SqlDbType.NVarChar));
                 cmdExternePartner.Parameters.Add(new SqlParameter("@FlagPartner", System.Data.SqlDbType.Int));
                 try {
-                    cmdExternePartner.Parameters["@ProjectID"].Value = id;
-                    cmdExternePartner.Parameters["@PartnerID"].Value = p.Partners.;
-                    cmdExternePartner.Parameters["@Rolomschrijving"].Value = p.Partners.RolBeschrijving;
+                    cmdExternePartner.Parameters["@ProjectID"].Value = projectID;
+                    cmdExternePartner.Parameters["@PartnerID"].Value = NieuwePartner.Partner.Id;
+                    cmdExternePartner.Parameters["@Rolomschrijving"].Value = NieuwePartner.RolBeschrijving;
                     cmdExternePartner.Parameters["@FlagPartner"].Value = Enums.Flags.shown;
                     cmdExternePartner.ExecuteNonQuery();
 
 
+
+
+
+                    transaction.Commit();
                 }
-
-
-        transaction.Commit();
-            }
                 catch (Exception ex) {
-                transaction.Rollback();
-                throw ex;
+                    transaction.Rollback();
+                    throw ex;
 
-            
-            } 
+
+                }
+            }
         }
+        
         public void ProjectVerwijderen(Project project)
         {
 
