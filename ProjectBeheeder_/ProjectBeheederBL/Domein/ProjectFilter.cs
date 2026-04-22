@@ -10,8 +10,6 @@ namespace ProjectBeheerderBL.Domein
 {
     public class ProjectFilter
     {
-       
-
         public HashSet<ProjectStatus> Statussen { get; set; } = new HashSet<ProjectStatus>();
         public string? Wijk { get; set; }
 
