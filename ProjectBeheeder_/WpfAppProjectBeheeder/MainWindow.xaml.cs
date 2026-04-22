@@ -96,7 +96,7 @@ namespace WpfAppProjectBeheeder {
         }
 
         private void DgProjecten_SelectionChanged(object sender, RoutedEventArgs e){ }
-        private void NieuwProject_Click(object sender, SelectionChangedEventArgs e)
+        private void NieuwProject_Click(object sender, RoutedEventArgs e)
         {
             var w = new NieuwProjectWindow(_Beheerder);
             if (w.ShowDialog() == true) LaadProjecten();
@@ -172,7 +172,7 @@ namespace WpfAppProjectBeheeder {
             catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
-        private void ExportPdf_Click(object sender, RoutedEventArgs e)
+        private void ExportPDF_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new SaveFileDialog { Filter = "PDF|*.pdf", FileName = ".pdf" };
             if (dlg.ShowDialog() != true) return;
