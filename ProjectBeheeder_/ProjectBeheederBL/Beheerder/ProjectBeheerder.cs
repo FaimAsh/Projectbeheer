@@ -24,16 +24,6 @@ namespace ProjectBeheerderBL.Beheerder
 
             _writer.Write(path, projecten);
         }
-        public void ExportCsv(List<Project> projecten, string fileName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ExportPdf(List<Project> projecten, string fileName)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public ProjectBeheerder(IProjectRepository repository)
         {
@@ -50,6 +40,7 @@ namespace ProjectBeheerderBL.Beheerder
         public void DeleteProject(Project p) =>    _repository.ProjectVerwijderen(p);
         public void DeletePartner(Partner p) =>    _repository.PartnerVerwijderen(p);
 <<<<<<< HEAD
+<<<<<<< HEAD
         public List<Partner> GetPartners() => _repository.GeefPartners();
         
        
@@ -61,12 +52,14 @@ namespace ProjectBeheerderBL.Beheerder
             if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");
             _writer.Write(path, projecten);
         }
+=======
 
-        public void ExportPdf(List<Project> projecten, string path)
-        {
-            if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");
-            _writer.Write(path, projecten);
-        }
->>>>>>> 7c7e7b46b821030ca40c02fdcaf4f94802adb488
+        public void GetPartners(Partner p) => _repository.GeefPartners();
+       
+
+        public void AddPartner(int id,ProjectPartner NieuwePartner) => _repository.PartnerAanmaken(id,NieuwePartner);
+        public List<Partner> GivePartner() => _repository.GeefPartners();
+>>>>>>> 1288899887078bc9e75eb69d27eec3ee8ac7306b
+
     }
 }

@@ -20,7 +20,7 @@ namespace WpfAppProjectBeheeder
     public partial class NieuwProjectWindow : Window
     {
         private readonly ProjectBeheerder _service;
-        private readonly Project? _bestaand;
+        private readonly Project? _bestand;
         private readonly ProjectFactory _factory = new ProjectFactory();
 
         private List<PartnerWeergave> _weergave = new();
@@ -30,14 +30,14 @@ namespace WpfAppProjectBeheeder
         {
             InitializeComponent();
             _service = service;
-            _bestaand = bestaand;
+            _bestand = bestaand;
 
             LaadPartners();
 
-            if (_bestaand != null)
+            if (_bestand != null)
             {
                 Title = "Project wijzigen";
-                VulFormulierIn(_bestaand);
+                VulFormulierIn(_bestand);
                 CmbType.IsEnabled = false;
             }
         }
@@ -107,7 +107,7 @@ namespace WpfAppProjectBeheeder
                 var type = Enum.Parse<PartnerType>(
                     ((ComboBoxItem)CmbNieuwType.SelectedItem).Content.ToString()!);
                 var partner = new Partner(0, TxtNieuweNaam.Text.Trim(), type);
-                _service.AddPartner(id,partner);
+                _service.AddPartner(_bestand.Id,partner);
                 TxtNieuweNaam.Clear();
                 LaadPartners();
             }
@@ -259,10 +259,10 @@ namespace WpfAppProjectBeheeder
                     default: throw new GentException("Onbekend projecttype.");
                 }
 
-                if (_bestaand != null)
+                if (_bestand != null)
                 {
-                    project.Id = _bestaand.Id;
-                    project.Locatie.LocatieId = _bestaand.Locatie.LocatieId;
+                    project.Id = _bestand.Id;
+                    project.Locatie.LocatieId = _bestand.Locatie.LocatieId;
                     _service.UpdateProject(project);
                 }
                 else
