@@ -165,7 +165,7 @@ namespace WpfAppProjectBeheeder
 
         private void LaadBeschikbarePartners()
         {
-            try   { _allPartners = _service.GetAllPartners(); }
+            try   { _allPartners = _service.GivePartner(); }
             catch { _allPartners = new List<Partner>(); }
             RefreshBeschikbaar();
         }
