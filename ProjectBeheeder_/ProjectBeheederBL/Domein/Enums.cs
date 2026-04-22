@@ -36,7 +36,8 @@ namespace ProjectBeheerderBL.Domein
 
         public enum Flags {
 
-
+            gone = 0,
+            shown = 1
         }
     }
 }

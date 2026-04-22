@@ -162,8 +162,7 @@ namespace WpfAppProjectBeheeder {
  
                 _Beheerder.ExportCsv(projecten, dlg.FileName);
 
-                _service.ExportCsv(projecten, dlg.FileName);
-
+                
                 MessageBox.Show("CSV geëxporteerd.", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -179,7 +178,7 @@ namespace WpfAppProjectBeheeder {
 
                 _Beheerder.ExportPdf(projecten, dlg.FileName);
 
-                _service.ExportPdf(projecten, dlg.FileName);
+               
 
                 MessageBox.Show("Export klaar.", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
             }
