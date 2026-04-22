@@ -67,7 +67,7 @@ namespace WpfAppProjectBeheeder
                 var type = Enum.Parse<PartnerType>(
                     ((ComboBoxItem)CmbTypePartner.SelectedItem).Content.ToString()!);
                 var partner = new Partner(0, TxtNaam.Text.Trim(), type);
-                _service.AddPartner(id ,partner);
+                _service.AddPartner(partner);
                 TxtNaam.Clear();
                 Laad();
             }
