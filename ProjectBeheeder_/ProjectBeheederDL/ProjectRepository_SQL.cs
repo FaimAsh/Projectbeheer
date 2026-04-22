@@ -721,7 +721,7 @@ namespace ProjectBeheederDL
         {
             var query = @"
 SELECT 
-    p.ID, p.Titel, p.StartDatum, p.Status, p.Beschrijving,
+    p.ProjectID, p.Titel, p.StartDatum, p.Status, p.Beschrijving,
 
     l.LocatieID, l.Gemeente, l.Wijk, l.Postcode, l.Straat, l.Huisnummer,
 
@@ -741,10 +741,10 @@ SELECT
 
 FROM Project p
 JOIN Locatie l ON p.LocatieID = l.LocatieID
-LEFT JOIN GroenDetail gd ON gd.ProjectID = p.ID
-LEFT JOIN StadDetail sd ON sd.ProjectID = p.ID
-LEFT JOIN InnovatiefwonenDetail wd ON wd.ProjectID = p.ID
-LEFT JOIN Project_Partner pp ON pp.ProjectID = p.ID
+LEFT JOIN GroenDetail gd ON gd.ProjectID = p.ProjectID
+LEFT JOIN StadDetail sd ON sd.ProjectID = p.ProjectID
+LEFT JOIN InnovatiefwonenDetail wd ON wd.ProjectID = p.ProjectID
+LEFT JOIN Project_Partner pp ON pp.ProjectID = p.ProjectID
 LEFT JOIN Partner pr ON pr.PartnerID = pp.PartnerID
 LEFT JOIN StadsOntwikkeling_Partner sop ON sop.StadDetailID = sd.StadDetailID
 LEFT JOIN Partner sp ON sp.PartnerID = sop.PartnerID

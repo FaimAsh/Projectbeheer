@@ -34,9 +34,9 @@ namespace WpfAppProjectBeheeder {
 
         public MainWindow() {
             InitializeComponent();
-
-            _Beheerder = new ProjectBeheerder(RepositoryFactory.GeefRepository(databaseType, connectionstring));
             LeesConfig();
+            _Beheerder = new ProjectBeheerder(RepositoryFactory.GeefRepository(databaseType, connectionstring));
+            
             LaadProjecten();
         }
 
