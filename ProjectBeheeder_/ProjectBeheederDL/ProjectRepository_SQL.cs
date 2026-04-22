@@ -7,6 +7,7 @@ using ProjectBeheerderBL.DomeinDetails;
 using ProjectBeheerderBL.Interfaces;
 using System.Data;
 using System.Data.Common;
+using System.Reflection.PortableExecutable;
 using System.Transactions;
 using static ProjectBeheerderBL.Domein.Enums;
 
@@ -204,12 +205,45 @@ namespace ProjectBeheederDL
 
         public List<Partner> GeefPartners() {
 
+            List<Partner> partner = new();
 
+            using (SqlConnection conn = new SqlConnection(_connectionstring)) {
 
+                conn.Open();
 
+                string PartnerQuery = "SELECT * FROM Partner";
 
+                using (SqlCommand cmd = conn.CreateCommand()) {
 
+                    cmd.CommandText = PartnerQuery;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader()) {
+
+                        while (reader.Read()) {
+
+                            Partner partner1 = new Partner((int)reader["PartnerID"],
+                                (string)reader["Naam"],
+                                (Enums.PartnerType)reader["TypePartner"]
+                                );
+
+                            partner.Add(partner1);
+
+                            
+
+                        }
+                        return partner;
+                    }
+                }
+
+            }
         }
+        
+
+
+
+
+
+       
 
         public void ProjectVerwijderen(Project project)
         {
