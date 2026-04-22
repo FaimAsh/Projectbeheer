@@ -17,7 +17,7 @@ namespace ProjectBeheerderUtil
                     return new FileWriterPDF();
 
                 default:
-                    throw new ArgumentException("Unknown type");
+                    throw new ArgumentException("Onbekend type");
             }
         }
     }

@@ -138,17 +138,19 @@ namespace WpfAppProjectBeheeder {
 
         private void Info_Click(object sender, RoutedEventArgs e)
         {
-            if (DgProjecten.SelectedItem is not Project selected)
-            {
-                MessageBox.Show("Selecteer een project.", "Geen selectie", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
             try
             {
-                var volledig = _Beheerder.GetByID(selected.Id);
-                new DetailProjectWindow(volledig).ShowDialog();
+                if (DgProjecten.SelectedItem is not Project geselecteerd)
+                {
+                    MessageBox.Show("Selecteer eerst een project.");
+                    return;
+                }
+                new DetailProjectWindow(geselecteerd).ShowDialog();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);}
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void Partners_Click(object sender, RoutedEventArgs e)
@@ -156,7 +158,7 @@ namespace WpfAppProjectBeheeder {
 
         private void ExportCSV_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new SaveFileDialog { Filter = "CSV|*.csv", FileName = "projecten.csv" };
+            var dlg = new SaveFileDialog { Filter = "CSV|*.csv", FileName = ".csv" };
             if (dlg.ShowDialog() != true) return;
             try
             {
@@ -172,7 +174,7 @@ namespace WpfAppProjectBeheeder {
 
         private void ExportPdf_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new SaveFileDialog { Filter = "PDF|*.pdf|Tekstbestand|*.txt", FileName = "projecten.pdf" };
+            var dlg = new SaveFileDialog { Filter = "PDF|*.pdf", FileName = ".pdf" };
             if (dlg.ShowDialog() != true) return;
             try
             {

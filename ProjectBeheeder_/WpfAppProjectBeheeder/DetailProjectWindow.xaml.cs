@@ -1,18 +1,10 @@
 ﻿using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.DomeinDetails;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WpfAppProjectBeheeder
 {
@@ -32,8 +24,21 @@ namespace WpfAppProjectBeheeder
             Rij("Startdatum", p.StartDatum.ToString("dd/MM/yyyy"));
             Rij("Status", p.Status.ToString());
             Rij("Beschrijving", p.Beschrijving ?? "/");
-            Rij("Locatie",
-                $"{p.Locatie.Straat} {p.Locatie.Huisnummer}, {p.Locatie.Postcode} {p.Locatie.Gemeente} ({p.Locatie.Wijk})");
+
+            // 🔥 LOCATIE NULL SAFE
+            if (p.Locatie != null)
+            {
+                Rij("Locatie",
+                    $"{p.Locatie.Straat} {p.Locatie.Huisnummer}, {p.Locatie.Postcode} {p.Locatie.Gemeente} ({p.Locatie.Wijk})");
+            }
+            else
+            {
+                Rij("Locatie", "/");
+            }
+
+            // 🔥 DETAILS NULL SAFE
+            if (p.Details == null) return;
+
             foreach (var detail in p.Details)
             {
                 switch (detail)
@@ -45,8 +50,12 @@ namespace WpfAppProjectBeheeder
                         Rij("Toegankelijkheid", sd.Toegankelijkheid.ToString());
                         Rij("Bezienswaardigheid", sd.Bezienswaardigheid ? "Ja" : "Nee");
                         Rij("Infowandeling", sd.InfoBordVoorzien ? "Ja" : "Nee");
-                        if (sd.Bouwfirmas.Count > 0)
+
+                        // 🔥 FIX: null check voor Bouwfirmas
+                        if (sd.Bouwfirmas != null && sd.Bouwfirmas.Count > 0)
+                        {
                             Rij("Bouwfirmas", string.Join(", ", sd.Bouwfirmas.Select(b => b.Naam)));
+                        }
                         break;
 
                     case GroenDetail gd:
@@ -80,8 +89,14 @@ namespace WpfAppProjectBeheeder
             PnlDetail.Children.Add(sp);
         }
 
-        private void Sep() =>
+        private void Sep()
+        {
             PnlDetail.Children.Add(new System.Windows.Shapes.Rectangle
-                { Height = 1, Fill = System.Windows.Media.Brushes.LightGray, Margin = new(0, 6, 0, 6)});
+            {
+                Height = 1,
+                Fill = Brushes.LightGray,
+                Margin = new(0, 6, 0, 6)
+            });
+        }
     }
 }
