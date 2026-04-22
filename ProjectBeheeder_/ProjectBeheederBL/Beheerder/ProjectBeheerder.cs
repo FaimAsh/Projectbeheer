@@ -50,11 +50,12 @@ namespace ProjectBeheerderBL.Beheerder
         public void DeleteProject(Project p) =>    _repository.ProjectVerwijderen(p);
         public void DeletePartner(Partner p) =>    _repository.PartnerVerwijderen(p);
 <<<<<<< HEAD
-        public void GetPartners(Partner p) => _repository.GeefPartners();
+        public List<Partner> GetPartners() => _repository.GeefPartners();
+        
        
 =======
-        public void AddPartner(int id,ProjectPartner NieuwePartner) => _repository.PartnerAanmaken(id,NieuwePartner);
-        public List<Partner> GivePartner() => _repository.GeefPartners();
+        public void AddPartner(ProjectPartner NieuwePartner) => _repository.PartnerAanmaken(NieuwePartner);
+     
         public void ExportCsv(List<Project> projecten, string path)
         {
             if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");

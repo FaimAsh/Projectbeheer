@@ -46,7 +46,7 @@ namespace WpfAppProjectBeheeder
         {
             try
             {
-                var all = _service.GivePartner();
+                var all = _service.GetPartners();
                 _weergave = all.Select(p => new PartnerWeergave(p)).ToList();
             }
             catch { _weergave = new List<PartnerWeergave>(); }

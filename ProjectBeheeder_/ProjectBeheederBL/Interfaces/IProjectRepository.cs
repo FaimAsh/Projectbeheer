@@ -17,7 +17,7 @@ namespace ProjectBeheerderBL.Interfaces {
         
         void UpdateProject(Project project);
 
-        void PartnerAanmaken(int id,ProjectPartner NieuwePartner);
+        void PartnerAanmaken(ProjectPartner NieuwePartner);
 
         List<Partner> GeefPartners();
 

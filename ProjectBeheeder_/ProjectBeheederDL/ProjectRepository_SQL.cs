@@ -250,7 +250,7 @@ namespace ProjectBeheederDL
         }
 
 
-        public void PartnerAanmaken(int projectID, ProjectPartner NieuwePartner)
+        public void PartnerAanmaken(Partner NieuwePartner)
         {
 
             string ExternePartnerQuery = "INSERT INTO Project_Partner (ProjectID,PartnerID,Rolomschrijving,FlagPartner) VALUES (@ProjectID,@PartnerID,@Rolomschrijving,@FlagPartner);";
@@ -268,15 +268,15 @@ namespace ProjectBeheederDL
 
 
                 cmdExternePartner.CommandText = ExternePartnerQuery;
-                cmdExternePartner.Parameters.Add(new SqlParameter("@ProjectID", System.Data.SqlDbType.Int));
+                //cmdExternePartner.Parameters.Add(new SqlParameter("@ProjectID", System.Data.SqlDbType.Int));
                 cmdExternePartner.Parameters.Add(new SqlParameter("@PartnerID", System.Data.SqlDbType.Int));
                 cmdExternePartner.Parameters.Add(new SqlParameter("@RolOmschrijving", System.Data.SqlDbType.NVarChar));
                 cmdExternePartner.Parameters.Add(new SqlParameter("@FlagPartner", System.Data.SqlDbType.Int));
                 try
                 {
-                    cmdExternePartner.Parameters["@ProjectID"].Value = projectID;
-                    cmdExternePartner.Parameters["@PartnerID"].Value = NieuwePartner.Partner.Id;
-                    cmdExternePartner.Parameters["@Rolomschrijving"].Value = NieuwePartner.RolBeschrijving;
+                    //cmdExternePartner.Parameters["@ProjectID"].Value = NieuwePartner.PartnerT;
+                    cmdExternePartner.Parameters["@PartnerID"].Value = NieuwePartner.Id;
+                    
                     cmdExternePartner.Parameters["@FlagPartner"].Value = Enums.Flags.shown;
                     cmdExternePartner.ExecuteNonQuery();
 
@@ -582,9 +582,7 @@ namespace ProjectBeheederDL
             return projects.Values.ToList();
         }
 
-        // =========================
-        // PROJECT CREATION
-        // =========================
+     
         private Project CreateProject(SqlDataReader reader, int projectId)
         {
             Locatie locatie = new Locatie(
@@ -610,9 +608,7 @@ namespace ProjectBeheederDL
             return p;
         }
 
-        // =========================
-        // DETAILS
-        // =========================
+        
         private void EnsureGroenDetail(SqlDataReader reader, Project project, int projectId, HashSet<int> hasGroen)
         {
             if (reader["GroenDetailID"] == DBNull.Value || !hasGroen.Add(projectId))
@@ -664,9 +660,7 @@ namespace ProjectBeheederDL
             ));
         }
 
-        // =========================
-        // PARTNERS
-        // =========================
+      
         private void AddProjectPartner(SqlDataReader reader, Project project, int projectId,
             Dictionary<int, HashSet<int>> projectPartnerIds)
         {
@@ -722,9 +716,7 @@ namespace ProjectBeheederDL
             ));
         }
 
-        // =========================
-        // QUERY
-        // =========================
+        
         private string BuildQuery(ProjectFilter filter)
         {
             var query = @"
@@ -778,9 +770,7 @@ AND FlagProject = @FlagProject";
             return query;
         }
 
-        // =========================
-        // PARAMETERS
-        // =========================
+     
         private void AddParameters(SqlCommand cmd, ProjectFilter filter)
         {
             cmd.Parameters.AddWithValue("@FlagPartner", Enums.Flags.shown);

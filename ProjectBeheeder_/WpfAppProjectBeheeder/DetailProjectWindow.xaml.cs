@@ -25,7 +25,7 @@ namespace WpfAppProjectBeheeder
             Rij("Status", p.Status.ToString());
             Rij("Beschrijving", p.Beschrijving ?? "/");
 
-            // 🔥 LOCATIE NULL SAFE
+            
             if (p.Locatie != null)
             {
                 Rij("Locatie",
@@ -36,7 +36,7 @@ namespace WpfAppProjectBeheeder
                 Rij("Locatie", "/");
             }
 
-            // 🔥 DETAILS NULL SAFE
+            
             if (p.Details == null) return;
 
             foreach (var detail in p.Details)
@@ -51,7 +51,7 @@ namespace WpfAppProjectBeheeder
                         Rij("Bezienswaardigheid", sd.Bezienswaardigheid ? "Ja" : "Nee");
                         Rij("Infowandeling", sd.InfoBordVoorzien ? "Ja" : "Nee");
 
-                        // 🔥 FIX: null check voor Bouwfirmas
+
                         if (sd.Bouwfirmas != null && sd.Bouwfirmas.Count > 0)
                         {
                             Rij("Bouwfirmas", string.Join(", ", sd.Bouwfirmas.Select(b => b.Naam)));

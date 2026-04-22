@@ -8,10 +8,9 @@ namespace ProjectBeheederBL.Domein
     {
         private readonly IFileWriter _writer;
 
-        public ExportService(string type)
-        {
-            _writer = FileWriterFactory.GetWriter(type);
-        }
+        //public ExportService(string type) {
+        //    _writer = FileWriterFactory.GetWriter(type);
+        //}
 
         public void Export(string path, List<Project> projecten)
         {

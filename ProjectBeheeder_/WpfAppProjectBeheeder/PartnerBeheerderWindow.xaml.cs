@@ -31,7 +31,7 @@ namespace WpfAppProjectBeheeder
 
         private void Laad()
         {
-            try { _partners = _service.GivePartner(); }
+            try { _partners = _service.GetPartners(); }
             catch { _partners = new List<Partner>(); }
             Filter(TxtNaam?.Text ?? "");
         }
