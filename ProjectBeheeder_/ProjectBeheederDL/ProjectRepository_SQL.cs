@@ -558,7 +558,7 @@ namespace ProjectBeheederDL
 
             while (reader.Read())
             {
-                int projectId = Convert.ToInt32(reader["ID"]);
+                int projectId = Convert.ToInt32(reader["ProjectID"]);
 
                 if (!projects.TryGetValue(projectId, out var project))
                 {
@@ -640,7 +640,7 @@ namespace ProjectBeheederDL
             )
             {
                 Bouwfirmas = new List<Partner>(),
-                ToeristischeWaarde = Convert.ToBoolean(reader["ToeristischeWaarde"])
+                
             });
         }
 
@@ -729,9 +729,9 @@ SELECT
     gd.BeschikbareFaciliteit, gd.ToeristischeRoute, gd.BezoekersBeoordeling,
 
     sd.StadDetailID, sd.Vergunningstatus, sd.ArchitecturaleWaarde, sd.Toegankelijkheid,
-    sd.Bezienswaardigheid, sd.Infobordvoorzien, sd.ToeristischeWaarde,
+    sd.Bezienswaardigheid, sd.Infobordvoorzien,
 
-    wd.WonenDetailID, wd.AantalWooneenheden, wd.TypeWoonVorm, wd.RondLeidingMogelijk,
+    wd.InnovatiefWonenDetailID, wd.AantalWooneenheden, wd.TypeWoonVorm, wd.RondLeidingMogelijk,
     wd.ShowWoningMogelijk, wd.ArchitecturaleScore, wd.SamenwerkingErfgoed,
 
     pr.PartnerID AS PartnerId, pr.Naam AS PartnerNaam, pr.TypePartner AS PartnerType,
@@ -749,8 +749,7 @@ LEFT JOIN Partner pr ON pr.PartnerID = pp.PartnerID
 LEFT JOIN StadsOntwikkeling_Partner sop ON sop.StadDetailID = sd.StadDetailID
 LEFT JOIN Partner sp ON sp.PartnerID = sop.PartnerID
 WHERE 1=1 
-AND FlagPartner = @FlagPartner 
-AND FlagProject = @FlagProject";
+;";
 
             if (!string.IsNullOrEmpty(filter.Wijk))
                 query += " AND l.Wijk LIKE @Wijk";
