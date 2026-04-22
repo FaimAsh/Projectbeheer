@@ -7,6 +7,7 @@ namespace ProjectBeheerderDL_SQL
 {
     public class FileWriterPDF : IFileWriter
     {
+
         public void Write(string path, List<Project> projecten)
         {
             using (StreamWriter sw = new StreamWriter(path))
