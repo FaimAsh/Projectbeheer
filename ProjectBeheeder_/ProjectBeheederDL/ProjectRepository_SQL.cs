@@ -257,24 +257,26 @@ namespace ProjectBeheederDL
                 cmdExternePartner.Parameters.Add(new SqlParameter("@PartnerID", System.Data.SqlDbType.Int));
                 cmdExternePartner.Parameters.Add(new SqlParameter("@RolOmschrijving", System.Data.SqlDbType.NVarChar));
                 cmdExternePartner.Parameters.Add(new SqlParameter("@FlagPartner", System.Data.SqlDbType.Int));
+                try {
+                    cmdExternePartner.Parameters["@ProjectID"].Value = id;
+                    cmdExternePartner.Parameters["@PartnerID"].Value = p.Partners.;
+                    cmdExternePartner.Parameters["@Rolomschrijving"].Value = p.Partners.RolBeschrijving;
+                    cmdExternePartner.Parameters["@FlagPartner"].Value = Enums.Flags.shown;
+                    cmdExternePartner.ExecuteNonQuery();
 
-                cmdExternePartner.Parameters["@ProjectID"].Value = id;
-                cmdExternePartner.Parameters["@PartnerID"].Value = p.Partners.;
-                cmdExternePartner.Parameters["@Rolomschrijving"].Value = p.RolBeschrijving;
-                cmdExternePartner.Parameters["@FlagPartner"].Value = Enums.Flags.shown;
-                cmdExternePartner.ExecuteNonQuery();
 
-            }
-        }
+                }
+
 
         transaction.Commit();
-                }
+            }
                 catch (Exception ex) {
-                    transaction.Rollback();
-                    throw ex;
+                transaction.Rollback();
+                throw ex;
 
-       
-
+            
+            } 
+        }
         public void ProjectVerwijderen(Project project)
         {
 
