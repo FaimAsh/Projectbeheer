@@ -21,7 +21,7 @@ using static ProjectBeheerderBL.Domein.Enums;
 namespace WpfAppProjectBeheeder {
     public partial class MainWindow : Window
     {
-<<<<<<< HEAD
+
      
 
         string connectionstring;
@@ -150,145 +150,8 @@ namespace WpfAppProjectBeheeder {
         }
 
         private void Partners_Click(object sender, RoutedEventArgs e)
-            => new PartnerBeheerderWindow(_Beheerder).ShowDialog();
+            => new PartnerBeheerderWindow(_Beheerder).ShowDialog();        
 
-=======
-        private ProjectBeheerder _service;
-        private ProjectFactory _factory;
-        public MainWindow() {
-            InitializeComponent();
-            LeesConfig();
-            LaadProjecten();
-        }
-
-        private void LeesConfig() {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-            string cs = config.GetConnectionString("SQLServerConnection");
-            var repo = RepositoryFactory.GeefRepository("SQL", cs);
-            
-            string fileWriterType = "CSV";
-            var fileWriter = FileWriterFactory.GetWriter(fileWriterType);
-            _service = new ProjectBeheerder(repo);
-            _factory = new ProjectFactory();
-        }
-
-        private void LaadProjecten(ProjectFilter? filter = null) {
-            try
-            {
-                DgProjecten.ItemsSource = _service.Search(filter ?? new ProjectFilter());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Fout bij laden projecten: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void Zoeken_Click(object sender, RoutedEventArgs e) {
-            string? type = (CmbType.SelectedItem as ComboBoxItem)?.Content?.ToString() is "(alle)" ? null
-                              : (CmbType.SelectedItem as ComboBoxItem)?.Content?.ToString();
-            string? status = (CmbStatus.SelectedItem as ComboBoxItem)?.Content?.ToString() is "(alle)" ? null
-                              : (CmbStatus.SelectedItem as ComboBoxItem)?.Content?.ToString();
-
-            var details = new List<ProjectDetail>();
-            if (!string.IsNullOrEmpty(type))
-            {
-                details = type switch
-                {
-                    "Stad" => new List<ProjectDetail> { new StadDetail(0, VergunningStatus.In_Behandeling, false, Toegankelijkheid.Goed, false, false) },
-                    "Groen" => new List<ProjectDetail> { new GroenDetail(0, 0, 0, 0, "", false, 0) },
-                    "Wonen" => new List<ProjectDetail> { new WonenDetail(0, 0, "", false, false, 0, false) },
-                    _ => new List<ProjectDetail>()
-                };
-            }
-
-            var filter = new ProjectFilter
-            {
-                Details = CmbType.SelectedIndex > 0 ? details : null,
-                Status = CmbStatus.SelectedIndex > 0 ? Enum.Parse<Enums.ProjectStatus>((CmbStatus.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Concept") : 0,
-                Wijk = string.IsNullOrWhiteSpace(TxtWijk.Text) ? null : TxtWijk.Text.Trim(),
-                PartnerNaam = string.IsNullOrWhiteSpace(TxtPartner.Text) ? null : TxtPartner.Text.Trim(),
-                StartDatumVan = DpVan.SelectedDate,
-                StartDatumTot = DpTot.SelectedDate
-            };
-            LaadProjecten(filter);
-        }
-
-        private void Reset_Click(object sender, RoutedEventArgs e)
-        {
-            CmbType.SelectedIndex = 0;
-            CmbStatus.SelectedIndex = 0;
-            TxtWijk.Clear();
-            TxtPartner.Clear();
-            DpVan.SelectedDate = null;
-            DpTot.SelectedDate = null;
-            LaadProjecten();
-        }
-
-        private void DgProjecten_SelectionChanged(object sender, RoutedEventArgs e){ }
-        private void NieuwProject_Click(object sender, SelectionChangedEventArgs e)
-        {
-            var w = new NieuwProjectWindow(_service);
-            if (w.ShowDialog() == true) LaadProjecten();
-        }
-        private void WijzigProject_Click(object sender, RoutedEventArgs e)
-        {
-            if (DgProjecten.SelectedItem is not Project geselecteerd)
-            {
-                MessageBox.Show("Selecteer een project.", "Geen selectie", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            try
-            {
-                var volledig = _service.GetByID(geselecteerd.Id!.Value);
-                var w = new NieuwProjectWindow(_service, volledig);
-                if (w.ShowDialog() == true) LaadProjecten();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void VerwijderProject_Click(object sender, RoutedEventArgs e)
-        {
-            if (DgProjecten.SelectedItem is not Project geselecteerd)
-            {
-                MessageBox.Show("Selecteer een project.", "Geen selectie", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            var res = MessageBox.Show($"Project '{geselecteerd.Titel}' verwijderen?", "Bevestigen",
-                MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (res == MessageBoxResult.Yes)
-            {
-                try { _service.DeleteProject(geselecteerd); LaadProjecten(); }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
-            }
-        }
-
-        private void Info_Click(object sender, RoutedEventArgs e)
-        {
-            if (DgProjecten.SelectedItem is not Project selected)
-            {
-                MessageBox.Show("Selecteer een project.", "Geen selectie", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            try
-            {
-                var volledig = _service.GetByID(selected.Id!.Value);
-                new DetailProjectWindow(volledig).ShowDialog();
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);}
-        }
-
-        private void Partners_Click(object sender, RoutedEventArgs e)
-        {
-            new PartnerBeheerderWindow(_service).ShowDialog();
-        }
-
->>>>>>> bec6ae3d511afb9f41febb05a7a4610592459478
         private void ExportCSV_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new SaveFileDialog { Filter = "CSV|*.csv", FileName = "projecten.csv" };
@@ -296,11 +159,11 @@ namespace WpfAppProjectBeheeder {
             try
             {
                 var projecten = (List<Project>)DgProjecten.ItemsSource;
-<<<<<<< HEAD
+ 
                 _Beheerder.ExportCsv(projecten, dlg.FileName);
-=======
+
                 _service.ExportCsv(projecten, dlg.FileName);
->>>>>>> bec6ae3d511afb9f41febb05a7a4610592459478
+
                 MessageBox.Show("CSV geëxporteerd.", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -313,11 +176,11 @@ namespace WpfAppProjectBeheeder {
             try
             {
                 var projecten = (List<Project>)DgProjecten.ItemsSource;
-<<<<<<< HEAD
+
                 _Beheerder.ExportPdf(projecten, dlg.FileName);
-=======
+
                 _service.ExportPdf(projecten, dlg.FileName);
->>>>>>> bec6ae3d511afb9f41febb05a7a4610592459478
+
                 MessageBox.Show("Export klaar.", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }

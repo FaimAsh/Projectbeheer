@@ -33,5 +33,10 @@ namespace ProjectBeheerderBL.Domein
             Organisatie = 1,
             Burger = 2
         }
+
+        public enum Flags {
+
+
+        }
     }
 }

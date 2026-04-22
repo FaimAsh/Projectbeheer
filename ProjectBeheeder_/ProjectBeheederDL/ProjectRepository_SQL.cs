@@ -361,7 +361,7 @@ namespace ProjectBeheederDL
                     }
                 }
 
-                string WonenQuery = "SELECT * FROM InnovatiefwonenDetail WHERE ProjectID = @id";
+                string WonenQuery = "SELECT * FROM InnovatiefwonenDetail WHERE ProjectID = @id AND ";
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = WonenQuery;
