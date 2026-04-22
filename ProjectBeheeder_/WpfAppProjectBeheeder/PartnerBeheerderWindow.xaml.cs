@@ -31,7 +31,7 @@ namespace WpfAppProjectBeheeder
 
         private void Laad()
         {
-            try { _partners = _service.GetAllPartners(); }
+            try { _partners = _service.GivePartner(); }
             catch { _partners = new List<Partner>(); }
             Filter(TxtNaam?.Text ?? "");
         }
@@ -67,7 +67,7 @@ namespace WpfAppProjectBeheeder
                 var type = Enum.Parse<PartnerType>(
                     ((ComboBoxItem)CmbTypePartner.SelectedItem).Content.ToString()!);
                 var partner = new Partner(0, TxtNaam.Text.Trim(), type);
-                _service.AddPartner(partner);
+                _service.AddPartner(id ,partner);
                 TxtNaam.Clear();
                 Laad();
             }

@@ -46,7 +46,7 @@ namespace WpfAppProjectBeheeder
 
             _isStads = project.Details.Any(d => d is StadDetail);
 
-            // Set type combobox to current project type (before VulFormulierIn fires SelectionChanged)
+            // Set type combobox to current project type
             CmbType.SelectionChanged -= CmbType_SelectionChanged;
             string initType = project.Details.FirstOrDefault() switch
             {
@@ -86,7 +86,6 @@ namespace WpfAppProjectBeheeder
             if (CmbWijzigKategorie != null) CmbWijzigKategorie.Visibility = nowStads ? Visibility.Visible : Visibility.Collapsed;
             if (GridNieuweKategorie != null) GridNieuweKategorie.Visibility = nowStads ? Visibility.Visible : Visibility.Collapsed;
 
-            // If leaving StadsProject, reset all partner rijen to algemeen
             if (!nowStads)
                 foreach (var r in _partnerRijen) r.Kategorie = "algemeen";
         }
@@ -166,7 +165,7 @@ namespace WpfAppProjectBeheeder
 
         private void LaadBeschikbarePartners()
         {
-            try   { _allPartners = _service.GetAllPartners(); }
+            try   { _allPartners = _service.GivePartner(); }
             catch { _allPartners = new List<Partner>(); }
             RefreshBeschikbaar();
         }

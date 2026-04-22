@@ -14,7 +14,7 @@ namespace ProjectBeheerderUtil
         public Project CreateProject(string titel, DateTime startDatum, string beschrijving,ProjectStatus status, Locatie locatie)
         {
             return new Project(
-                null,
+                
                 titel,
                 startDatum,
                 string.Empty,
