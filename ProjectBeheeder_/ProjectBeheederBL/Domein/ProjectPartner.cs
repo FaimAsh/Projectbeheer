@@ -8,7 +8,7 @@ namespace ProjectBeheerderBL.Domein
 {
     public class ProjectPartner
     {
-      
+
 
         public ProjectPartner(Partner partner, string rolomschrijving) {
             this.Partner = partner;
@@ -17,8 +17,6 @@ namespace ProjectBeheerderBL.Domein
 
         public Partner Partner { get; set; }
         public string RolBeschrijving { get; set; }
-        public int ProjectId { get; set; }
-        public int PartnerId { get; set; }
 
     }
 }

@@ -106,7 +106,7 @@ namespace WpfAppProjectBeheeder
 
                 Project project = type switch
                 {
-                    "StadsProject" => _service.Factory.CreateStadsProject(
+                    "StadsProject" => _service.Factory.AddStadsDetail(
                         TxtTitel.Text, DpStart.SelectedDate ?? DateTime.Today, status, locatie,
                         Enum.Parse<VergunningStatus>(((ComboBoxItem)CmbVergunning.SelectedItem).Content.ToString()!),
                         ChkArchWaarde.IsChecked == true,
@@ -115,7 +115,7 @@ namespace WpfAppProjectBeheeder
                         ChkInfowandeling.IsChecked == true,
                         TxtBeschrijving.Text),
 
-                    "GroenProject" => _service.Factory.CreateGroenProject(
+                    "GroenProject" => _service.Factory.AddGroenDetail(
                         TxtTitel.Text, DpStart.SelectedDate ?? DateTime.Today, status, locatie,
                         double.Parse(TxtOppervlakte.Text),
                         int.Parse(TxtBioScore.Text),
@@ -125,7 +125,7 @@ namespace WpfAppProjectBeheeder
                         int.Parse(TxtBeoordeling.Text),
                         TxtBeschrijving.Text),
 
-                    "WonenProject" => _service.Factory.CreateWonenProject(
+                    "WonenProject" => _service.Factory.AddWonenDetail(
                         TxtTitel.Text, DpStart.SelectedDate ?? DateTime.Today, status, locatie,
                         int.Parse(TxtEenheden.Text),
                         TxtWoningTypes.Text,

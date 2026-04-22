@@ -540,20 +540,18 @@ namespace ProjectBeheederDL
             if (!set.Add(partnerId))
                 return;
 
-            project.Partners.Add(new ProjectPartner
-            {
-                ProjectId = projectId,
-                PartnerId = partnerId,
-                Rolbeschrijving = reader["Rolomschrijving"]?.ToString(),
+            var partner = new Partner(
+                partnerId,
+                reader["PartnerNaam"]?.ToString(),
+                (PartnerType)Convert.ToInt32(reader["PartnerType"])
+            );
 
-                Partner = new Partner
-                {
-                    Id = partnerId,
-                    Naam = reader["PartnerNaam"]?.ToString(),
-                    PartnerType = (PartnerType)Convert.ToInt32(reader["PartnerType"])
-                }
-            });
-        }
+            var rol = reader["Rolomschrijving"]?.ToString();
+
+            var projectPartner = new ProjectPartner(partner, rol);
+
+            project.Partners.Add(projectPartner);
+        }   
 
         private void AddStadPartner(SqlDataReader reader, Project project, int projectId,
             Dictionary<int, HashSet<int>> stadPartnerIds)
@@ -575,12 +573,7 @@ namespace ProjectBeheederDL
             var stad = project.Details.OfType<StadDetail>().FirstOrDefault();
             if (stad == null) return;
 
-            stad.Bouwfirmas.Add(new Partner
-            {
-                Id = partnerId,
-                Naam = reader["StadPartnerNaam"]?.ToString(),
-                PartnerType = (PartnerType)Convert.ToInt32(reader["StadPartnerType"])
-            });
+            stad.Bouwfirmas.Add(new Partner(partnerId, reader["StadPartnerNaam"]?.ToString(), (PartnerType)Convert.ToInt32(reader["StadPartnerType"]))) ;
         }
 
         // =========================

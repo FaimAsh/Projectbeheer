@@ -7,18 +7,14 @@ using ProjectBeheerderUtil;
 using static ProjectBeheerderBL.Domein.Enums;
 
 
-var builder = new ConfigurationBuilder()
-       .SetBasePath(Directory.GetCurrentDirectory())
-       .AddJsonFile("appsetting.json", optional: false, reloadOnChange: true);
-
-var config = builder.Build();
-string connectionstring = config.GetConnectionString("SQLServerConnection");
-string databaseType = config.GetSection("appsettings")["databasetype"];
 
 
-ProjectBeheerder projectBeheerder = new ProjectBeheerder(RepositoryFactory.GeefRepository(databaseType, connectionstring));
+//ProjectBeheerder projectBeheerder = new ProjectBeheerder(,IFileWriter);
 
-
+Console.WriteLine("dadada");
+IProjectRepository repository = null;
+ConsoleAppTest lala;
+lala = new ConsoleAppTest( repository);
 
 
 public class ConsoleAppTest {
@@ -27,7 +23,15 @@ public class ConsoleAppTest {
     public ConsoleAppTest(IProjectRepository repository) {
         this.repository = repository;
 
+        Console.WriteLine("adadaodnaondaon");
 
+        var builder = new ConfigurationBuilder()
+       .SetBasePath(Directory.GetCurrentDirectory())
+       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+        var config = builder.Build();
+        string connectionstring = config.GetConnectionString("SQLServerConnection");
+        string databaseType = config.GetSection("appsettings")["databasetype"];
 
 
 
@@ -36,8 +40,9 @@ public class ConsoleAppTest {
         // DUMMY PARTNERS 
         // (We gaan ervan uit dat je Partner constructor zo werkt: ID, Naam, Enum)
         // ==========================================
-        Partner besix = new Partner(1, "Besix Bouwgroep"); // Of voeg de enum toe als dat in je constructor staat
-        Partner natuurpunt = new Partner(2, "Natuurpunt");
+        Console.WriteLine("adadaodnaondaon");
+        Partner besix = new Partner(1, "Besix Bouwgroep",PartnerType.Organisatie); // Of voeg de enum toe als dat in je constructor staat
+        Partner natuurpunt = new Partner(2, "Natuurpunt",PartnerType.Burger);
 
         // ==========================================
         // DOSSIER 1: STADSONTWIKKELING GENT

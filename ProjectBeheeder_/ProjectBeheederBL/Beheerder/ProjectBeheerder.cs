@@ -11,7 +11,7 @@ namespace ProjectBeheerderBL.Beheerder
         private IFileWriter _writer;
 
 
-        public ProjectBeheerder(string type,IProjectRepository repository, IFileWriter writer)
+        public ProjectBeheerder(IProjectRepository repository, IFileWriter writer)
         {
             _repository = repository;
             _writer = writer;

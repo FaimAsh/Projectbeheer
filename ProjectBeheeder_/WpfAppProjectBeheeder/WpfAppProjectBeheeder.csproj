@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProjectBeheederBL\ProjectBeheerderBL.csproj" />
+    <ProjectReference Include="..\ProjectBeheerderUtil\ProjectBeheerderUtil.csproj" />
   </ItemGroup>
 
 </Project>
