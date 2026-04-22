@@ -24,12 +24,12 @@ namespace ProjectBeheerderBL.Domein
         }
 
 
-        public Project(int? id, string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) : this (titel,startdatum,beschrijving,projectStatus,locatie){
+        public Project(int id, string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) : this (titel,startdatum,beschrijving,projectStatus,locatie){
 
             this.Id = id;
         }
 
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string Titel { get; set; }
         public ProjectStatus Status { get; set; }
         public DateTime StartDatum { get; set; }

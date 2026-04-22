@@ -202,9 +202,14 @@ namespace ProjectBeheederDL
             }
         }
 
+        public List<Partner> GeefPartners() {
 
 
 
+
+
+
+        }
 
         public void ProjectVerwijderen(Project project)
         {

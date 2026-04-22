@@ -11,10 +11,10 @@ namespace ProjectBeheerderBL.Beheerder
         private IFileWriter _writer;
 
 
-        public ProjectBeheerder(IProjectRepository repository, IFileWriter writer)
+        public ProjectBeheerder(IProjectRepository repository)
         {
             _repository = repository;
-            _writer = writer;
+            
         }
        
         public List<Project> GetAll() =>    _repository.Search(new ProjectFilter());
