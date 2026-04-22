@@ -9,37 +9,54 @@
         WindowStartupLocation="CenterScreen">
     <DockPanel Margin="10">
         <GroupBox DockPanel.Dock="Top" Header="Zoeken &amp; Filteren" Margin="0 0 0 8">
-            <WrapPanel Margin="6">
-                <Label Content="Type:" VerticalAlignment="Center"/>
-                <ComboBox Name="CmbType" Width="150" Margin="0 0 10 0">
-                    <ComboBoxItem Content="(alle)" IsSelected="True"/>
-                    <ComboBoxItem Content="StadsProject"/>
-                    <ComboBoxItem Content="WonenProject"/>
-                    <ComboBoxItem Content="GroenProject"/>
-                </ComboBox>
+            <Grid Margin="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+                    <Label Grid.Column="0" Content="Type:" Margin="50 0 0 0" VerticalAlignment="Center"/>
+                <Label Grid.Column="1" Content="StadsProject:" Margin="0 0 0 0" VerticalAlignment="Center"/>
+                <CheckBox Grid.Column="1" Grid.Row="0" Name="ChkBowfirma" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
+                <Label Grid.Column="1" Grid.Row="1" Content="GroenProject:" Margin="0 0 0 0" VerticalAlignment="Center"/>
+                <CheckBox Grid.Column="1" Grid.Row="1" Name="ChkBuwfirma" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
+                <Label Grid.Column="1" Grid.Row="2" Content="WoonProject:" Margin="0 0 0 0" VerticalAlignment="Center"/>
+                <CheckBox Grid.Column="1" Grid.Row="2" Name="ChkBouwfirma" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
 
-                <Label Content="Status:" VerticalAlignment="Center"/>
-                <ComboBox Name="CmbStatus" Width="120" Margin="0 0 10 0">
-                    <ComboBoxItem Content="(alle)" IsSelected="True"/>
-                    <ComboBoxItem Content="Planning"/>
-                    <ComboBoxItem Content="UitVoering"/>
-                    <ComboBoxItem Content="Afgerond"/>
-                </ComboBox>
+                    <Label Grid.Column="2" Content="Status:" VerticalAlignment="Center"/>
+                <Label Grid.Column="3" Content="Planning:" Margin="0 0 0 0" VerticalAlignment="Center"/>
+                <CheckBox Grid.Column="3" Grid.Row="0" Name="ChkBowfirm" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
+                <Label Grid.Column="3" Grid.Row="1" Content="UitVoering:" Margin="0 0 0 0" VerticalAlignment="Center"/>
+                <CheckBox Grid.Column="3" Grid.Row="1" Name="ChkBuwfira" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
+                <Label Grid.Column="3" Grid.Row="2" Content="Afgerond:" Margin="0 0 0 0" VerticalAlignment="Center"/>
+                <CheckBox Grid.Column="3" Grid.Row="2" Name="ChkBouwfrma" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
 
-                <Label Content="Wijk:" VerticalAlignment="Center"/>
-                <TextBox Name="TxtWijk" Width="100" Margin="0 0 10 0" VerticalAlignment="Center"/>
+                    <Label Grid.Column="4" Content="Wijk:" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="5" Name="TxtWijk" Width="100" Margin="0 0 10 0" VerticalAlignment="Center"/>
 
-                <Label Content="Partner:" VerticalAlignment="Center"/>
-                <TextBox Name="TxtPartner" Width="120" Margin="0 0 10 0" VerticalAlignment="Center"/>
-
-                <Label Content="Van:" VerticalAlignment="Center"/>
-                <DatePicker Name="DpVan" Width="120" Margin="0 0 6 0" VerticalAlignment="Center"/>
-                <Label Content="Tot:" VerticalAlignment="Center"/>
-                <DatePicker Name="DpTot" Width="120" Margin="0 0 10 0" VerticalAlignment="Center"/>
-
-                <Button Content="Zoeken" Width="80" Click="Zoeken_Click"/>
-                <Button Content="Reset" Width="60" Margin="6 0 0 0" Click="Reset_Click"/>
-            </WrapPanel>
+                    <Label Grid.Column="6" Content="Partner:" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="7" Name="TxtPartner" Width="120" Margin="0 0 10 0" VerticalAlignment="Center"/>
+                    <Label Grid.Column="8" Content="Van:" VerticalAlignment="Center"/>
+                <DatePicker Grid.Column="9" Name="DpVan" Width="120" Margin="0 0 6 0" VerticalAlignment="Center"/>
+                    <Label Grid.Column="10" Content="Tot:" VerticalAlignment="Center"/>
+                <DatePicker Grid.Column="11" Name="DpTot" Width="120" Margin="0 0 10 0" VerticalAlignment="Center"/>
+                <Button Grid.Column="11" Grid.Row="2" Content="Zoeken" Width="80" Click="Zoeken_Click"/>
+                <Button Grid.Column="9" Grid.Row="2" Content="Reset" Width="60" Height="25" Margin="0 0 0 0" Click="Reset_Click"/>
+            </Grid>
         </GroupBox>
         
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0 0 0 8" RenderTransformOrigin="0.729,0.709">

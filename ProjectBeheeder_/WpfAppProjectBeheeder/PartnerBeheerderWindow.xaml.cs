@@ -20,10 +20,17 @@ namespace WpfAppProjectBeheeder
     public partial class PartnerBeheerderWindow : Window
     {
         private readonly ProjectService _service;
+        private ProjectBeheerder service;
+
         public PartnerBeheerderWindow(ProjectService service)
         {
             InitializeComponent();
             _service = service;
+        }
+
+        public PartnerBeheerderWindow(ProjectBeheerder service)
+        {
+            this.service = service;
         }
 
         private void Toevoegen_Click(object sender, RoutedEventArgs e)
