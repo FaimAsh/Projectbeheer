@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using ProjectBeheederDL;
 using ProjectBeheerderBL.Beheerder;
 using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.DomeinDetails;
@@ -7,12 +8,20 @@ using ProjectBeheerderUtil;
 using static ProjectBeheerderBL.Domein.Enums;
 
 
+var builder = new ConfigurationBuilder()
+       .SetBasePath(Directory.GetCurrentDirectory())
+       .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+var config = builder.Build();
+string connectionstring = config.GetConnectionString("SQLServerConnection");
+string databaseType = config.GetSection("appsettings")["databasetype"];
 
 
 //ProjectBeheerder projectBeheerder = new ProjectBeheerder(,IFileWriter);
 
 Console.WriteLine("dadada");
-IProjectRepository repository = null;
+
+IProjectRepository repository = new ProjectRepository_SQL(connectionstring);
 ConsoleAppTest lala;
 lala = new ConsoleAppTest( repository);
 
@@ -24,6 +33,8 @@ public class ConsoleAppTest {
         this.repository = repository;
 
         Console.WriteLine("adadaodnaondaon");
+
+        
 
         var builder = new ConfigurationBuilder()
        .SetBasePath(Directory.GetCurrentDirectory())
