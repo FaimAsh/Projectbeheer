@@ -1,0 +1,294 @@
+<Window x:Class="WpfAppProjectBeheeder.WijzigenWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Project wijzigen" Height="720" Width="940"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>  <!-- content -->
+            <RowDefinition Height="44"/> <!-- save/cancel -->
+        </Grid.RowDefinitions>
+
+        <!-- ========== CONTENT: left form | right partners ========== -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="490"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ===== LEFT: project fields (type locked, content editable) ===== -->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="14">
+
+                    <!-- Algemeen -->
+                    <GroupBox Header="Algemeen" Margin="0 0 0 10">
+                        <Grid Margin="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="60"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Type selector: changes which detail GroupBox is shown -->
+                            <Label Grid.Row="0" Content="Type project:"/>
+                            <ComboBox Grid.Row="0" Grid.Column="1" Name="CmbType"
+                                      VerticalContentAlignment="Center"
+                                      SelectionChanged="CmbType_SelectionChanged">
+                                <ComboBoxItem Content="StadsProject"/>
+                                <ComboBoxItem Content="GroenProject"/>
+                                <ComboBoxItem Content="WonenProject"/>
+                            </ComboBox>
+
+                            <Label Grid.Row="1" Content="Titel:"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Name="TxtTitel" VerticalContentAlignment="Center"/>
+
+                            <Label Grid.Row="2" Content="StartDatum:"/>
+                            <DatePicker Grid.Row="2" Grid.Column="1" Name="DpStart"/>
+
+                            <Label Grid.Row="3" Content="Status:"/>
+                            <ComboBox Grid.Row="3" Grid.Column="1" Name="CmbStatus" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="Planning"   IsSelected="True"/>
+                                <ComboBoxItem Content="UitVoering"/>
+                                <ComboBoxItem Content="Afgerond"/>
+                            </ComboBox>
+
+                            <Label Grid.Row="4" Content="Beschrijving:" VerticalAlignment="Top"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Name="TxtBeschrijving"
+                                     AcceptsReturn="True" TextWrapping="Wrap"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Locatie -->
+                    <GroupBox Header="Locatie" Margin="0 0 0 10">
+                        <Grid Margin="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Content="Gemeente:"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Name="TxtGemeente" VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="1" Content="PostCode:"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Name="TxtPostCode" VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="2" Content="Straat:"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Name="TxtStraat"   VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="3" Content="HuisNummer:"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Name="TxtHuisNummer" VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="4" Content="Wijk:"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Name="TxtWijk"     VerticalContentAlignment="Center"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- StadsProject details (shown only if project is StadsProject) -->
+                    <GroupBox Name="GbStads" Header="Stadsproject details" Margin="0 0 0 10" Visibility="Collapsed">
+                        <Grid Margin="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Content="Vergunningstatus:"/>
+                            <ComboBox Grid.Row="0" Grid.Column="1" Name="CmbVergunning" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="InAanvraag"  IsSelected="True"/>
+                                <ComboBoxItem Content="Goedgekeurd"/>
+                                <ComboBoxItem Content="Geweigerd"/>
+                            </ComboBox>
+                            <Label Grid.Row="1" Content="Architecturale waarde:"/>
+                            <CheckBox Grid.Row="1" Grid.Column="1" Name="ChkArchWaarde" VerticalAlignment="Center"/>
+                            <Label Grid.Row="2" Content="Toegankelijkheid:"/>
+                            <ComboBox Grid.Row="2" Grid.Column="1" Name="CmbToegang" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="VolledigOpenbaar" IsSelected="True"/>
+                                <ComboBoxItem Content="Gedeeltelijk"/>
+                                <ComboBoxItem Content="Gesloten"/>
+                            </ComboBox>
+                            <Label Grid.Row="3" Content="Bezienswaardigheid:"/>
+                            <CheckBox Grid.Row="3" Grid.Column="1" Name="ChkBeziens"   VerticalAlignment="Center"/>
+                            <Label Grid.Row="4" Content="Infobord voorzien:"/>
+                            <CheckBox Grid.Row="4" Grid.Column="1" Name="ChkInfobord"  VerticalAlignment="Center"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- GroenProject details -->
+                    <GroupBox Name="GbGroen" Header="Groen project details" Margin="0 0 0 10" Visibility="Collapsed">
+                        <Grid Margin="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Content="Oppervlakte (m²):"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Name="TxtOppervlakte" VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="1" Content="Biodiversiteitscore (0-10):"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Name="TxtBioScore"    VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="2" Content="Aantal wandelpaden:"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Name="TxtWandelpaden" VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="3" Content="Faciliteiten:"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Name="TxtFaciliteiten" VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="4" Content="Toeristische route:"/>
+                            <CheckBox Grid.Row="4" Grid.Column="1" Name="ChkToerRoute"  VerticalAlignment="Center"/>
+                            <Label Grid.Row="5" Content="Beoordeling (0-5):"/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Name="TxtBeoordeling" VerticalContentAlignment="Center"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- WonenProject details -->
+                    <GroupBox Name="GbInno" Header="Wonen project details" Margin="0 0 0 10" Visibility="Collapsed">
+                        <Grid Margin="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="32"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Content="Aantal eenheden:"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Name="TxtEenheden"    VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="1" Content="Woning types:"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Name="TxtWoningTypes" VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="2" Content="Rondleidingen mogelijk:"/>
+                            <CheckBox Grid.Row="2" Grid.Column="1" Name="ChkRondleiding" VerticalAlignment="Center"/>
+                            <Label Grid.Row="3" Content="Showwoning beschikbaar:"/>
+                            <CheckBox Grid.Row="3" Grid.Column="1" Name="ChkShowwoning"  VerticalAlignment="Center"/>
+                            <Label Grid.Row="4" Content="Innovatie score (0-10):"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Name="TxtInnoScore"   VerticalContentAlignment="Center"/>
+                            <Label Grid.Row="5" Content="Erfgoed samenwerking:"/>
+                            <CheckBox Grid.Row="5" Grid.Column="1" Name="ChkErfgoed"    VerticalAlignment="Center"/>
+                        </Grid>
+                    </GroupBox>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ===== RIGHT: partner management ===== -->
+            <GroupBox Grid.Column="1" Header="Partners" Margin="8 14 10 8">
+                <Grid Margin="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/> <!-- label -->
+                        <RowDefinition Height="*"/>    <!-- gekoppeld list (takes available space) -->
+                        <RowDefinition Height="Auto"/> <!-- edit selected -->
+                        <RowDefinition Height="8"/>    <!-- spacer -->
+                        <RowDefinition Height="Auto"/> <!-- add section label -->
+                        <RowDefinition Height="32"/>   <!-- search -->
+                        <RowDefinition Height="130"/>  <!-- available list -->
+                        <RowDefinition Height="32"/>   <!-- rol row -->
+                        <RowDefinition Height="32"/>   <!-- kategorie row (stads only) -->
+                        <RowDefinition Height="32"/>   <!-- voeg toe button -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Gekoppelde partners list -->
+                    <Label Grid.Row="0" Content="Gekoppelde partners:" FontWeight="SemiBold"/>
+                    <ListBox Grid.Row="1" Name="LstGekoppeld" MinHeight="80"
+                             SelectionChanged="LstGekoppeld_SelectionChanged"/>
+
+                    <!-- Edit selected partner -->
+                    <StackPanel Grid.Row="2" Margin="0 6 0 0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="65"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/> <!-- kategorie row, hidden when not stads -->
+                            </Grid.RowDefinitions>
+                            <Label Grid.Column="0" Content="Rol:"    VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Name="TxtWijzigRol" VerticalContentAlignment="Center"/>
+                            <Button Grid.Column="2" Content="Wijzig" Margin="4 0 0 0"
+                                    Click="WijzigGekoppeld_Click"/>
+
+                            <!-- Kategorie row: only visible for StadsProject -->
+                            <Label Grid.Row="1" Grid.Column="0" Name="LblKategorie"
+                                   Content="Type:" VerticalAlignment="Center" Visibility="Collapsed"/>
+                            <ComboBox Grid.Row="1" Grid.Column="1" Name="CmbWijzigKategorie"
+                                      VerticalContentAlignment="Center" Margin="0 2 0 0"
+                                      Visibility="Collapsed">
+                                <ComboBoxItem Content="algemeen"  IsSelected="True"/>
+                                <ComboBoxItem Content="bouwfirma"/>
+                            </ComboBox>
+                        </Grid>
+                        <Button Name="BtnVerwijderGekoppeld" Content="Verwijder gekoppelde partner"
+                                Click="VerwijderGekoppeld_Click" Margin="0 4 0 0"/>
+                    </StackPanel>
+
+                    <Separator Grid.Row="3" Margin="0 4 0 0"/>
+
+                    <!-- Add partner section -->
+                    <Label Grid.Row="4" Content="Partner toevoegen:" FontWeight="SemiBold"/>
+                    <TextBox Grid.Row="5" Name="TxtPartnerZoek" VerticalContentAlignment="Center"
+                             Margin="0 0 0 4"
+                             TextChanged="TxtPartnerZoek_TextChanged"/>
+                    <ListBox Grid.Row="6" Name="LstBeschikbaar" DisplayMemberPath="Naam"
+                             Margin="0 0 0 4"/>
+
+                    <Grid Grid.Row="7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="45"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Rol:"   VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Name="TxtNieuweRol" VerticalContentAlignment="Center"/>
+                    </Grid>
+
+                    <!-- Nieuwe kategorie (stads only) -->
+                    <Grid Grid.Row="8" Name="GridNieuweKategorie" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="45"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Type:"  VerticalAlignment="Center"/>
+                        <ComboBox Grid.Column="1" Name="CmbNieuweKategorie"
+                                  VerticalContentAlignment="Center">
+                            <ComboBoxItem Content="algemeen"  IsSelected="True"/>
+                            <ComboBoxItem Content="bouwfirma"/>
+                        </ComboBox>
+                    </Grid>
+
+                    <Button Grid.Row="9" Content="Voeg partner toe"
+                            Click="VoegPartnerToe_Click" Margin="0 2 0 0"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+        <!-- ========== SAVE / CANCEL ========== -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal"
+                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 14 0">
+            <Button Content="Opslaan"  Width="90" Click="Opslaan_Click"/>
+            <Button Content="Annuleer" Width="90" Margin="8 0 0 0" Click="Annuleer_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

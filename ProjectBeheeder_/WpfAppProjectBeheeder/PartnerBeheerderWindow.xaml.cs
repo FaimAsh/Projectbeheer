@@ -19,28 +19,91 @@ namespace WpfAppProjectBeheeder
 {
     public partial class PartnerBeheerderWindow : Window
     {
-        private readonly ProjectService _service;
-        private ProjectBeheerder service;
-
-        public PartnerBeheerderWindow(ProjectService service)
-        {
-            InitializeComponent();
-            _service = service;
-        }
+        private readonly ProjectBeheerder _service;
+        private List<Partner> _partners = new();
 
         public PartnerBeheerderWindow(ProjectBeheerder service)
         {
-            this.service = service;
+            InitializeComponent();
+            _service = service;
+            Laad();
         }
 
-        private void Toevoegen_Click(object sender, RoutedEventArgs e)
+        private void Laad()
         {
+            try { _partners = _service.GetAllPartners(); }
+            catch { _partners = new List<Partner>(); }
+            Filter(TxtNaam?.Text ?? "");
+        }
+
+        private void Filter(string zoek)
+        {
+            zoek = zoek.Trim().ToLower();
+            var lijst = string.IsNullOrEmpty(zoek)
+                ? _partners
+                : _partners.Where(p => p.Naam.ToLower().Contains(zoek)).ToList();
+
+            LstPartners.ItemsSource = null;
+            LstPartners.ItemsSource = lijst
+                .Select(p => $"{p.Naam}  ({p.PartnerType})")
+                .ToList();
+        }
+
+        private void TxtNaam_TextChanged(object sender, TextChangedEventArgs e)
+            => Filter(TxtNaam.Text);
+
+        private void LstPartners_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
+
+        private void Aanmaken_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(TxtNaam.Text))
+            {
+                MessageBox.Show("Vul een naam in.", "Validatie",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             try
             {
-                var type = Enum.Parse<PartnerType>(((ComboBoxItem)CmbTypePartner.SelectedItem).Content.ToString()!);
-                var partner = new Partner(TxtNaam.Text, type);
+                var type = Enum.Parse<PartnerType>(
+                    ((ComboBoxItem)CmbTypePartner.SelectedItem).Content.ToString()!);
+                var partner = new Partner(0, TxtNaam.Text.Trim(), type);
                 _service.AddPartner(partner);
-                TxtNaam.Text = "";
+                TxtNaam.Clear();
+                Laad();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void Verwijder_Click(object sender, RoutedEventArgs e)
+        {
+            int idx = LstPartners.SelectedIndex;
+            if (idx < 0)
+            {
+                MessageBox.Show("Selecteer eerst een partner.", "Geen selectie",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            string filterTekst = TxtNaam.Text.Trim().ToLower();
+            var zichtbaar = string.IsNullOrEmpty(filterTekst)
+                ? _partners
+                : _partners.Where(p => p.Naam.ToLower().Contains(filterTekst)).ToList();
+
+            if (idx >= zichtbaar.Count) return;
+            var teVerwijderen = zichtbaar[idx];
+
+            var bevestig = MessageBox.Show(
+                $"Partner '{teVerwijderen.Naam}' verwijderen?", "Bevestigen",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (bevestig != MessageBoxResult.Yes) return;
+
+            try
+            {
+                _service.DeletePartner(teVerwijderen);
+                Laad();
             }
             catch (Exception ex)
             {

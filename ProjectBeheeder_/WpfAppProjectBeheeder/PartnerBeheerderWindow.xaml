@@ -5,35 +5,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppProjectBeheeder"
         mc:Ignorable="d"
-        Title="PartnerBeheerderWindow" Height="180" Width="800"
+        Title="PartnerBeheerderWindow" Height="440" Width="580"
         WindowStartupLocation="CenterOwner">
-    <DockPanel Margin="10">
-        <GroupBox DockPanel.Dock="Bottom" Header="Nieuwe partner" Margin="0 8 0 0">
-            <Grid Margin="6">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <!-- partner list -->
+            <RowDefinition Height="Auto"/>
+            <!-- aanmaak verwijder -->
+            <RowDefinition Height="40"/>
+            <!-- sluiten -->
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0" Header="Bestaande partners" Margin="0 0 0 8">
+            <ListBox Name="LstPartners" Margin="4"
+                 SelectionChanged="LstPartners_SelectionChanged"/>
+        </GroupBox>
+
+        
+        <GroupBox Grid.Row="1" Header="Partner aanmaken / verwijderen" Margin="0 0 0 8">
+            <Grid Margin="6 8 6 6">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="45"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="90"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Column="0" Content="Naam:" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" Name="TxtNaam" VerticalContentAlignment="Center" Margin="0 0 6 0"/>
-                <Label Grid.Column="2" Content="Type:" VerticalAlignment="Center"/>
-                <ComboBox Grid.Column="3" Name="CmbTypePartner" VerticalContentAlignment="Center" Margin="0 0 6 0">
-                    <ComboBoxItem Content="Bedrijf" IsSelected="True"/>
+
+                <Label  Grid.Column="0" Content="Naam:"  VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Name="TxtNaam"  VerticalContentAlignment="Center"
+                     Margin="0 0 8 0" TextChanged="TxtNaam_TextChanged"/>
+                <Label  Grid.Column="2" Content="Type:"  VerticalAlignment="Center"/>
+                <ComboBox Grid.Column="3" Name="CmbTypePartner" VerticalContentAlignment="Center">
+                    <ComboBoxItem Content="Bedrijf"      IsSelected="True"/>
                     <ComboBoxItem Content="Organisatie"/>
                     <ComboBoxItem Content="Burger"/>
                 </ComboBox>
-                <Button Grid.Column="4" Content="Toevoegen" Click="Toevoegen_Click"/>
-                    <Label Grid.Column="2" Grid.Row="2" Content="BouwFirma:" Margin="0 0 0 0"  VerticalAlignment="Center"/>
-                <CheckBox Grid.Column="3" Grid.Row="2" Name="ChkBouwfirma" Margin="0 0 40 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <Button Grid.Column="4" Grid.Row="2" Content="Sluiten" Width="80" Height="30" Margin="0 16 0 0" Click="Sluiten_Click"/>
-                </Grid>
+                <Button Grid.Column="5" Content="Aanmaken"
+                    Click="Aanmaken_Click"/>
+
+                <Button Grid.Column="5" Grid.Row="1" Content="Verwijder selectie"
+                    Click="Verwijder_Click"/>
+            </Grid>
         </GroupBox>
-    </DockPanel>
+
+        <Button Grid.Row="2" Content="Sluiten" Width="90"
+            HorizontalAlignment="Right" Click="Sluiten_Click"/>
+    </Grid>
 </Window>
