@@ -3,176 +3,284 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfAppProjectBeheeder"
         mc:Ignorable="d"
-        Title="NewProjectWindow" Height="680" Width="540"
+        Title="Nieuw project" Height="680" Width="880"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="14">
 
-            <GroupBox Header="Algemeen" Margin="0 0 0 10">
-                <Grid Margin="6">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="140"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="60"/>
-                    </Grid.RowDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="530"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0" Content="TypeProject"/>
-                    <ComboBox Grid.Row="0" Grid.Column="1" Name="CmbType" VerticalContentAlignment="Center"
-                              SelectionChanged="CmbType_SelectionChanged">
-                        <ComboBoxItem Content="StadsProject" IsSelected="True"/>
-                        <ComboBoxItem Content="WonenProject"/>
-                        <ComboBoxItem Content="GroenProject"/>
-                    </ComboBox>
+        <!-- ===== LEFT: project form (unchanged) ===== -->
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="14">
 
-                    <Label Grid.Row="1" Content="Titel:"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Name="TxtTitel" VerticalContentAlignment="Center"/>
+                <GroupBox Header="Algemeen" Margin="0 0 0 10">
+                    <Grid Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="60"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="TypeProject"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" Name="CmbType" VerticalContentAlignment="Center"
+                                  SelectionChanged="CmbType_SelectionChanged">
+                            <ComboBoxItem Content="StadsProject" IsSelected="True"/>
+                            <ComboBoxItem Content="WonenProject"/>
+                            <ComboBoxItem Content="GroenProject"/>
+                        </ComboBox>
+                        <Label Grid.Row="1" Content="Titel:"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Name="TxtTitel" VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="2" Content="StartDatum:"/>
+                        <DatePicker Grid.Row="2" Grid.Column="1" Name="DpStart"/>
+                        <Label Grid.Row="3" Content="Status:"/>
+                        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="CmbStatus" VerticalContentAlignment="Center">
+                            <ComboBoxItem Content="Planning"   IsSelected="True"/>
+                            <ComboBoxItem Content="UitVoering"/>
+                            <ComboBoxItem Content="Afgerond"/>
+                        </ComboBox>
+                        <Label Grid.Row="4" Content="Beschrijving:" VerticalAlignment="Top"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Name="TxtBeschrijving"
+                                 AcceptsReturn="True" TextWrapping="Wrap"/>
+                    </Grid>
+                </GroupBox>
 
-                    <Label Grid.Row="2" Content="StartDatum:"/>
-                    <DatePicker Grid.Row="2" Grid.Column="1" Name="DpStart"/>
+                <GroupBox Header="Locatie" Margin="0 0 0 10">
+                    <Grid Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Gemeente:"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Name="TxtGemeente" Text="Gent" VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="1" Content="PostCode:"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Name="TxtPostCode" VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="2" Content="Straat:"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Name="TxtStraat"   VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="3" Content="HuisNummer:"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Name="TxtHuisNummer" VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="4" Content="Wijk:"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Name="TxtWijk"     VerticalContentAlignment="Center"/>
+                    </Grid>
+                </GroupBox>
 
-                    <Label Grid.Row="3" Content="Status:"/>
-                    <ComboBox Grid.Row="3" Grid.Column="1" x:Name="CmbStatus" VerticalContentAlignment="Center">
-                        <ComboBoxItem Content="Planning" IsSelected="True"/>
-                        <ComboBoxItem Content="UitVoering"/>
-                        <ComboBoxItem Content="Afgerond"/>
-                    </ComboBox>
-
-                    <Label Grid.Row="4" Content="Beschrijving:" VerticalAlignment="Top"/>
-                    <TextBox Grid.Row="4" Grid.Column="1" Name="TxtBeschrijving"
-                             AcceptsReturn="True" TextWrapping="Wrap"/>
-                </Grid>
-            </GroupBox>
-
-            <GroupBox Header="Locatie" Margin="0 0 0 10">
-                <Grid Margin="6">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="140"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="Gemeente:"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Name="TxtGemeente" Text="Gent" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="1" Content="PostCode:"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Name="TxtPostCode" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="2" Content="Straat:"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Name="TxtStraat" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="3" Content="HuisNummer:"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Name="TxtHuisNummer" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="4" Content="Wijk:"/>
-                    <TextBox Grid.Row="4" Grid.Column="1" Name="TxtWijk" VerticalContentAlignment="Center"/>
-                </Grid>
-            </GroupBox>
-            <!-- StadsProject -->
                 <GroupBox Name="GbStads" Header="Stadsproject details" Margin="0 0 0 10">
-                <Grid Margin="6">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="180"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="Vergunningstatus:"/>
-                    <ComboBox Grid.Row="0" Grid.Column="1" Name="CmbVergunning" VerticalContentAlignment="Center">
-                        <ComboBoxItem Content="InAanvraag" IsSelected="True"/>
-                        <ComboBoxItem Content="Goedgekeurd"/>
-                        <ComboBoxItem Content="Geweigerd"/>
-                    </ComboBox>
-                    <Label Grid.Row="1" Content="Architecturale waarde:"/>
-                    <CheckBox Grid.Row="1" Grid.Column="1" Name="ChkArchWaarde" VerticalAlignment="Center"/>
-                    <Label Grid.Row="2" Content="Toegankelijkheid:"/>
-                    <ComboBox Grid.Row="2" Grid.Column="1" Name="CmbToegang" VerticalContentAlignment="Center">
-                        <ComboBoxItem Content="VolledigOpenbaar" IsSelected="True"/>
-                        <ComboBoxItem Content="Gedeeltelijk"/>
-                        <ComboBoxItem Content="Gesloten"/>
-                    </ComboBox>
-                    <Label Grid.Row="3" Content="Toeristische waarde:"/>
-                    <CheckBox Grid.Row="3" Grid.Column="1" Name="ChkToeristisch" VerticalAlignment="Center"/>
-                    <Label Grid.Row="4" Content="Infowandeling voorzien:"/>
-                    <CheckBox Grid.Row="4" Grid.Column="1" Name="ChkInfowandeling" VerticalAlignment="Center"/>
-                </Grid>
-            </GroupBox>
-            
-            <!-- GroenProject -->
-            <GroupBox Name="GbGroen" Header="Groen project details" Margin="0 0 0 10" Visibility="Collapsed">
-                <Grid Margin="6">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="180"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="Oppervlakte (m²):"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Name="TxtOppervlakte" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="1" Content="Biodiversiteitscore (0-10):"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Name="TxtBioScore" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="2" Content="Aantal wandelpaden:"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Name="TxtWandelpaden" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="3" Content="Faciliteiten:"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Name="TxtFaciliteiten" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="4" Content="Toeristische route:"/>
-                    <CheckBox Grid.Row="4" Grid.Column="1" Name="ChkToerRoute" VerticalAlignment="Center"/>
-                    <Label Grid.Row="5" Content="Beoordeling (0-5):"/>
-                    <TextBox Grid.Row="5" Grid.Column="1" Name="TxtBeoordeling" VerticalContentAlignment="Center"/>
-                </Grid>
-            </GroupBox>
-            <!-- WonenProject -->
-            <GroupBox Name="GbInno" Header="Wonen project details" Margin="0 0 0 10" Visibility="Collapsed">
-                <Grid Margin="6">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="180"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                        <RowDefinition Height="32"/>
-                    </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Content="Aantal eenheden:"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Name="TxtEenheden" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="1" Content="Woning types:"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Name="TxtWoningTypes" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="2" Content="Rondleidingen mogelijk:"/>
-                    <CheckBox Grid.Row="2" Grid.Column="1" Name="ChkRondleiding" VerticalAlignment="Center"/>
-                    <Label Grid.Row="3" Content="Showwoning beschikbaar:"/>
-                    <CheckBox Grid.Row="3" Grid.Column="1" Name="ChkShowwoning" VerticalAlignment="Center"/>
-                    <Label Grid.Row="4" Content="Innovatie score (0-10):"/>
-                    <TextBox Grid.Row="4" Grid.Column="1" Name="TxtInnoScore" VerticalContentAlignment="Center"/>
-                    <Label Grid.Row="5" Content="Erfgoed samenwerking:"/>
-                    <CheckBox Grid.Row="5" Grid.Column="1" Name="ChkErfgoed" VerticalAlignment="Center"/>
-                </Grid>
-            </GroupBox>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 6 0 0">
-                <Button Content="Opslaan"  Width="90" Click="Opslaan_Click"/>
-                <Button Content="Annuleer" Width="90" Margin="8 0 0 0" Click="Annuleer_Click"/>
+                    <Grid Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Vergunningstatus:"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" Name="CmbVergunning" VerticalContentAlignment="Center">
+                            <ComboBoxItem Content="InAanvraag"     IsSelected="True"/>
+                            <ComboBoxItem Content="Goedgekeurd"/>
+                            <ComboBoxItem Content="Geweigerd"/>
+                        </ComboBox>
+                        <Label Grid.Row="1" Content="Architecturale waarde:"/>
+                        <CheckBox Grid.Row="1" Grid.Column="1" Name="ChkArchWaarde" VerticalAlignment="Center"/>
+                        <Label Grid.Row="2" Content="Toegankelijkheid:"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" Name="CmbToegang" VerticalContentAlignment="Center">
+                            <ComboBoxItem Content="VolledigOpenbaar" IsSelected="True"/>
+                            <ComboBoxItem Content="Gedeeltelijk"/>
+                            <ComboBoxItem Content="Gesloten"/>
+                        </ComboBox>
+                        <Label Grid.Row="3" Content="Toeristische waarde:"/>
+                        <CheckBox Grid.Row="3" Grid.Column="1" Name="ChkToeristisch"  VerticalAlignment="Center"/>
+                        <Label Grid.Row="4" Content="Infowandeling voorzien:"/>
+                        <CheckBox Grid.Row="4" Grid.Column="1" Name="ChkInfowandeling" VerticalAlignment="Center"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Name="GbGroen" Header="Groen project details" Margin="0 0 0 10" Visibility="Collapsed">
+                    <Grid Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Oppervlakte (m²):"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Name="TxtOppervlakte" VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="1" Content="Biodiversiteitscore (0-10):"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Name="TxtBioScore"    VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="2" Content="Aantal wandelpaden:"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Name="TxtWandelpaden" VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="3" Content="Faciliteiten:"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Name="TxtFaciliteiten" VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="4" Content="Toeristische route:"/>
+                        <CheckBox Grid.Row="4" Grid.Column="1" Name="ChkToerRoute"  VerticalAlignment="Center"/>
+                        <Label Grid.Row="5" Content="Beoordeling (0-5):"/>
+                        <TextBox Grid.Row="5" Grid.Column="1" Name="TxtBeoordeling" VerticalContentAlignment="Center"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Name="GbInno" Header="Wonen project details" Margin="0 0 0 10" Visibility="Collapsed">
+                    <Grid Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                            <RowDefinition Height="32"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Aantal eenheden:"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Name="TxtEenheden"    VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="1" Content="Woning types:"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Name="TxtWoningTypes" VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="2" Content="Rondleidingen mogelijk:"/>
+                        <CheckBox Grid.Row="2" Grid.Column="1" Name="ChkRondleiding" VerticalAlignment="Center"/>
+                        <Label Grid.Row="3" Content="Showwoning beschikbaar:"/>
+                        <CheckBox Grid.Row="3" Grid.Column="1" Name="ChkShowwoning"  VerticalAlignment="Center"/>
+                        <Label Grid.Row="4" Content="Innovatie score (0-10):"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Name="TxtInnoScore"   VerticalContentAlignment="Center"/>
+                        <Label Grid.Row="5" Content="Erfgoed samenwerking:"/>
+                        <CheckBox Grid.Row="5" Grid.Column="1" Name="ChkErfgoed"    VerticalAlignment="Center"/>
+                    </Grid>
+                </GroupBox>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 6 0 0">
+                    <Button Content="Opslaan"  Width="90" Click="Opslaan_Click"/>
+                    <Button Content="Annuleer" Width="90" Margin="8 0 0 0" Click="Annuleer_Click"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
+
+        <!-- ===== RIGHT: revamped partner panel ===== -->
+        <GroupBox Grid.Column="1" Header="Partners koppelen (optioneel)" Margin="8 14 10 14">
+            <Grid Margin="6">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- zoek label -->
+                    <RowDefinition Height="32"/>
+                    <!-- search box -->
+                    <RowDefinition Height="*"/>
+                    <!-- partner list (grays added ones) -->
+                    <RowDefinition Height="68"/>
+                    <!-- rol + bouwfirma + voeg toe -->
+                    <RowDefinition Height="8"/>
+                    <!-- spacer -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- nieuwe partner label -->
+                    <RowDefinition Height="68"/>
+                    <!-- aanmaken row -->
+                    <RowDefinition Height="10"/>
+                    <!-- type en knop -->
+                </Grid.RowDefinitions>
+
+                <!-- Zoek -->
+                <Label Grid.Row="0" Content="Partners:" FontWeight="SemiBold"/>
+                <TextBox Grid.Row="1" Name="TxtPartnerZoek" VerticalContentAlignment="Center"
+                         Margin="0 0 0 4" TextChanged="TxtPartnerZoek_TextChanged"/>
+
+                <!-- Main partner list -->
+                <ListBox Grid.Row="2" Name="LstPartners" Margin="0 0 0 4">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Display}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsToegevoegd}" Value="True">
+                                    <Setter Property="Foreground" Value="Gray"/>
+                                    <Setter Property="FontStyle"  Value="Italic"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+
+                <!-- Rol + Bouwfirma checkbox + Voeg toe -->
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="32"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" Content="Rol:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Name="TxtRol" VerticalContentAlignment="Center" Grid.ColumnSpan="5"/>
+                    <!-- ChkBouwfirma: disabled (gray) when project type ≠ StadsProject -->
+                    <CheckBox Grid.Row="1" Grid.Column="1" Name="ChkBouwfirma" Grid.ColumnSpan="2"
+                              Content="Bouwfirma" VerticalAlignment="Center"
+                              IsEnabled="False"/>
+                    <Button Grid.Row="1" Grid.Column="5" Content="Voeg toe" Margin="0 6 0 0" Width="80"
+                            Click="VoegPartnerToe_Click"/>
+                </Grid>
+
+                <Separator Grid.Row="4" Margin="0 2 0 0"/>
+
+                <!-- Inline partner aanmaak -->
+                <Label Grid.Row="5" Content="Nieuwe partner aanmaken:" FontWeight="SemiBold"/>
+                <Grid Grid.Row="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16.667"/>
+                        <ColumnDefinition Width="28.333"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="45"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="78"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="34"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Column="0" Content="Naam:" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                    <TextBox Grid.Column="2" Name="TxtNieuweNaam" VerticalContentAlignment="Center" Grid.ColumnSpan="5" Margin="0 4 0 4"/>
+                    <Label Grid.Row="7" Grid.Column="4" Content="Type:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="7" Grid.Column="5" Name="CmbNieuwType" VerticalContentAlignment="Center">
+                        <ComboBoxItem Content="Bedrijf"      IsSelected="True"/>
+                        <ComboBoxItem Content="Organisatie"/>
+                        <ComboBoxItem Content="Burger"/>
+                    </ComboBox>
+                    <Button Grid.Row="1" Grid.Column="7" Content="Aanmaken"
+                            Click="PartnerAanmaken_Click"/>
+                </Grid>
+
+            </Grid>
+        </GroupBox>
+
+    </Grid>
 </Window>
