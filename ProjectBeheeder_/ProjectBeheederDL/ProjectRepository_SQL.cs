@@ -253,7 +253,7 @@ namespace ProjectBeheederDL
         public void PartnerAanmaken(Partner NieuwePartner)
         {
 
-            string ExternePartnerQuery = "INSERT INTO Project_Partner (ProjectID,PartnerID,Rolomschrijving,FlagPartner) VALUES (@ProjectID,@PartnerID,@Rolomschrijving,@FlagPartner);";
+            string ExternePartnerQuery = "INSERT INTO Project_Partner (PartnerID,Rolomschrijving,FlagPartner) VALUES (@PartnerID,@Rolomschrijving,@FlagPartner);";
 
             using (SqlConnection conn = new SqlConnection(_connectionstring))
 
@@ -303,7 +303,7 @@ namespace ProjectBeheederDL
             using (SqlCommand cmd = conn.CreateCommand())
             {
 
-                string sql = "DELETE FROM Project WHERE Projectid=@id AND FlagProject = @FlagProject";
+                string sql = "UPDATE Project SET FlagProject = @FlagProject WHERE Projectid=@id";
 
                 cmd.CommandText = sql;
                 cmd.Parameters.AddWithValue("@id", project.Id);
@@ -319,7 +319,7 @@ namespace ProjectBeheederDL
         public void PartnerVerwijderen(Partner partner)
         {
 
-            string sql = "DELETE FROM Partner where id = @id AND FlagPartner = @FlagPartner ";
+            string sql = "UPDATE Partner SET FlagPartner = @FlagPartner WHERE Partnerid = @id";
 
             using (SqlConnection conn = new SqlConnection(_connectionstring))
             using (SqlCommand cmd = conn.CreateCommand())
@@ -478,26 +478,35 @@ namespace ProjectBeheederDL
 
             string LocatieQuery = "UPDATE Locatie SET Gemeente=@Gemeente,Postcode=@Postcode,Straat=@Straat,Huisnummer=@Huisnummer,wijk=@wijk WHERE LocatieID = @LocatieID;";
             string ProjectQuery = "UPDATE Project SET Titel=@Titel,StartDatum=@StartDatum,Status=@Status,Beschrijving=@BeSchrijving,LocatieID=@LocatieID WHERE Projectid = @ProjectID AND FlagProject = @Flagproject;";
+            string StadDetails = " UPDATE StadDetail SET VergunningStatus = @VergunningStatus, ArchitecturaleWaarde=@ArchitecturaleWaarde,Toegankelijkheid=@Toegankelijkheid,Bezienswaardigheid=@Bezienswaardigheid,Infobordvoorzien=@Infobordvoorzien;";
+            string WonenDetails = "UPDATE InnovatiefwonenDetail SET AantalWooneenheden=@AantalWooneenheden,TypeWoonVorm=@TypeWoonVorm,RondLeidingMogelijk=@RondLeidingMogelijk,ShowWoningMogelijk=@ShowWoningMogelijk,ArchitecturaleScore=@ArchitecturaleScore,SamenwerkingErfgoed=@SamenwerkingErfgoed;";
+            string GroenDetails = "UPDATE GroenDetail SET Oppervlakte,@Oppervlakte,Biodiversiteitscore=@Biodiversiteitscore,AantalWandepaden=@AantalWandepaden,BeschikbareFaciliteiten=@BeschikbareFaciliteiten,ToeristischeRoute=@ToeristischeRoute,BezoekersBeoordeling=@BezoekersBeoordeling;";
+
+
 
 
             using (SqlConnection conn = new SqlConnection(_connectionstring))
             using (SqlCommand ProjectCmd = conn.CreateCommand())
             using (SqlCommand LocatieCmd = conn.CreateCommand())
-
-
-            {
+            using (SqlCommand StadDetailCmd = conn.CreateCommand())
+            using (SqlCommand WonenDetailCmd = conn.CreateCommand())
+            using (SqlCommand GroenDetailCmd = conn.CreateCommand()) 
+                
+                {
                 ProjectCmd.Parameters.AddWithValue("@FlagProject", Enums.Flags.shown);
 
                 conn.Open();
                 SqlTransaction transaction = conn.BeginTransaction();
 
-                try
-                {
+                try {
 
 
 
                     LocatieCmd.Transaction = transaction;
                     ProjectCmd.Transaction = transaction;
+                    StadDetailCmd.Transaction =     transaction;
+                    WonenDetailCmd.Transaction = transaction;   
+                    GroenDetailCmd.Transaction = transaction;   
 
                     LocatieCmd.CommandText = LocatieQuery;
                     LocatieCmd.Parameters.AddWithValue("@LocatieID", project.Locatie.LocatieId);
@@ -519,11 +528,44 @@ namespace ProjectBeheederDL
 
                     ProjectCmd.ExecuteNonQuery();
 
+                    StadDetailCmd.CommandText = StadDetails;
+                    StadDetailCmd.Parameters.AddWithValue("@VergunningStatus", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).VergunningStatus);
+                    StadDetailCmd.Parameters.AddWithValue("@ArchitecturaleWaarde", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).ArchitecturaleWaarde);
+                    StadDetailCmd.Parameters.AddWithValue("@Toegangelijkheid", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).Toegankelijkheid);
+                    StadDetailCmd.Parameters.AddWithValue("@Bezienswaardigheid", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).Bezienswaardigheid);
+                    StadDetailCmd.Parameters.AddWithValue("@Infobordvoorzien", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).InfoBordVoorzien);
+
+                    StadDetailCmd.ExecuteNonQuery();
+
+                    WonenDetailCmd.CommandText = WonenDetails;
+                    WonenDetailCmd.Parameters.AddWithValue("@AantalWooneenheden", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).AantalEenheden);
+                    WonenDetailCmd.Parameters.AddWithValue("@TypeWoonVorm", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).Woningtypes);
+                    WonenDetailCmd.Parameters.AddWithValue("@RondLeidingMogelijk", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).Rondleidingen);
+                    WonenDetailCmd.Parameters.AddWithValue("@ShowWoningMogelijk", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).Showwoningen);
+                    WonenDetailCmd.Parameters.AddWithValue("@ArchitecturaleScore", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).ArchitecturaleScore);
+                    WonenDetailCmd.Parameters.AddWithValue("@SamenwerkingErfgoed", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).ErfgoedSamenwerking);
+
+                    WonenDetailCmd.ExecuteNonQuery();
+
+                    GroenDetailCmd.CommandText = GroenDetails;
+                    GroenDetailCmd.Parameters.AddWithValue("@Oppervlakte", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).Oppervlakte);
+                    GroenDetailCmd.Parameters.AddWithValue("@Biodiversiteitscore", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).Biodiversiteit);
+                    GroenDetailCmd.Parameters.AddWithValue("@AantalWandepaden", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).Wandelpaden);
+                    GroenDetailCmd.Parameters.AddWithValue("@BeschikbareFaciliteiten", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).Faciliteiten);
+                    GroenDetailCmd.Parameters.AddWithValue("@ToeristischeRoute", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).ToeristischeRoute);
+                    GroenDetailCmd.Parameters.AddWithValue("@BezoekersBeoordeling", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).Beoordeling);
+
+                    GroenDetailCmd.ExecuteNonQuery();
+
+
+
+
+
+
                     transaction.Commit();
 
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     transaction.Rollback();
                     throw ex;
                 }
