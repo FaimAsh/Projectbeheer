@@ -274,7 +274,7 @@ namespace WpfAppProjectBeheeder
 
             string kat = "algemeen";
             if (IsStads)
-                kat = ((ComboBoxItem)CmbNieuweKategorie.SelectedItem).Content.ToString()!;
+                kat = ((ComboBoxItem)CmbNieuweCategorie.SelectedItem).Content.ToString()!;
 
             _partnerRijen.Add(new PartnerRij(gekozen, TxtNieuweRol.Text.Trim(), kat));
             TxtNieuweRol.Clear();

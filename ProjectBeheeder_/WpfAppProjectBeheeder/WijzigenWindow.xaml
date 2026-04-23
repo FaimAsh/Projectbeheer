@@ -271,7 +271,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Label Content="Type:"  VerticalAlignment="Center"/>
-                        <ComboBox Grid.Column="1" Name="CmbNieuweKategorie"
+                        <ComboBox Grid.Column="1" Name="CmbNieuweCategorie"
                                   VerticalContentAlignment="Center">
                             <ComboBoxItem Content="algemeen"  IsSelected="True"/>
                             <ComboBoxItem Content="bouwfirma"/>

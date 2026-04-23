@@ -276,11 +276,11 @@ namespace WpfAppProjectBeheeder
                         ChkToeristisch.IsChecked == true, false,
                         ChkInfowandeling.IsChecked == true);
                     stadDetail.Bouwfirmas = _partnerRijen
-                        .Where(r => r.Kategorie == "bouwfirma")
+                        .Where(r => r.Categorie == "bouwfirma")
                         .Select(r => r.Partner).ToList();
                     project.Details.Add(stadDetail);
                     project.Partners = _partnerRijen
-                        .Where(r => r.Kategorie == "algemeen")
+                        .Where(r => r.Categorie == "algemeen")
                         .Select(r => new ProjectPartner(project, r.Partner, r.Rol)).ToList();
                 }
 
