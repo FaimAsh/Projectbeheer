@@ -8,22 +8,6 @@ namespace ProjectBeheerderBL.Beheerder
     public class ProjectBeheerder
     {
         private IProjectRepository _repository;
-        private IFileWriter _writer;
-
-        public ProjectBeheerder(string type, IFileWriter writer)
-        {
-            _writer = writer;
-        }
-
-        public void Export(string path, List<Project> projecten)
-        {
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            _writer.Write(path, projecten);
-        }
 
         public ProjectBeheerder(IProjectRepository repository)
         {
@@ -44,18 +28,6 @@ namespace ProjectBeheerderBL.Beheerder
         
        
         public void AddPartner(Partner NieuwePartner) => _repository.PartnerAanmaken(NieuwePartner);
-     
-        public void ExportCSV(List<Project> projecten, string path)
-        {
-            if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");
-            _writer.Write(path, projecten);
-        }
-
-        public void ExportPDF(List<Project> projecten, string path) {
-            if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");
-            _writer.Write(path, projecten);
-        }
-
 
         public void GetPartners(Partner p) => _repository.GeefPartners();
        
