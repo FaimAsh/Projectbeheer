@@ -126,7 +126,7 @@ namespace WpfAppProjectBeheeder {
             }
             try
             {
-                var volledig = _Beheerder.GetByID(geselecteerd.Id);
+                var volledig = _Beheerder.GeefProject(geselecteerd.Id);
                 var w = new WijzigenWindow(_Beheerder, volledig);
                 if (w.ShowDialog() == true) LaadProjecten();
             }
@@ -147,7 +147,7 @@ namespace WpfAppProjectBeheeder {
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (res == MessageBoxResult.Yes)
             {
-                try { _Beheerder.DeleteProject(selected); LaadProjecten(); }
+                try { _Beheerder.VerwijderProject(selected); LaadProjecten(); }
                 catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
             }
         }
