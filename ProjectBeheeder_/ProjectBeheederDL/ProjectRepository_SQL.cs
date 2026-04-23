@@ -604,7 +604,7 @@ namespace ProjectBeheederDL
                     StadDetailCmd.CommandText = StadDetails;
                     StadDetailCmd.Parameters.AddWithValue("@VergunningStatus", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).VergunningStatus);
                     StadDetailCmd.Parameters.AddWithValue("@ArchitecturaleWaarde", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).ArchitecturaleWaarde);
-                    StadDetailCmd.Parameters.AddWithValue("@Toegangelijkheid", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).Toegankelijkheid);
+                    StadDetailCmd.Parameters.AddWithValue("@Toegankelijkheid", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).Toegankelijkheid);
                     StadDetailCmd.Parameters.AddWithValue("@Bezienswaardigheid", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).Bezienswaardigheid);
                     StadDetailCmd.Parameters.AddWithValue("@Infobordvoorzien", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).InfoBordVoorzien);
 
