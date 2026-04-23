@@ -10,11 +10,11 @@ namespace ProjectBeheerderBL.Domein
     {
 
 
-        public ProjectPartner(Partner partner, string rolomschrijving) {
+        public ProjectPartner(Project project, Partner partner, string rolomschrijving) {
             this.Partner = partner;
             this.RolBeschrijving = rolomschrijving;
         }
-
+        public Project Project { get; set; }
         public Partner Partner { get; set; }
         public string RolBeschrijving { get; set; }
 
