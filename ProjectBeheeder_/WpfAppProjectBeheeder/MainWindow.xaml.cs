@@ -164,7 +164,7 @@ namespace WpfAppProjectBeheeder {
             {
                 var projecten = (List<Project>)DgProjecten.ItemsSource;
  
-                _Beheerder.ExportCsv(projecten, dlg.FileName);
+                _Beheerder.ExportCSV(projecten, dlg.FileName);
 
                 
                 MessageBox.Show("CSV geëxporteerd.", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -180,7 +180,7 @@ namespace WpfAppProjectBeheeder {
             {
                 var projecten = (List<Project>)DgProjecten.ItemsSource;
 
-                _Beheerder.ExportPdf(projecten, dlg.FileName);
+                _Beheerder.ExportPDF(projecten, dlg.FileName);
 
                
 

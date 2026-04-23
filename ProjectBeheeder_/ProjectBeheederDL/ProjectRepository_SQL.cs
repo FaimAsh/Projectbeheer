@@ -253,7 +253,7 @@ namespace ProjectBeheederDL
         public void PartnerAanmaken(Partner NieuwePartner)
         {
 
-            string ExternePartnerQuery = "INSERT INTO Project_Partner (ProjectID,PartnerID,Rolomschrijving,FlagPartner) VALUES (@ProjectID,@PartnerID,@Rolomschrijving,@FlagPartner);";
+            string ExternePartnerQuery = "INSERT INTO Partner (Naam,TypePartner,FlagPartner) VALUES (@Naam,@TypePartner,@FlagPartner);";
 
             using (SqlConnection conn = new SqlConnection(_connectionstring))
 
@@ -268,19 +268,17 @@ namespace ProjectBeheederDL
 
 
                 cmdExternePartner.CommandText = ExternePartnerQuery;
-                //cmdExternePartner.Parameters.Add(new SqlParameter("@ProjectID", System.Data.SqlDbType.Int));
-                cmdExternePartner.Parameters.Add(new SqlParameter("@PartnerID", System.Data.SqlDbType.Int));
-                cmdExternePartner.Parameters.Add(new SqlParameter("@RolOmschrijving", System.Data.SqlDbType.NVarChar));
-                cmdExternePartner.Parameters.Add(new SqlParameter("@FlagPartner", System.Data.SqlDbType.Int));
+
+                cmdExternePartner.Parameters.AddWithValue("@Naam", NieuwePartner.Naam);
+                cmdExternePartner.Parameters.AddWithValue("@TypePartner", (int)NieuwePartner.PartnerType); 
+                cmdExternePartner.Parameters.AddWithValue("@FlagPartner", (int)Enums.Flags.shown);
+
+
                 try
                 {
-                    //cmdExternePartner.Parameters["@ProjectID"].Value = NieuwePartner.PartnerT;
-                    cmdExternePartner.Parameters["@PartnerID"].Value = NieuwePartner.Id;
-                    
-                    cmdExternePartner.Parameters["@FlagPartner"].Value = Enums.Flags.shown;
+
+
                     cmdExternePartner.ExecuteNonQuery();
-
-
 
 
 
@@ -487,6 +485,7 @@ namespace ProjectBeheederDL
 
             {
                 ProjectCmd.Parameters.AddWithValue("@FlagProject", Enums.Flags.shown);
+                ProjectCmd.Parameters.AddWithValue("@id", project.Id);
 
                 conn.Open();
                 SqlTransaction transaction = conn.BeginTransaction();
