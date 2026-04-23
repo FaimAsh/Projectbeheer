@@ -582,16 +582,16 @@ namespace ProjectBeheederDL
             return projects.Values.ToList();
         }
 
-     
+
         private Project CreateProject(SqlDataReader reader, int projectId)
         {
             Locatie locatie = new Locatie(
                 Convert.ToInt32(reader["LocatieID"]),
                 reader["Gemeente"]?.ToString(),
-                reader["Wijk"]?.ToString(),
                 reader["Postcode"]?.ToString(),
                 reader["Straat"]?.ToString(),
-                reader["Huisnummer"]?.ToString()
+                reader["Huisnummer"]?.ToString(),
+                reader["Wijk"]?.ToString()
             );
 
             Project p = new Project(
@@ -608,7 +608,7 @@ namespace ProjectBeheederDL
             return p;
         }
 
-        
+
         private void EnsureGroenDetail(SqlDataReader reader, Project project, int projectId, HashSet<int> hasGroen)
         {
             if (reader["GroenDetailID"] == DBNull.Value || !hasGroen.Add(projectId))
@@ -640,7 +640,7 @@ namespace ProjectBeheederDL
             )
             {
                 Bouwfirmas = new List<Partner>(),
-                
+
             });
         }
 
@@ -660,7 +660,8 @@ namespace ProjectBeheederDL
             ));
         }
 
-      
+
+
         private void AddProjectPartner(SqlDataReader reader, Project project, int projectId,
             Dictionary<int, HashSet<int>> projectPartnerIds)
         {
@@ -716,7 +717,7 @@ namespace ProjectBeheederDL
             ));
         }
 
-        
+
         private string BuildQuery(ProjectFilter filter)
         {
             var query = @"
@@ -731,7 +732,8 @@ SELECT
     sd.StadDetailID, sd.Vergunningstatus, sd.ArchitecturaleWaarde, sd.Toegankelijkheid,
     sd.Bezienswaardigheid, sd.Infobordvoorzien,
 
-    wd.InnovatiefWonenDetailID, wd.AantalWooneenheden, wd.TypeWoonVorm, wd.RondLeidingMogelijk,
+    wd.InnovatiefwonenDetailID AS WonenDetailID, 
+    wd.AantalWooneenheden, wd.TypeWoonVorm, wd.RondLeidingMogelijk,
     wd.ShowWoningMogelijk, wd.ArchitecturaleScore, wd.SamenwerkingErfgoed,
 
     pr.PartnerID AS PartnerId, pr.Naam AS PartnerNaam, pr.TypePartner AS PartnerType,
@@ -744,15 +746,18 @@ JOIN Locatie l ON p.LocatieID = l.LocatieID
 LEFT JOIN GroenDetail gd ON gd.ProjectID = p.ProjectID
 LEFT JOIN StadDetail sd ON sd.ProjectID = p.ProjectID
 LEFT JOIN InnovatiefwonenDetail wd ON wd.ProjectID = p.ProjectID
-LEFT JOIN Project_Partner pp ON pp.ProjectID = p.ProjectID
-LEFT JOIN Partner pr ON pr.PartnerID = pp.PartnerID
+LEFT JOIN Project_Partner pp ON pp.ProjectID = p.ProjectID AND pp.FlagPartner = @FlagPartner
+LEFT JOIN Partner pr ON pr.PartnerID = pp.PartnerID AND pr.FlagPartner = @FlagPartner
 LEFT JOIN StadsOntwikkeling_Partner sop ON sop.StadDetailID = sd.StadDetailID
-LEFT JOIN Partner sp ON sp.PartnerID = sop.PartnerID
-WHERE 1=1 
-;";
+LEFT JOIN Partner sp ON sp.PartnerID = sop.PartnerID AND sp.FlagPartner = @FlagPartner
+WHERE p.FlagProject = @FlagProject";
 
-            if (!string.IsNullOrEmpty(filter.Wijk))
+            if (!string.IsNullOrWhiteSpace(filter.Wijk))
                 query += " AND l.Wijk LIKE @Wijk";
+
+            if (!string.IsNullOrWhiteSpace(filter.PartnerNaam))
+                query += " AND (pr.Naam LIKE @PartnerNaam OR sp.Naam LIKE @PartnerNaam)";
+
 
             if (filter.StartDatumVan != null)
                 query += " AND p.StartDatum >= @StartVan";
@@ -766,23 +771,44 @@ WHERE 1=1
                 query += $" AND p.Status IN ({statusParams})";
             }
 
+            if (filter.Details != null && filter.Details.Count > 0)
+            {
+                var detailConditions = new List<string>();
+
+                if (filter.Details.Contains("Groen"))
+                    detailConditions.Add("gd.GroenDetailID IS NOT NULL");
+
+                if (filter.Details.Contains("Stad"))
+                    detailConditions.Add("sd.StadDetailID IS NOT NULL");
+
+                if (filter.Details.Contains("Wonen"))
+                    detailConditions.Add("wd.InnovatiefwonenDetailID IS NOT NULL");
+
+                if (detailConditions.Count > 0)
+                    query += $" AND ({string.Join(" OR ", detailConditions)})";
+            }
+
             return query;
         }
 
-     
+
+
         private void AddParameters(SqlCommand cmd, ProjectFilter filter)
         {
-            cmd.Parameters.AddWithValue("@FlagPartner", Enums.Flags.shown);
-            cmd.Parameters.AddWithValue("@FlagProject", Enums.Flags.shown);
+            cmd.Parameters.Add("@FlagPartner", SqlDbType.Int).Value = (int)Enums.Flags.shown;
+            cmd.Parameters.Add("@FlagProject", SqlDbType.Int).Value = (int)Enums.Flags.shown;
 
-            if (!string.IsNullOrEmpty(filter.Wijk))
+            if (!string.IsNullOrWhiteSpace(filter.Wijk))
                 cmd.Parameters.Add("@Wijk", SqlDbType.NVarChar).Value = $"%{filter.Wijk}%";
 
+            if (!string.IsNullOrWhiteSpace(filter.PartnerNaam))
+                cmd.Parameters.Add("@PartnerNaam", SqlDbType.NVarChar).Value = $"%{filter.PartnerNaam}%";
+
             if (filter.StartDatumVan != null)
-                cmd.Parameters.Add("@StartVan", SqlDbType.DateTime).Value = filter.StartDatumVan;
+                cmd.Parameters.Add("@StartVan", SqlDbType.DateTime).Value = filter.StartDatumVan.Value;
 
             if (filter.StartDatumTot != null)
-                cmd.Parameters.Add("@StartTot", SqlDbType.DateTime).Value = filter.StartDatumTot;
+                cmd.Parameters.Add("@StartTot", SqlDbType.DateTime).Value = filter.StartDatumTot.Value;
 
             if (filter.Statussen != null && filter.Statussen.Count > 0)
             {
@@ -794,5 +820,6 @@ WHERE 1=1
                 }
             }
         }
+
     }
 }
