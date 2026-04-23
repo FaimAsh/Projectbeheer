@@ -73,13 +73,13 @@
                   SelectionChanged="DgProjecten_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
-                <DataGridTextColumn Header="Naam" Binding="{Binding Naam}" Width="*"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="Auto"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="Auto"/>
-                <DataGridTextColumn Header="Wijk" Binding="{Binding Wijk}" Width="Auto"/>
-                <DataGridTextColumn Header="Partner" Binding="{Binding Partner}" Width="Auto"/>
-                <DataGridTextColumn Header="StartDatum" Binding="{Binding StartDatum, StringFormat=d}" Width="Auto"/>
-                <DataGridTextColumn Header="EindDatum" Binding="{Binding EindDatum, StringFormat=d}" Width="Auto"/>
+                <DataGridTextColumn Header="Naam" Binding="{Binding Titel}" Width="3*"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="2*"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="2*"/>
+                <DataGridTextColumn Header="Wijk" Binding="{Binding Wijk}" Width="2*"/>
+                <DataGridTextColumn Header="Partner" Binding="{Binding Partner}" Width="2*"/>
+                <DataGridTextColumn Header="StartDatum" Binding="{Binding StartDatum, StringFormat=d}" Width="2*"/>
+                <DataGridTextColumn Header="EindDatum" Binding="{Binding EindDatum, StringFormat=d}" Width="2*"/>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
