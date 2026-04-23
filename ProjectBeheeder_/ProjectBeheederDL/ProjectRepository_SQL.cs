@@ -250,7 +250,7 @@ namespace ProjectBeheederDL
         }
 
 
-        public void PartnerAanmaken(Partner NieuwePartner)
+        public void PartnerKoppeling(Partner KoppelPartner)
         {
 
             string ExternePartnerQuery = "INSERT INTO Project_Partner (PartnerID,Rolomschrijving,FlagPartner) VALUES (@PartnerID,@Rolomschrijving,@FlagPartner);";
@@ -275,7 +275,7 @@ namespace ProjectBeheederDL
                 try
                 {
                     //cmdExternePartner.Parameters["@ProjectID"].Value = NieuwePartner.PartnerT;
-                    cmdExternePartner.Parameters["@PartnerID"].Value = NieuwePartner.Id;
+                    cmdExternePartner.Parameters["@PartnerID"].Value = KoppelPartner.Id;
                     
                     cmdExternePartner.Parameters["@FlagPartner"].Value = Enums.Flags.shown;
                     cmdExternePartner.ExecuteNonQuery();
@@ -288,6 +288,51 @@ namespace ProjectBeheederDL
                 }
                 catch (Exception ex)
                 {
+                    transaction.Rollback();
+                    throw ex;
+
+
+                }
+            }
+        }
+
+        public void PartnerAanmaken(Partner NieuwePartner) {
+
+            string ExternePartnerQuery = "INSERT INTO Partner (Naam,TypePartner,FlagPartner) VALUES (@Naam,@TypePartner,@FlagPartner);";
+
+            using (SqlConnection conn = new SqlConnection(_connectionstring))
+
+            using (SqlCommand cmdExternePartner = conn.CreateCommand()) {
+
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+
+
+                cmdExternePartner.Transaction = transaction;
+
+
+                cmdExternePartner.CommandText = ExternePartnerQuery;
+                //cmdExternePartner.Parameters.Add(new SqlParameter("@ProjectID", System.Data.SqlDbType.Int));
+                //cmdExternePartner.Parameters.Add(new SqlParameter("@PartnerID", System.Data.SqlDbType.Int));
+                cmdExternePartner.Parameters.Add(new SqlParameter("@Naam", System.Data.SqlDbType.NVarChar));
+                cmdExternePartner.Parameters.Add(new SqlParameter("@TypePartner", System.Data.SqlDbType.Int));
+                cmdExternePartner.Parameters.Add(new SqlParameter("@FlagPartner", System.Data.SqlDbType.Int));
+                try {
+                    //cmdExternePartner.Parameters["@ProjectID"].Value = NieuwePartner.PartnerT;
+                    cmdExternePartner.Parameters["@Naam"].Value = NieuwePartner.Naam;
+                    cmdExternePartner.Parameters["@TypePartner"].Value = NieuwePartner.PartnerType;
+
+
+                    cmdExternePartner.Parameters["@FlagPartner"].Value = Enums.Flags.shown;
+                    cmdExternePartner.ExecuteNonQuery();
+
+
+
+
+
+                    transaction.Commit();
+                }
+                catch (Exception ex) {
                     transaction.Rollback();
                     throw ex;
 
