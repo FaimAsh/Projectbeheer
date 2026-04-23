@@ -26,6 +26,7 @@ namespace WpfAppProjectBeheeder
 
         private List<PartnerWeergave> _weergave = new();
         private List<PartnerRij> _partnerRijen = new();
+        private List<ProjectPartner> _gekoppeldPartners = new();
 
         public NieuwProjectWindow(ProjectBeheerder service, Project? bestaand = null)
         {
@@ -59,7 +60,21 @@ namespace WpfAppProjectBeheeder
 
         private void TxtPartnerZoek_TextChanged(object sender, TextChangedEventArgs e)
             => RefreshLijst();
+        //private void LstGekoppeld_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    int idx = LstGekoppeld.SelectedIndex;
+        //    if (idx < 0) { TxtWijzigRol.Clear(); return; }
 
+        //    var rij = _partnerRijen[idx];
+        //    TxtWijzigRol.Text = rij.Rol;
+
+        //    if (IsStads)
+        //    {
+        //        foreach (ComboBoxItem item in CmbWijzigKategorie.Items)
+        //            if (item.Content.ToString() == rij.Kategorie)
+        //            { CmbWijzigKategorie.SelectedItem = item; break; }
+        //    }
+        //}
         private void RefreshLijst()
         {
             string zoek = TxtPartnerZoek?.Text.Trim().ToLower() ?? "";
@@ -97,8 +112,6 @@ namespace WpfAppProjectBeheeder
         }
 
         private void VerwijderKoppeling_Click(object sender, RoutedEventArgs e) {
-
-
            
 
             if (LstPartners.SelectedItem is not PartnerWeergave pw)

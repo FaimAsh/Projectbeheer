@@ -182,7 +182,7 @@ namespace WpfAppProjectBeheeder
             TxtWijzigRol.Clear();
         }
 
-        private void LstPartners_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LstGekoppeld_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int idx = LstGekoppeld.SelectedIndex;
             if (idx < 0) { TxtWijzigRol.Clear(); return; }
