@@ -575,7 +575,7 @@ namespace ProjectBeheederDL
             string ProjectQuery = "UPDATE Project SET Titel=@Titel,StartDatum=@StartDatum,Status=@Status,Beschrijving=@BeSchrijving,LocatieID=@LocatieID WHERE Projectid = @ProjectID AND FlagProject = @Flagproject;";
             string StadDetails = " UPDATE StadDetail SET VergunningStatus = @VergunningStatus, ArchitecturaleWaarde=@ArchitecturaleWaarde,Toegankelijkheid=@Toegankelijkheid,Bezienswaardigheid=@Bezienswaardigheid,Infobordvoorzien=@Infobordvoorzien WHERE ProjectID = @ProjectID;";
             string WonenDetails = "UPDATE InnovatiefwonenDetail SET AantalWooneenheden=@AantalWooneenheden,TypeWoonVorm=@TypeWoonVorm,RondLeidingMogelijk=@RondLeidingMogelijk,ShowWoningMogelijk=@ShowWoningMogelijk,ArchitecturaleScore=@ArchitecturaleScore,SamenwerkingErfgoed=@SamenwerkingErfgoed WHERE ProjectID = @ProjectID;";
-            string GroenDetails = "UPDATE GroenDetail SET Oppervlakte=@Oppervlakte,Biodiversiteitscore=@Biodiversiteitscore,AantalWandepaden=@AantalWandepaden,BeschikbareFaciliteiten=@BeschikbareFaciliteiten,ToeristischeRoute=@ToeristischeRoute,BezoekersBeoordeling=@BezoekersBeoordeling WHERE ProjectID = @ProjectID;";
+            string GroenDetails = "UPDATE GroenDetail SET Oppervlakte=@Oppervlakte,Biodiversiteitscore=@Biodiversiteitscore,AantalWandelpaden=@AantalWandelpaden,BeschikbareFaciliteit=@BeschikbareFaciliteit,ToeristischeRoute=@ToeristischeRoute,BezoekersBeoordeling=@BezoekersBeoordeling WHERE ProjectID = @ProjectID;";
 
 
 
@@ -658,8 +658,8 @@ namespace ProjectBeheederDL
                         GroenDetailCmd.Parameters.AddWithValue("@ProjectID", project.Id);
                         GroenDetailCmd.Parameters.AddWithValue("@Oppervlakte", Groen.Oppervlakte);
                         GroenDetailCmd.Parameters.AddWithValue("@Biodiversiteitscore", Groen.Biodiversiteit);
-                        GroenDetailCmd.Parameters.AddWithValue("@AantalWandepaden", Groen.Wandelpaden);
-                        GroenDetailCmd.Parameters.AddWithValue("@BeschikbareFaciliteiten", Groen.Faciliteiten);
+                        GroenDetailCmd.Parameters.AddWithValue("@AantalWandelpaden", Groen.Wandelpaden);
+                        GroenDetailCmd.Parameters.AddWithValue("@BeschikbareFaciliteit", Groen.Faciliteiten);
                         GroenDetailCmd.Parameters.AddWithValue("@ToeristischeRoute", Groen.ToeristischeRoute);
                         GroenDetailCmd.Parameters.AddWithValue("@BezoekersBeoordeling", Groen.Beoordeling);
 
