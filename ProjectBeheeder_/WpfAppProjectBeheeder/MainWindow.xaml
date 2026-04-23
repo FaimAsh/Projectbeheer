@@ -15,14 +15,12 @@
                     <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="35"/>
@@ -48,14 +46,14 @@
                     <Label Grid.Column="4" Content="Wijk:" VerticalAlignment="Center"/>
                 <TextBox Grid.Column="5" Name="TxtWijk" Width="100" Margin="0 0 10 0" VerticalAlignment="Center"/>
 
-                    <Label Grid.Column="6" Content="Partner:" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="7" Name="TxtPartner" Width="120" Margin="0 0 10 0" VerticalAlignment="Center"/>
-                    <Label Grid.Column="8" Content="Van:" VerticalAlignment="Center"/>
-                <DatePicker Grid.Column="9" Name="DpVan" Width="120" Margin="0 0 6 0" VerticalAlignment="Center"/>
-                    <Label Grid.Column="10" Content="Tot:" VerticalAlignment="Center"/>
-                <DatePicker Grid.Column="11" Name="DpTot" Width="120" Margin="0 0 10 0" VerticalAlignment="Center"/>
-                <Button Grid.Column="11" Grid.Row="2" Content="Zoeken" Width="80" Click="Zoeken_Click"/>
-                <Button Grid.Column="9" Grid.Row="2" Content="Reset" Width="60" Height="25" Margin="0 0 0 0" Click="Reset_Click"/>
+                    <Label Grid.Row="1" Grid.Column="4" Content="Partner:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="5" Name="TxtPartner" Width="100" Margin="0 0 10 0" VerticalAlignment="Center"/>
+                    <Label Grid.Column="6" Content="Van:" VerticalAlignment="Center"/>
+                <DatePicker Grid.Column="7" Name="DpVan" Width="120" Margin="0 0 6 0" VerticalAlignment="Center" Grid.ColumnSpan="1"/>
+                    <Label Grid.Row="1" Grid.Column="6" Content="Tot:" VerticalAlignment="Center"/>
+                <DatePicker Grid.Row="1" Grid.Column="7" Name="DpTot" Width="120" Margin="0 0 6 0" VerticalAlignment="Center" Grid.ColumnSpan="1"/>
+                <Button Grid.Column="11" Grid.Row="2" Content="Zoeken" Width="150" Click="Zoeken_Click"/>
+                <Button Grid.Column="9" Grid.Row="0" Content="Reset" Width="80" Height="35" Margin="0 0 0 0" Click="Reset_Click" Grid.RowSpan="2"/>
             </Grid>
         </GroupBox>
         
@@ -64,7 +62,7 @@
             <Button Content="Wijzig"     Width="80" Margin="6 0" Click="WijzigProject_Click"/>
             <Button Content="Verwijder"  Width="85" Click="VerwijderProject_Click"/>
             <Button Content="Meer Info"     Width="85" Margin="6 0" Click="Info_Click"/>
-            <Button Content="Voeg Partner toe"   Width="110" Click="Partners_Click"/>
+            <Button Content="Partners"   Width="90" Click="Partners_Click"/>
             <Button Content="Export CSV" Width="90" Margin="16 0 0 0" Click="ExportCSV_Click"/>
             <Button Content="Export PDF" Width="90" Margin="6 0 0 0" Click="ExportPDF_Click"/>
         </StackPanel>
