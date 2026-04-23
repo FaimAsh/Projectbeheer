@@ -27,7 +27,6 @@ namespace WpfAppProjectBeheeder
 
             if (p.Partners != null && p.Partners.Count > 0)
             {
-                Sep();
                 Rij("Partners", string.Join(", ",
                     p.Partners
                         .Where(pp => pp.Partner != null)
