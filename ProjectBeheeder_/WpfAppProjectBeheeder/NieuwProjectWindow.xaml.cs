@@ -49,7 +49,7 @@ namespace WpfAppProjectBeheeder
             try
             {
                 var all = _service.GeefPartners();
-                _weergave = all.Select(p => new PartnerWeergave(p)).ToList();
+                _weergave = all.Select(display => new PartnerWeergave(display)).ToList();
             }
             catch { _weergave = new List<PartnerWeergave>(); }
             RefreshLijst();
@@ -60,21 +60,7 @@ namespace WpfAppProjectBeheeder
 
         private void TxtPartnerZoek_TextChanged(object sender, TextChangedEventArgs e)
             => RefreshLijst();
-        //private void LstGekoppeld_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    int idx = LstGekoppeld.SelectedIndex;
-        //    if (idx < 0) { TxtWijzigRol.Clear(); return; }
 
-        //    var rij = _partnerRijen[idx];
-        //    TxtWijzigRol.Text = rij.Rol;
-
-        //    if (IsStads)
-        //    {
-        //        foreach (ComboBoxItem item in CmbWijzigKategorie.Items)
-        //            if (item.Content.ToString() == rij.Kategorie)
-        //            { CmbWijzigKategorie.SelectedItem = item; break; }
-        //    }
-        //}
         private void RefreshLijst()
         {
             string zoek = TxtPartnerZoek?.Text.Trim().ToLower() ?? "";

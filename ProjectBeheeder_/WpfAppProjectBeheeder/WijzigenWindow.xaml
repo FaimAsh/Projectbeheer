@@ -202,7 +202,7 @@
                         <RowDefinition Height="Auto"/> <!-- edit selected -->
                         <RowDefinition Height="8"/>    <!-- spacer -->
                         <RowDefinition Height="Auto"/> <!-- add section label -->
-                        <RowDefinition Height="32"/>   <!-- search -->
+                        <RowDefinition Height="32"/>   <!-- zoek -->
                         <RowDefinition Height="130"/>  <!-- available list -->
                         <RowDefinition Height="32"/>   <!-- rol row -->
                         <RowDefinition Height="32"/>   <!-- kategorie row (stads only) -->
@@ -214,7 +214,7 @@
                     <ListBox Grid.Row="1" Name="LstGekoppeld" MinHeight="80"
                              SelectionChanged="LstGekoppeld_SelectionChanged"/>
 
-                    <!-- Edit selected partner -->
+                    <!-- Edit partner -->
                     <StackPanel Grid.Row="2" Margin="0 6 0 0">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -224,14 +224,14 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/> <!-- kategorie row, hidden when not stads -->
+                                <RowDefinition Height="30"/> <!-- kategorie row, hidden-->
                             </Grid.RowDefinitions>
                             <Label Grid.Column="0" Content="Rol:"    VerticalAlignment="Center"/>
                             <TextBox Grid.Column="1" Name="TxtWijzigRol" VerticalContentAlignment="Center"/>
                             <Button Grid.Column="2" Content="Wijzig" Margin="4 0 0 0"
                                     Click="WijzigGekoppeld_Click"/>
 
-                            <!-- Kategorie row: only visible for StadsProject -->
+                            <!-- Kategorie row: visible bij StadsProject -->
                             <Label Grid.Row="1" Grid.Column="0" Name="LblKategorie"
                                    Content="Type:" VerticalAlignment="Center" Visibility="Collapsed"/>
                             <ComboBox Grid.Row="1" Grid.Column="1" Name="CmbWijzigKategorie"
@@ -247,7 +247,7 @@
 
                     <Separator Grid.Row="3" Margin="0 4 0 0"/>
 
-                    <!-- Add partner section -->
+                    <!-- partners toevoegen -->
                     <Label Grid.Row="4" Content="Partner toevoegen:" FontWeight="SemiBold"/>
                     <TextBox Grid.Row="5" Name="TxtPartnerZoek" VerticalContentAlignment="Center"
                              Margin="0 0 0 4"
@@ -264,7 +264,7 @@
                         <TextBox Grid.Column="1" Name="TxtNieuweRol" VerticalContentAlignment="Center"/>
                     </Grid>
 
-                    <!-- Nieuwe kategorie (stads only) -->
+                    <!-- Nieuwe kategorie (stads) -->
                     <Grid Grid.Row="8" Name="GridNieuweKategorie" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="45"/>
@@ -284,7 +284,6 @@
             </GroupBox>
         </Grid>
 
-        <!-- ========== SAVE / CANCEL ========== -->
         <StackPanel Grid.Row="1" Orientation="Horizontal"
                     HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 14 0">
             <Button Content="Opslaan"  Width="90" Click="Opslaan_Click"/>

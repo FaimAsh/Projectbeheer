@@ -165,13 +165,19 @@ namespace WpfAppProjectBeheeder {
         {
             try
             {
-                if (DgProjecten.SelectedItem is not Project geselecteerd)
+                var geselecteerdeProjecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
+                if (geselecteerdeProjecten.Count == 0)
                 {
-                    MessageBox.Show("Selecteer eerst een project.");
+                    MessageBox.Show("Selecteer eerst een of meer projecten.");
                     return;
                 }
-                new DetailProjectWindow(geselecteerd).ShowDialog();
+
+                foreach (var project in geselecteerdeProjecten)
+                {
+                    new DetailProjectWindow(project).ShowDialog();
+                }
             }
+
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
