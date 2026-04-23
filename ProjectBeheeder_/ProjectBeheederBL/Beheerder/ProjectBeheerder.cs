@@ -45,13 +45,13 @@ namespace ProjectBeheerderBL.Beheerder
        
         public void AddPartner(Partner NieuwePartner) => _repository.PartnerAanmaken(NieuwePartner);
      
-        public void ExportCsv(List<Project> projecten, string path)
+        public void ExportCSV(List<Project> projecten, string path)
         {
             if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");
             _writer.Write(path, projecten);
         }
 
-        public void ExportPdf(List<Project> projecten, string path) {
+        public void ExportPDF(List<Project> projecten, string path) {
             if (_writer == null) throw new InvalidOperationException("Geen exporter geconfigureerd.");
             _writer.Write(path, projecten);
         }

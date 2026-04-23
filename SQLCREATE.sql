@@ -24,7 +24,9 @@ CREATE TABLE Locatie (
 CREATE TABLE Partner (
  PartnerID INT NOT NULL IDENTITY(1,1),
  Naam NVARCHAR(150) NOT NULL,
- TypePartner INT NOT NULL, /*ENUM*/
+ TypePartner INT NOT NULL,
+ FlagPartner INT NOT NULL,
+
  CONSTRAINT PK_Partner PRIMARY KEY (PartnerID)
 );
  
@@ -36,6 +38,7 @@ CREATE TABLE Project (
  Beschrijving NVARCHAR(MAX) NOT NULL,
  Status INT NOT NULL, /*ENUM*/
  LocatieID INT NOT NULL,
+ FlagProject Int NOT NULL,
  CONSTRAINT PK_Project PRIMARY KEY (ProjectID),
  CONSTRAINT FK_Project_Locatie FOREIGN KEY (LocatieID)
   REFERENCES Locatie (LocatieID)
@@ -47,6 +50,7 @@ CREATE TABLE Project (
 CREATE TABLE Project_Partner (
  ProjectID INT NOT NULL,
  PartnerID INT NOT NULL,
+  FlagPartner INT NOT NULL,
  Rolomschrijving NVARCHAR(255) NOT NULL,
  CONSTRAINT PK_Project_Partner PRIMARY KEY (ProjectID, PartnerID),
  CONSTRAINT FK_PP_Project FOREIGN KEY (ProjectID)
