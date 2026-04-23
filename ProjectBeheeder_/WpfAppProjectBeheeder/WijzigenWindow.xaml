@@ -234,7 +234,7 @@
                             <!-- Kategorie row: visible bij StadsProject -->
                             <Label Grid.Row="1" Grid.Column="0" Name="LblKategorie"
                                    Content="Type:" VerticalAlignment="Center" Visibility="Collapsed"/>
-                            <ComboBox Grid.Row="1" Grid.Column="1" Name="CmbWijzigKategorie"
+                            <ComboBox Grid.Row="1" Grid.Column="1" Name="CmbWijzigCategorie"
                                       VerticalContentAlignment="Center" Margin="0 2 0 0"
                                       Visibility="Collapsed">
                                 <ComboBoxItem Content="algemeen"  IsSelected="True"/>
@@ -264,8 +264,8 @@
                         <TextBox Grid.Column="1" Name="TxtNieuweRol" VerticalContentAlignment="Center"/>
                     </Grid>
 
-                    <!-- Nieuwe kategorie (stads) -->
-                    <Grid Grid.Row="8" Name="GridNieuweKategorie" Visibility="Collapsed">
+                    <!-- Nieuwe kategorie (stads only) -->
+                    <Grid Grid.Row="8" Name="GridNieuweCategorie" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="45"/>
                             <ColumnDefinition Width="*"/>

@@ -568,6 +568,27 @@ namespace ProjectBeheederDL
             return project;
         }
 
+        //public void UpdateRol(int ProjectID, int PartnerID, string Rolomschrijving) {
+
+        //    string sql = "UPDATE Project_Partner SET Rolomschrijving=@Rolomschrijving WHERE ProjectID=@ProjectID AND PartnerID=@PartnerID;";
+
+        //    using (SqlConnection conn = new SqlConnection(_connectionstring))
+        //    using (SqlCommand cmd = conn.CreateCommand()) {
+
+        //        conn.Open();
+
+        //        cmd.CommandText = sql;
+        //        cmd.Parameters.AddWithValue("@Rolomschrijving", Rolomschrijving);
+        //        cmd.Parameters.AddWithValue("@ProjectID", ProjectID);
+        //        cmd.Parameters.AddWithValue("@PartnerID", PartnerID);
+
+                
+
+        //        cmd.ExecuteNonQuery();
+
+        //    }
+        //}
+
         public void UpdateProject(Project project)
         {
 

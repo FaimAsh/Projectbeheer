@@ -12,16 +12,16 @@ namespace WpfAppProjectBeheeder
     {
         public Partner Partner      { get; set; }
         public string  Rol          { get; set; }
-        public string  Kategorie    { get; set; } = "algemeen";
+        public string  Categorie    { get; set; } = "algemeen";
 
         public PartnerRij(Partner partner, string rol, string kategorie = "algemeen")
         {
             Partner   = partner;
             Rol       = rol;
-            Kategorie = kategorie;
+            Categorie = kategorie;
         }
 
-        public override string ToString() => Kategorie == "bouwfirma"
+        public override string ToString() => Categorie == "bouwfirma"
             ? $"[bouwfirma] {Partner.Naam}  — {Rol}"
             : $"{Partner.Naam}  — {Rol}";
     }
@@ -67,8 +67,8 @@ namespace WpfAppProjectBeheeder
             if (IsStads)
             {
                 LblKategorie.Visibility      = Visibility.Visible;
-                CmbWijzigKategorie.Visibility = Visibility.Visible;
-                GridNieuweKategorie.Visibility = Visibility.Visible;
+                CmbWijzigCategorie.Visibility = Visibility.Visible;
+                GridNieuweCategorie.Visibility = Visibility.Visible;
             }
 
             VulFormulierIn();
@@ -84,11 +84,11 @@ namespace WpfAppProjectBeheeder
 
             bool nowStads = type == "StadsProject";
             if (LblKategorie      != null) LblKategorie.Visibility       = nowStads ? Visibility.Visible : Visibility.Collapsed;
-            if (CmbWijzigKategorie != null) CmbWijzigKategorie.Visibility = nowStads ? Visibility.Visible : Visibility.Collapsed;
-            if (GridNieuweKategorie != null) GridNieuweKategorie.Visibility = nowStads ? Visibility.Visible : Visibility.Collapsed;
+            if (CmbWijzigCategorie != null) CmbWijzigCategorie.Visibility = nowStads ? Visibility.Visible : Visibility.Collapsed;
+            if (GridNieuweCategorie != null) GridNieuweCategorie.Visibility = nowStads ? Visibility.Visible : Visibility.Collapsed;
 
             if (!nowStads)
-                foreach (var r in _partnerRijen) r.Kategorie = "algemeen";
+                foreach (var r in _partnerRijen) r.Categorie = "algemeen";
         }
 
 
@@ -192,9 +192,9 @@ namespace WpfAppProjectBeheeder
 
             if (IsStads)
             {
-                foreach (ComboBoxItem item in CmbWijzigKategorie.Items)
-                    if (item.Content.ToString() == rij.Kategorie)
-                    { CmbWijzigKategorie.SelectedItem = item; break; }
+                foreach (ComboBoxItem item in CmbWijzigCategorie.Items)
+                    if (item.Content.ToString() == rij.Categorie)
+                    { CmbWijzigCategorie.SelectedItem = item; break; }
             }
         }
 
@@ -216,8 +216,13 @@ namespace WpfAppProjectBeheeder
 
             _partnerRijen[idx].Rol = TxtWijzigRol.Text.Trim();
             if (IsStads)
-                _partnerRijen[idx].Kategorie =
-                    ((ComboBoxItem)CmbWijzigKategorie.SelectedItem).Content.ToString()!;
+                _partnerRijen[idx].Categorie =
+                    ((ComboBoxItem)CmbWijzigCategorie.SelectedItem).Content.ToString()!;
+
+            //int ProjectID = _project.Id;
+            //int partnerId = _partnerRijen[idx].Partner.Id;
+            //string nieuweRol = _partnerRijen[idx].Rol;
+            //_service.UpdateRol(ProjectID, partnerId, nieuweRol);
 
             RefreshGekoppeld();
         }
@@ -310,9 +315,9 @@ namespace WpfAppProjectBeheeder
                             ChkBeziens.IsChecked  == true,
                             ChkInfobord.IsChecked  == true);
                         sd.Bouwfirmas = _partnerRijen
-                            .Where(r => r.Kategorie == "bouwfirma").Select(r => r.Partner).ToList();
+                            .Where(r => r.Categorie == "bouwfirma").Select(r => r.Partner).ToList();
                         _project.Partners = _partnerRijen
-                            .Where(r => r.Kategorie == "algemeen")
+                            .Where(r => r.Categorie == "algemeen")
                             .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
                         nieuweDetail = sd;
                         break;
