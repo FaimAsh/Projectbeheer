@@ -25,18 +25,19 @@ namespace WpfAppProjectBeheeder
             Rij("Status", p.Status.ToString());
             Rij("Beschrijving", p.Beschrijving ?? "/");
 
-            
-            if (p.Locatie != null)
+            if (p.Partners != null && p.Partners.Count > 0)
             {
-                Rij("Locatie",
-                    $"{p.Locatie.Straat} {p.Locatie.Huisnummer}, {p.Locatie.Postcode} {p.Locatie.Gemeente} ({p.Locatie.Wijk})");
+                Sep();
+                Rij("Partners", string.Join(", ",
+                    p.Partners
+                        .Where(pp => pp.Partner != null)
+                        .Select(pp => $"{pp.Partner.Naam} ({pp.RolBeschrijving})")));
             }
             else
             {
-                Rij("Locatie", "/");
+                Rij("Partners", "/");
             }
 
-            
             if (p.Details == null) return;
 
             foreach (var detail in p.Details)

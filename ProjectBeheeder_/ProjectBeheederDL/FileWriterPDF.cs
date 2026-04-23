@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.Interfaces;
 using iText.Kernel.Pdf;
@@ -11,21 +13,31 @@ namespace ProjectBeheerderDL_SQL
     {
         public void Write(string path, List<Project> projecten)
         {
-            using (PdfWriter writer = new PdfWriter(path))
-            using (PdfDocument pdf = new PdfDocument(writer))
-            using (Document document = new Document(pdf))
-            {
-                document.Add(new Paragraph("Projecten Overzicht"));
-                document.Add(new Paragraph(" "));
+            PdfWriter writer = new PdfWriter(path);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
 
-                foreach (var p in projecten)
-                {
-                    document.Add(new Paragraph($"Project: {p.Titel}"));
-                    document.Add(new Paragraph($"Status: {p.Status}"));
-                    document.Add(new Paragraph($"Wijk: {p.Locatie?.Wijk}"));
-                    document.Add(new Paragraph("------"));
-                }
+            foreach (var p in projecten)
+            {
+                string type = p.GetType().Name;
+                string wijk = p.Locatie?.Wijk ?? "";
+                string start = p.StartDatum.ToString("dd/MM/yyyy");
+
+                string partner = string.Join(", ",
+                    p.Partners
+                     .Where(pp => pp.Partner != null)
+                     .Select(pp => $"{pp.Partner.Naam} ({pp.RolBeschrijving})"));
+
+                document.Add(new Paragraph($"Naam: {p.Titel}"));
+                document.Add(new Paragraph($"Type: {type}"));
+                document.Add(new Paragraph($"Status: {p.Status}"));
+                document.Add(new Paragraph($"Wijk: {wijk}"));
+                document.Add(new Paragraph($"Partners: {partner}"));
+                document.Add(new Paragraph($"Startdatum: {start}"));
+                document.Add(new Paragraph("----------------------------------"));
             }
+
+            document.Close();
         }
     }
 }

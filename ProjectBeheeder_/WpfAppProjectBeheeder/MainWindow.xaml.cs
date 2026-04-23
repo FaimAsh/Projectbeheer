@@ -161,22 +161,16 @@ namespace WpfAppProjectBeheeder {
             }
         }
 
-        private void Info_Click(object sender, RoutedEventArgs e)
+               private void Info_Click(object sender, RoutedEventArgs e)
         {
-
-            Project lala;
             try
             {
-                var geselecteerdeProjecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
-                if (geselecteerdeProjecten.Count == 0)
+                if (DgProjecten.SelectedItem is not Project geselecteerd)
                 {
-                    MessageBox.Show("Selecteer eerst een of meer projecten.");
+                    MessageBox.Show("Selecteer eerst een project.");
                     return;
                 }
-                foreach (var project in geselecteerdeProjecten)
-                {
-                    new DetailProjectWindow(project).ShowDialog();
-                }
+                new DetailProjectWindow(geselecteerd).ShowDialog();
             }
             catch (Exception ex)
             {
@@ -185,24 +179,35 @@ namespace WpfAppProjectBeheeder {
         }
 
         private void Partners_Click(object sender, RoutedEventArgs e)
-            => new PartnerBeheerderWindow(_Beheerder).ShowDialog();        
+            => new PartnerBeheerderWindow(_Beheerder).ShowDialog();
 
-        
-       private void ExportCSV_Click(object sender, RoutedEventArgs e)
+
+        private void ExportCSV_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new SaveFileDialog { Filter = "CSV|*.csv", FileName = ".csv" };
+            var projecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
+
+            if (projecten.Count == 0)
+            {
+                MessageBox.Show(
+                    "Selecteer minstens 1 project om te exporteren.",
+                    "Geen selectie",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            var dlg = new SaveFileDialog
+            {
+                Filter = "CSV|*.csv",
+                FileName = "export.csv"
+            };
+
             if (dlg.ShowDialog() != true) return;
 
             try
             {
-                var projecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
-                if (projecten.Count == null)
-                {
-                    MessageBox.Show("Geen data.");
-                    return;
-                }
-
-                IFileWriter writer = new FileWriterCSV(); 
+                IFileWriter writer = new FileWriterCSV();
                 writer.Write(dlg.FileName, projecten);
 
                 MessageBox.Show("CSV geëxporteerd.");
@@ -215,22 +220,35 @@ namespace WpfAppProjectBeheeder {
 
         private void ExportPDF_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new SaveFileDialog { Filter = "PDF|*.pdf", FileName = ".pdf" };
+            var projecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
+
+            if (projecten.Count == 0)
+            {
+                MessageBox.Show(
+                    "Selecteer minstens 1 project om te exporteren.",
+                    "Geen selectie",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                return;
+            }
+
+            var dlg = new SaveFileDialog
+            {
+                Filter = "PDF|*.pdf",
+                FileName = "export.pdf"
+            };
+
             if (dlg.ShowDialog() != true) return;
+
             try
             {
-                var projecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
-                if (projecten.Count == 0)
-                {
-                    MessageBox.Show("Geen data.");
-                    return;
-                }
-
                 IFileWriter writer = new FileWriterPDF();
                 writer.Write(dlg.FileName, projecten);
+
                 MessageBox.Show("PDF geëxporteerd.");
-            }   
-               catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
