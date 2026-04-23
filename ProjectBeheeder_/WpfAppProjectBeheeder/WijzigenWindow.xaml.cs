@@ -308,7 +308,7 @@ namespace WpfAppProjectBeheeder
                             .Where(r => r.Kategorie == "bouwfirma").Select(r => r.Partner).ToList();
                         _project.Partners = _partnerRijen
                             .Where(r => r.Kategorie == "algemeen")
-                            .Select(r => new ProjectPartner(r.Partner, r.Rol)).ToList();
+                            .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
                         nieuweDetail = sd;
                         break;
 
@@ -319,7 +319,7 @@ namespace WpfAppProjectBeheeder
                             int.Parse(TxtWandelpaden.Text),     TxtFaciliteiten.Text,
                             ChkToerRoute.IsChecked == true,     int.Parse(TxtBeoordeling.Text));
                         _project.Partners = _partnerRijen
-                            .Select(r => new ProjectPartner(r.Partner, r.Rol)).ToList();
+                            .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
                         break;
 
                     case "WonenProject":
@@ -329,7 +329,7 @@ namespace WpfAppProjectBeheeder
                             ChkRondleiding.IsChecked == true, ChkShowwoning.IsChecked == true,
                             int.Parse(TxtInnoScore.Text),     ChkErfgoed.IsChecked    == true);
                         _project.Partners = _partnerRijen
-                            .Select(r => new ProjectPartner(r.Partner, r.Rol)).ToList();
+                            .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
                         break;
 
                     default: throw new Exception("Onbekend projecttype.");

@@ -235,7 +235,7 @@ namespace WpfAppProjectBeheeder
                         project.Details.Add(stadDetail);
                         project.Partners = _partnerRijen
                             .Where(r => r.Kategorie == "algemeen")
-                            .Select(r => new ProjectPartner(r.Partner, r.Rol)).ToList();
+                            .Select(r => new ProjectPartner(_bestand, r.Partner, r.Rol)).ToList();
                         break;
 
                     case "GroenProject":
@@ -244,7 +244,7 @@ namespace WpfAppProjectBeheeder
                             int.Parse(TxtWandelpaden.Text), TxtFaciliteiten.Text,
                             ChkToerRoute.IsChecked == true, int.Parse(TxtBeoordeling.Text)));
                         project.Partners = _partnerRijen
-                            .Select(r => new ProjectPartner(r.Partner, r.Rol)).ToList();
+                            .Select(r => new ProjectPartner(_bestand, r.Partner, r.Rol)).ToList();
                         break;
 
                     case "WonenProject":
@@ -253,7 +253,7 @@ namespace WpfAppProjectBeheeder
                             ChkRondleiding.IsChecked == true, ChkShowwoning.IsChecked == true,
                             int.Parse(TxtInnoScore.Text), ChkErfgoed.IsChecked == true));
                         project.Partners = _partnerRijen
-                            .Select(r => new ProjectPartner(r.Partner, r.Rol)).ToList();
+                            .Select(r => new ProjectPartner(_bestand, r.Partner, r.Rol)).ToList();
                         break;
 
                     default: throw new GentException("Onbekend projecttype.");

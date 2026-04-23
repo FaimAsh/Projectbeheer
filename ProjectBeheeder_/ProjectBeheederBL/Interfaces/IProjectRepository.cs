@@ -11,7 +11,7 @@ namespace ProjectBeheerderBL.Interfaces {
 
         void KoppelingVerwijderen(ProjectPartner projectPartner);
 
-        List<ProjectPartner> GeefKoppeldePartners(int projectId);
+        List<ProjectPartner> GeefGeKoppeldePartners(int projectId);
         
         List<Partner> GeefPartners();
 
