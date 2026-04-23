@@ -112,7 +112,7 @@ namespace WpfAppProjectBeheeder {
             try
             {
                 var volledig = _Beheerder.GetByID(geselecteerd.Id);
-                var w = new NieuwProjectWindow(_Beheerder, volledig);
+                var w = new WijzigenWindow(_Beheerder, volledig);
                 if (w.ShowDialog() == true) LaadProjecten();
             }
             catch (Exception ex)

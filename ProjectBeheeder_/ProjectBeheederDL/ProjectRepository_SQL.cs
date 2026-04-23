@@ -348,7 +348,7 @@ namespace ProjectBeheederDL
                 conn.Open();
 
 
-                string ProLocQuery = "SELECT p.ID, p.Titel, p.StartDatum, p.Beschrijving, p.Status, p.LocatieID, l.Gemeente, l.Postcode, l.Straat, l.Huisnummer, l.Wijk FROM Project p INNER JOIN Locatie l ON p.LocatieID = l.LocatieID WHERE p.ProjectID = @id; AND FlagProject = @FlagProject";
+                string ProLocQuery = "SELECT p.ProjectID, p.Titel, p.StartDatum, p.Beschrijving, p.Status, p.LocatieID, l.Gemeente, l.Postcode, l.Straat, l.Huisnummer, l.Wijk FROM Project p INNER JOIN Locatie l ON p.LocatieID = l.LocatieID WHERE p.ProjectID = @Projectid AND FlagProject = @FlagProject";
 
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
@@ -393,11 +393,11 @@ namespace ProjectBeheederDL
 
 
 
-                string StadQuery = "SELECT * FROM StadDetail WHERE ProjectID = @id";
+                string StadQuery = "SELECT * FROM StadDetail WHERE ProjectID = @ProjectID";
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = StadQuery;
-                    cmd.Parameters.AddWithValue("@ProjectId", id);
+                    cmd.Parameters.AddWithValue("@ProjectID", id);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -418,7 +418,7 @@ namespace ProjectBeheederDL
                     }
                 }
 
-                string WonenQuery = "SELECT * FROM InnovatiefwonenDetail WHERE ProjectID = @id AND ";
+                string WonenQuery = "SELECT * FROM InnovatiefwonenDetail WHERE ProjectID = @ProjectId;";
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = WonenQuery;
@@ -444,7 +444,7 @@ namespace ProjectBeheederDL
                 }
 
 
-                string GroenQuery = "SELECT * FROM GroenDetail WHERE ProjectID = @id";
+                string GroenQuery = "SELECT * FROM GroenDetail WHERE ProjectID = @ProjectId";
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = GroenQuery;
@@ -476,8 +476,8 @@ namespace ProjectBeheederDL
         public void UpdateProject(Project project)
         {
 
-            string LocatieQuery = "UPDATE Locatie SET Gemeente=@Gemeente,Postcode=@Postcode,Straat=@Straat,Huisnummer=@Huisnummer,wijk=@wijk WHERE id = LocatieID;";
-            string ProjectQuery = "UPDATE Project SET Titel=@Titel,StartDatum=@StartDatum,Status=@Status,Beschrijving=@BeSchrijving,Locatie=@Locatie WHERE id = ProjectID AND FlagProject = @Flagproject;";
+            string LocatieQuery = "UPDATE Locatie SET Gemeente=@Gemeente,Postcode=@Postcode,Straat=@Straat,Huisnummer=@Huisnummer,wijk=@wijk WHERE LocatieID = @LocatieID;";
+            string ProjectQuery = "UPDATE Project SET Titel=@Titel,StartDatum=@StartDatum,Status=@Status,Beschrijving=@BeSchrijving,LocatieID=@LocatieID WHERE Projectid = @ProjectID AND FlagProject = @Flagproject;";
 
 
             using (SqlConnection conn = new SqlConnection(_connectionstring))
@@ -514,8 +514,8 @@ namespace ProjectBeheederDL
                     ProjectCmd.Parameters.AddWithValue("@Titel", project.Titel);
                     ProjectCmd.Parameters.AddWithValue("@StartDatum", project.StartDatum);
                     ProjectCmd.Parameters.AddWithValue("@Status", project.Status);
-                    ProjectCmd.Parameters.AddWithValue("@Beschriving", project.Beschrijving);
-                    ProjectCmd.Parameters.AddWithValue("@Locatie", project.Locatie);
+                    ProjectCmd.Parameters.AddWithValue("@Beschrijving", project.Beschrijving);
+                    ProjectCmd.Parameters.AddWithValue("@LocatieID", project.Locatie.LocatieId);
 
                     ProjectCmd.ExecuteNonQuery();
 
