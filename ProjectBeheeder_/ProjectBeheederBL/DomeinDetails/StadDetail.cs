@@ -30,7 +30,6 @@ namespace ProjectBeheerderBL.DomeinDetails {
         public VergunningStatus VergunningStatus { get; set; }
         public bool ArchitecturaleWaarde {  get; set; }
         public Toegankelijkheid Toegankelijkheid { get; set; }
-        public bool ToeristischeWaarde { get; set; }
         public bool Bezienswaardigheid { get; set; }
 
         public bool InfoBordVoorzien {  get; set; }

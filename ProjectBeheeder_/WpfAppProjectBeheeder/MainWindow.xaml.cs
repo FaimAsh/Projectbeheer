@@ -54,10 +54,11 @@ namespace WpfAppProjectBeheeder {
           
         }
 
-        private void LaadProjecten(ProjectFilter? filter = null) {
+        private void LaadProjecten(ProjectFilter? filter = null)
+        {
             try
             {
-                DgProjecten.ItemsSource = _Beheerder.Search(new ProjectFilter());
+                DgProjecten.ItemsSource = _Beheerder.Search(filter ?? new ProjectFilter());
             }
             catch (Exception ex)
             {
@@ -65,19 +66,34 @@ namespace WpfAppProjectBeheeder {
             }
         }
 
-        private void Zoeken_Click(object sender, RoutedEventArgs e) {
-
+        private void Zoeken_Click(object sender, RoutedEventArgs e)
+        {
             var filter = new ProjectFilter
-            { 
+            {
                 Wijk = string.IsNullOrWhiteSpace(TxtWijk.Text) ? null : TxtWijk.Text.Trim(),
                 PartnerNaam = string.IsNullOrWhiteSpace(TxtPartner.Text) ? null : TxtPartner.Text.Trim(),
                 StartDatumVan = DpVan.SelectedDate,
                 StartDatumTot = DpTot.SelectedDate
             };
 
-            bool planningChecked = ChkBowfirm.IsChecked == true;
-            bool uitvoeringChecked = ChkBuwfira.IsChecked == true;
-            bool afgerondChecked = ChkBouwfrma.IsChecked == true;
+            if (ChkBowfirm.IsChecked == true)
+                filter.Statussen.Add(ProjectStatus.Planning);
+
+            if (ChkBuwfira.IsChecked == true)
+                filter.Statussen.Add(ProjectStatus.Uitvoering);
+
+            if (ChkBouwfrma.IsChecked == true)
+                filter.Statussen.Add(ProjectStatus.Afgerond);
+ 
+            if (ChkBowfirma.IsChecked == true)
+                filter.Details.Add("Groen");
+
+            if (ChkBuwfirma.IsChecked == true)
+                filter.Details.Add("Stad");
+
+            if (ChkBouwfirma.IsChecked == true)
+                filter.Details.Add("Wonen");
+
             LaadProjecten(filter);
         }
 
@@ -93,10 +109,9 @@ namespace WpfAppProjectBeheeder {
             TxtPartner.Clear();
             DpVan.SelectedDate = null;
             DpTot.SelectedDate = null;
-            LaadProjecten();
         }
 
-        private void DgProjecten_SelectionChanged(object sender, RoutedEventArgs e){ }
+        private void DgProjecten_SelectionChanged(object sender, SelectionChangedEventArgs e){ }
         private void NieuwProject_Click(object sender, RoutedEventArgs e)
         {
             var w = new NieuwProjectWindow(_Beheerder);

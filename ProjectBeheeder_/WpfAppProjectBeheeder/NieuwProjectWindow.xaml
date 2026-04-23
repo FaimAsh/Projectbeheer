@@ -178,7 +178,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <!-- ===== RIGHT: revamped partner panel ===== -->
+        <!-- Rechts: partners ===== -->
         <GroupBox Grid.Column="1" Header="Partners koppelen (optioneel)" Margin="8 14 10 14">
             <Grid Margin="6">
                 <Grid.RowDefinitions>
@@ -250,7 +250,7 @@
 
                 <Separator Grid.Row="4" Margin="0 2 0 0"/>
 
-                <!-- Inline partner aanmaak -->
+                <!-- partner aanmaak -->
                 <Label Grid.Row="5" Content="Nieuwe partner aanmaken:" FontWeight="SemiBold"/>
                 <Grid Grid.Row="6">
                     <Grid.ColumnDefinitions>
