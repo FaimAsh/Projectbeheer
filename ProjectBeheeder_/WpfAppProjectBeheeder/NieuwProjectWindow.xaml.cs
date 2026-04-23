@@ -96,7 +96,7 @@ namespace WpfAppProjectBeheeder
             RefreshLijst();
         }
 
-        private void VerwijderPartner_Click(object sender, RoutedEventArgs e) {
+        private void VerwijderKoppeling_Click(object sender, RoutedEventArgs e) {
 
 
            
@@ -109,7 +109,7 @@ namespace WpfAppProjectBeheeder
             }
             if (pw.IsOntkoppelt)
             {
-                _partnerRijen.RemoveAll(r => (r.Partner == pw.Partner);
+                _partnerRijen.RemoveAll(r => (r.Partner == pw.Partner));
                 pw.IsToegevoegd = false;
             
             pw.IsToegevoegd = false;
