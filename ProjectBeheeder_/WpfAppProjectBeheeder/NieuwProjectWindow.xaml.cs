@@ -15,7 +15,6 @@ namespace WpfAppProjectBeheeder
         public bool IsToegevoegd { get; set; }
         public string Display => $"{Partner.Naam}  ({Partner.PartnerType}){(IsToegevoegd ? "  ✓" : "")}";
         public PartnerWeergave(Partner p) { Partner = p; }
-        public bool IsOntkoppelt { get; set; }
     }
 
     public partial class NieuwProjectWindow : Window
@@ -26,7 +25,7 @@ namespace WpfAppProjectBeheeder
 
         private List<PartnerWeergave> _weergave = new();
         private List<PartnerRij> _partnerRijen = new();
-        private List<ProjectPartner> _gekoppeldPartners = new();
+        private List<ProjectPartner>? _gekoppeldPartners = new();
 
         public NieuwProjectWindow(ProjectBeheerder service, Project? bestaand = null)
         {
@@ -38,9 +37,9 @@ namespace WpfAppProjectBeheeder
 
             if (_bestand != null)
             {
-                Title = "Project wijzigen";
-                VulFormulierIn(_bestand);
-                CmbType.IsEnabled = false;
+                MessageBox.Show("Dit project bestaat al.", "Bestaande Project", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+                Close();
             }
         }
 
@@ -49,14 +48,27 @@ namespace WpfAppProjectBeheeder
             try
             {
                 var all = _service.GeefPartners();
-                _weergave = all.Select(display => new PartnerWeergave(display)).ToList();
+                _weergave = all.Select(p => new PartnerWeergave(p)).ToList();
             }
             catch { _weergave = new List<PartnerWeergave>(); }
             RefreshLijst();
         }
 
-        private bool IsStads =>
-            (CmbType?.SelectedItem as ComboBoxItem)?.Content?.ToString() == "StadsProject";
+        private bool IsStads => ChkStad.IsChecked == false;
+        private bool IsGroen => ChkStad.IsChecked == false;
+        private bool IsInno => ChkStad.IsChecked == false;
+        private void ProjectCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+            if (GbStads != null) GbStads.Visibility = IsStads ? Visibility.Visible : Visibility.Collapsed;
+            if (GbGroen != null) GbGroen.Visibility = IsGroen ? Visibility.Visible : Visibility.Collapsed;
+            if (GbInno != null) GbInno.Visibility = IsInno ? Visibility.Visible : Visibility.Collapsed;
+
+            if (ChkBouwfirma != null)
+            {
+                ChkBouwfirma.IsEnabled = IsStads;
+                if (!IsStads) ChkBouwfirma.IsChecked = false;
+            }
+        }
 
         private void TxtPartnerZoek_TextChanged(object sender, TextChangedEventArgs e)
             => RefreshLijst();
@@ -66,7 +78,7 @@ namespace WpfAppProjectBeheeder
             string zoek = TxtPartnerZoek?.Text.Trim().ToLower() ?? "";
             var gefilterd = string.IsNullOrEmpty(zoek)
                 ? _weergave
-                : _weergave.Where(w => w.Partner.Naam.ToLower().Contains(zoek)).ToList();
+                : _weergave.Where(w => w.Display.Contains(zoek)).ToList();
 
             LstPartners.ItemsSource = null;
             LstPartners.ItemsSource = gefilterd;
@@ -87,7 +99,12 @@ namespace WpfAppProjectBeheeder
                     MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-
+            if (string.IsNullOrEmpty(TxtRol.Text))
+            {
+                MessageBox.Show("Rol moet ingevuld worden.", "Geen Rol Meegegeven",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
             string kat = (IsStads && ChkBouwfirma.IsChecked == true) ? "bouwfirma" : "algemeen";
             _partnerRijen.Add(new PartnerRij(pw.Partner, TxtRol.Text.Trim(), kat));
 
@@ -106,13 +123,10 @@ namespace WpfAppProjectBeheeder
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (pw.IsOntkoppelt)
+            if (pw.IsToegevoegd)
             {
                 _partnerRijen.RemoveAll(r => (r.Partner == pw.Partner));
                 pw.IsToegevoegd = false;
-            
-            pw.IsToegevoegd = false;
-
             RefreshLijst();
         }
     else
@@ -146,100 +160,100 @@ namespace WpfAppProjectBeheeder
             }
         }
 
-        private void CmbType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string? type = (CmbType.SelectedItem as ComboBoxItem)?.Content?.ToString();
-            if (GbStads != null) GbStads.Visibility = type == "StadsProject" ? Visibility.Visible : Visibility.Collapsed;
-            if (GbGroen != null) GbGroen.Visibility = type == "GroenProject" ? Visibility.Visible : Visibility.Collapsed;
-            if (GbInno != null) GbInno.Visibility = type == "WonenProject" ? Visibility.Visible : Visibility.Collapsed;
+        //private void CmbType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    string? type = (CmbType.SelectedItem as ComboBoxItem)?.Content?.ToString();
+        //    if (GbStads != null) GbStads.Visibility = type == "StadsProject" ? Visibility.Visible : Visibility.Collapsed;
+        //    if (GbGroen != null) GbGroen.Visibility = type == "GroenProject" ? Visibility.Visible : Visibility.Collapsed;
+        //    if (GbInno != null) GbInno.Visibility = type == "WonenProject" ? Visibility.Visible : Visibility.Collapsed;
 
-            // ChkBouwfirma: grijs
-            if (ChkBouwfirma != null)
-            {
-                ChkBouwfirma.IsEnabled = (type == "StadsProject");
-                if (type != "StadsProject") ChkBouwfirma.IsChecked = false;
-            }
-        }
+        //    // ChkBouwfirma: grijs
+        //    if (ChkBouwfirma != null)
+        //    {
+        //        ChkBouwfirma.IsEnabled = (type == "StadsProject");
+        //        if (type != "StadsProject") ChkBouwfirma.IsChecked = false;
+        //    }
+        //}
 
-        private void VulFormulierIn(Project p)
-        {
-            string typeName = p.Details.FirstOrDefault() switch
-            {
-                StadDetail => "StadsProject",
-                GroenDetail => "GroenProject",
-                WonenDetail => "WonenProject",
-                _ => "StadsProject"
-            };
-            foreach (ComboBoxItem item in CmbType.Items)
-                if (item.Content.ToString() == typeName) { CmbType.SelectedItem = item; break; }
+        //private void VulFormulierIn(Project p)
+        //{
+        //    string typeName = p.Details.FirstOrDefault() switch
+        //    {
+        //        StadDetail => "StadsProject",
+        //        GroenDetail => "GroenProject",
+        //        WonenDetail => "WonenProject",
+        //        _ => "StadsProject"
+        //    };
+        //    foreach (ComboBoxItem item in CmbType.Items)
+        //        if (item.Content.ToString() == typeName) { CmbType.SelectedItem = item; break; }
 
-            TxtTitel.Text = p.Titel;
-            DpStart.SelectedDate = p.StartDatum;
-            foreach (ComboBoxItem item in CmbStatus.Items)
-                if (item.Content.ToString()!.Equals(p.Status.ToString(), StringComparison.OrdinalIgnoreCase))
-                { CmbStatus.SelectedItem = item; break; }
-            TxtBeschrijving.Text = p.Beschrijving;
-            TxtGemeente.Text = p.Locatie.Gemeente;
-            TxtPostCode.Text = p.Locatie.Postcode;
-            TxtStraat.Text = p.Locatie.Straat;
-            TxtHuisNummer.Text = p.Locatie.Huisnummer;
-            TxtWijk.Text = p.Locatie.Wijk;
+        //    TxtTitel.Text = p.Titel;
+        //    DpStart.SelectedDate = p.StartDatum;
+        //    foreach (ComboBoxItem item in CmbStatus.Items)
+        //        if (item.Content.ToString()!.Equals(p.Status.ToString(), StringComparison.OrdinalIgnoreCase))
+        //        { CmbStatus.SelectedItem = item; break; }
+        //    TxtBeschrijving.Text = p.Beschrijving;
+        //    TxtGemeente.Text = p.Locatie.Gemeente;
+        //    TxtPostCode.Text = p.Locatie.Postcode;
+        //    TxtStraat.Text = p.Locatie.Straat;
+        //    TxtHuisNummer.Text = p.Locatie.Huisnummer;
+        //    TxtWijk.Text = p.Locatie.Wijk;
 
-            foreach (var detail in p.Details)
-            {
-                switch (detail)
-                {
-                    case StadDetail sd:
-                        foreach (ComboBoxItem i in CmbVergunning.Items)
-                            if (i.Content.ToString() == sd.VergunningStatus.ToString()) { CmbVergunning.SelectedItem = i; break; }
-                        ChkArchWaarde.IsChecked = sd.ArchitecturaleWaarde;
-                        foreach (ComboBoxItem i in CmbToegang.Items)
-                            if (i.Content.ToString() == sd.Toegankelijkheid.ToString()) { CmbToegang.SelectedItem = i; break; }
-                        ChkToeristisch.IsChecked = sd.Bezienswaardigheid;
-                        ChkInfowandeling.IsChecked = sd.InfoBordVoorzien;
+        //    foreach (var detail in p.Details)
+        //    {
+        //        switch (detail)
+        //        {
+        //            case StadDetail sd:
+        //                foreach (ComboBoxItem i in CmbVergunning.Items)
+        //                    if (i.Content.ToString() == sd.VergunningStatus.ToString()) { CmbVergunning.SelectedItem = i; break; }
+        //                ChkArchWaarde.IsChecked = sd.ArchitecturaleWaarde;
+        //                foreach (ComboBoxItem i in CmbToegang.Items)
+        //                    if (i.Content.ToString() == sd.Toegankelijkheid.ToString()) { CmbToegang.SelectedItem = i; break; }
+        //                ChkToeristisch.IsChecked = sd.Bezienswaardigheid;
+        //                ChkInfowandeling.IsChecked = sd.InfoBordVoorzien;
 
-                        // Grijs
-                        _partnerRijen = p.Partners
-                            .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving, "algemeen")).ToList();
-                        if (sd.Bouwfirmas != null)
-                            foreach (var b in sd.Bouwfirmas)
-                                _partnerRijen.Add(new PartnerRij(b, b.Naam, "bouwfirma"));
-                        break;
+        //                // Grijs
+        //                _partnerRijen = p.Partners
+        //                    .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving, "algemeen")).ToList();
+        //                if (sd.Bouwfirmas != null)
+        //                    foreach (var b in sd.Bouwfirmas)
+        //                        _partnerRijen.Add(new PartnerRij(b, b.Naam, "bouwfirma"));
+        //                break;
 
-                    case GroenDetail gd:
-                        TxtOppervlakte.Text = gd.Oppervlakte.ToString();
-                        TxtBioScore.Text = gd.Biodiversiteit.ToString();
-                        TxtWandelpaden.Text = gd.Wandelpaden.ToString();
-                        TxtFaciliteiten.Text = gd.Faciliteiten;
-                        ChkToerRoute.IsChecked = gd.ToeristischeRoute;
-                        TxtBeoordeling.Text = gd.Beoordeling.ToString();
-                        _partnerRijen = p.Partners
-                            .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving)).ToList();
-                        break;
+        //            case GroenDetail gd:
+        //                TxtOppervlakte.Text = gd.Oppervlakte.ToString();
+        //                TxtBioScore.Text = gd.Biodiversiteit.ToString();
+        //                TxtWandelpaden.Text = gd.Wandelpaden.ToString();
+        //                TxtFaciliteiten.Text = gd.Faciliteiten;
+        //                ChkToerRoute.IsChecked = gd.ToeristischeRoute;
+        //                TxtBeoordeling.Text = gd.Beoordeling.ToString();
+        //                _partnerRijen = p.Partners
+        //                    .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving)).ToList();
+        //                break;
 
-                    case WonenDetail wd:
-                        TxtEenheden.Text = wd.AantalEenheden.ToString();
-                        TxtWoningTypes.Text = wd.Woningtypes;
-                        ChkRondleiding.IsChecked = wd.Rondleidingen;
-                        ChkShowwoning.IsChecked = wd.Showwoningen;
-                        TxtInnoScore.Text = wd.ArchitecturaleScore.ToString();
-                        ChkErfgoed.IsChecked = wd.ErfgoedSamenwerking;
-                        _partnerRijen = p.Partners
-                            .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving)).ToList();
-                        break;
-                }
-            }
+        //            case WonenDetail wd:
+        //                TxtEenheden.Text = wd.AantalEenheden.ToString();
+        //                TxtWoningTypes.Text = wd.Woningtypes;
+        //                ChkRondleiding.IsChecked = wd.Rondleidingen;
+        //                ChkShowwoning.IsChecked = wd.Showwoningen;
+        //                TxtInnoScore.Text = wd.ArchitecturaleScore.ToString();
+        //                ChkErfgoed.IsChecked = wd.ErfgoedSamenwerking;
+        //                _partnerRijen = p.Partners
+        //                    .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving)).ToList();
+        //                break;
+        //        }
+        //    }
 
-            var addedIds = _partnerRijen.Select(r => r.Partner.Id).ToHashSet();
-            foreach (var pw in _weergave) pw.IsToegevoegd = addedIds.Contains(pw.Partner.Id);
-            RefreshLijst();
-        }
+        //    var addedIds = _partnerRijen.Select(r => r.Partner.Id).ToHashSet();
+        //    foreach (var pw in _weergave) pw.IsToegevoegd = addedIds.Contains(pw.Partner.Id);
+        //    RefreshLijst();
+        //}
 
         private void Opslaan_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                string type = ((ComboBoxItem)CmbType.SelectedItem).Content.ToString()!;
+
                 string statusStr = ((ComboBoxItem)CmbStatus.SelectedItem).Content.ToString()!;
                 var status = Enum.Parse<ProjectStatus>(statusStr, ignoreCase: true);
                 var locatie = new Locatie(null, TxtGemeente.Text, TxtPostCode.Text,
@@ -249,53 +263,60 @@ namespace WpfAppProjectBeheeder
                 var project = _factory.CreateProject(TxtTitel.Text,
                     DpStart.SelectedDate ?? DateTime.Today, beschr, status, locatie);
 
-                switch (type)
-                {
-                    case "StadsProject":
-                        var vergunning = Enum.Parse<VergunningStatus>(((ComboBoxItem)CmbVergunning.SelectedItem).Content.ToString()!);
-                        var toegankelijk = Enum.Parse<Toegankelijkheid>(((ComboBoxItem)CmbToegang.SelectedItem).Content.ToString()!);
-                        var stadDetail = _factory.AddStadsDetail(0, vergunning,
-                            ChkArchWaarde.IsChecked == true, toegankelijk,
-                            ChkToeristisch.IsChecked == true, false,
-                            ChkInfowandeling.IsChecked == true);
-                        stadDetail.Bouwfirmas = _partnerRijen
-                            .Where(r => r.Kategorie == "bouwfirma")
-                            .Select(r => r.Partner).ToList();
-                        project.Details.Add(stadDetail);
-                        project.Partners = _partnerRijen
-                            .Where(r => r.Kategorie == "algemeen")
-                            .Select(r => new ProjectPartner(_bestand, r.Partner, r.Rol)).ToList();
-                        break;
 
-                    case "GroenProject":
-                        project.Details.Add(_factory.AddGroenDetail(0,
+                //switch (project.Details)
+                //{
+                //    case project.Details.Contains(StadDetail):
+                if (IsStads)
+                {
+                    var vergunning = Enum.Parse<VergunningStatus>(((ComboBoxItem)CmbVergunning.SelectedItem).Content.ToString()!);
+                    var toegankelijk = Enum.Parse<Toegankelijkheid>(((ComboBoxItem)CmbToegang.SelectedItem).Content.ToString()!);
+                    var stadDetail = _factory.AddStadsDetail(0, vergunning,
+                        ChkArchWaarde.IsChecked == true, toegankelijk,
+                        ChkToeristisch.IsChecked == true, false,
+                        ChkInfowandeling.IsChecked == true);
+                    stadDetail.Bouwfirmas = _partnerRijen
+                        .Where(r => r.Kategorie == "bouwfirma")
+                        .Select(r => r.Partner).ToList();
+                    project.Details.Add(stadDetail);
+                    project.Partners = _partnerRijen
+                        .Where(r => r.Kategorie == "algemeen")
+                        .Select(r => new ProjectPartner(project, r.Partner, r.Rol)).ToList();
+                }
+
+                //    case "GroenProject":
+                if (IsGroen)
+                {
+                    project.Details.Add(_factory.AddGroenDetail(0,
                             decimal.Parse(TxtOppervlakte.Text), int.Parse(TxtBioScore.Text),
                             int.Parse(TxtWandelpaden.Text), TxtFaciliteiten.Text,
                             ChkToerRoute.IsChecked == true, int.Parse(TxtBeoordeling.Text)));
-                        project.Partners = _partnerRijen
-                            .Select(r => new ProjectPartner(_bestand, r.Partner, r.Rol)).ToList();
-                        break;
-
-                    case "WonenProject":
-                        project.Details.Add(_factory.AddWonenDetail(0,
-                            int.Parse(TxtEenheden.Text), TxtWoningTypes.Text,
-                            ChkRondleiding.IsChecked == true, ChkShowwoning.IsChecked == true,
-                            int.Parse(TxtInnoScore.Text), ChkErfgoed.IsChecked == true));
-                        project.Partners = _partnerRijen
-                            .Select(r => new ProjectPartner(_bestand, r.Partner, r.Rol)).ToList();
-                        break;
-
-                    default: throw new GentException("Onbekend projecttype.");
+                    project.Partners = _partnerRijen
+                        .Select(r => new ProjectPartner(project, r.Partner, r.Rol)).ToList();
                 }
+
+                //    case "WonenProject":
+                if (IsInno)
+                {
+                    project.Details.Add(_factory.AddWonenDetail(0,
+                        int.Parse(TxtEenheden.Text), TxtWoningTypes.Text,
+                        ChkRondleiding.IsChecked == true, ChkShowwoning.IsChecked == true,
+                        int.Parse(TxtInnoScore.Text), ChkErfgoed.IsChecked == true));
+                    project.Partners = _partnerRijen
+                        .Select(r => new ProjectPartner(project, r.Partner, r.Rol)).ToList();
+                }
+
+                //   default: throw new GentException("Onbekend projecttype.");
+                //}
 
                 if (_bestand != null)
                 {
-                    project.Id = _bestand.Id;
-                    project.Locatie.LocatieId = _bestand.Locatie.LocatieId;
-                    _service.UpdateProject(project);
+                    MessageBox.Show("Selecteer een partner.", "Geen selectie", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
                 }
                 else
                 {
+                    project.Partners = _gekoppeldPartners;
                     _service.AddProject(project);
                 }
 
