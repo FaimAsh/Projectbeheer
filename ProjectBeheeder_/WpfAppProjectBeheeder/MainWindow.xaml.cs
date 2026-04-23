@@ -4,6 +4,7 @@ using ProjectBeheerderBL.Beheerder;
 using ProjectBeheerderBL.Domein;
 using ProjectBeheerderBL.DomeinDetails;
 using ProjectBeheerderBL.Interfaces;
+using ProjectBeheerderDL_SQL;
 using ProjectBeheerderUtil;
 using System.IO;
 using System.Text;
@@ -156,20 +157,30 @@ namespace WpfAppProjectBeheeder {
         private void Partners_Click(object sender, RoutedEventArgs e)
             => new PartnerBeheerderWindow(_Beheerder).ShowDialog();        
 
-        private void ExportCSV_Click(object sender, RoutedEventArgs e)
+        
+       private void ExportCSV_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new SaveFileDialog { Filter = "CSV|*.csv", FileName = ".csv" };
             if (dlg.ShowDialog() != true) return;
+
             try
             {
-                var projecten = (List<Project>)DgProjecten.ItemsSource;
- 
-                _Beheerder.ExportCsv(projecten, dlg.FileName);
+                var projecten = DgProjecten.ItemsSource as List<Project>;
+                if (projecten == null)
+                {
+                    MessageBox.Show("Geen data.");
+                    return;
+                }
 
-                
-                MessageBox.Show("CSV geëxporteerd.", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
+                IFileWriter writer = new FileWriterCSV(); 
+                writer.Write(dlg.FileName, projecten);
+
+                MessageBox.Show("CSV geëxporteerd.");
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void ExportPDF_Click(object sender, RoutedEventArgs e)
@@ -178,15 +189,21 @@ namespace WpfAppProjectBeheeder {
             if (dlg.ShowDialog() != true) return;
             try
             {
-                var projecten = (List<Project>)DgProjecten.ItemsSource;
+                var projecten = DgProjecten.ItemsSource as List<Project>;
+                if (projecten == null)
+                {
+                    MessageBox.Show("Geen data.");
+                    return;
+                }
 
-                _Beheerder.ExportPdf(projecten, dlg.FileName);
-
-               
-
-                MessageBox.Show("Export klaar.", "OK", MessageBoxButton.OK, MessageBoxImage.Information);
+                IFileWriter writer = new FileWriterPDF();
+                writer.Write(dlg.FileName, projecten);
+                MessageBox.Show("PDF geëxporteerd.");
+            }   
+               catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
     }
 }
