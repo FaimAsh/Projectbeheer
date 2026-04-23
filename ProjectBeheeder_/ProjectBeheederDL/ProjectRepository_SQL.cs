@@ -207,6 +207,34 @@ namespace ProjectBeheederDL
             }
         }
 
+        public List<ProjectPartner> GeefGeKoppeldePartners(int projectId)
+        {
+            List<ProjectPartner> projectPartner = new();
+            using (SqlConnection conn = new SqlConnection(_connectionstring))
+            {
+                conn.Open();
+                string projectPartnerQuery = "SELECT pp.ProjectID, pp.Rolomschrijving FROM Project_Partner pp WHERE pp.FlagPartner = @FlagPartner AND pp.ProjectID = @ProjectID";
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = projectPartnerQuery;
+                    cmd.Parameters.AddWithValue("@FlagPartner", Enums.Flags.shown);
+                    cmd.Parameters.AddWithValue("@ProjectID", projectId);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ProjectPartner pp1 = new ProjectPartner((Project)reader["ProjectID"],
+                                (Partner)reader["PartnerID"],
+                                (string)reader["Rolomschrijving"]
+                                );
+                            projectPartner.Add(pp1);
+                        }
+                        return projectPartner;
+                    }
+                }
+            }
+        }
+
         public List<Partner> GeefPartners()
         {
 
