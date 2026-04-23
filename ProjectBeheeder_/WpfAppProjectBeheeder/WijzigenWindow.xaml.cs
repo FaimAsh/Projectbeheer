@@ -12,7 +12,7 @@ namespace WpfAppProjectBeheeder
     {
         public Partner Partner      { get; set; }
         public string  Rol          { get; set; }
-        public string  Kategorie    { get; set; } = "algemeen"; // "algemeen" | "bouwfirma"
+        public string  Kategorie    { get; set; } = "algemeen";
 
         public PartnerRij(Partner partner, string rol, string kategorie = "algemeen")
         {
@@ -35,8 +35,9 @@ namespace WpfAppProjectBeheeder
         private bool IsStads =>
             (CmbType?.SelectedItem as ComboBoxItem)?.Content?.ToString() == "StadsProject";
 
-        private List<Partner>    _allPartners  = new();
+        private List<Partner>    _allePartners  = new();
         private List<PartnerRij> _partnerRijen = new();
+        private List<ProjectPartner> GekoppeldePartners = new();
 
         public WijzigenWindow(ProjectBeheerder service, Project project)
         {
@@ -165,19 +166,23 @@ namespace WpfAppProjectBeheeder
 
         private void LaadBeschikbarePartners()
         {
-            try   { _allPartners = _service.GeefPartners(); }
-            catch { _allPartners = new List<Partner>(); }
+            try   { _allePartners = _service.GeefPartners(); }
+            catch { _allePartners = new List<Partner>(); }
             RefreshBeschikbaar();
         }
 
         private void RefreshGekoppeld()
         {
+            var linked = _partnerRijen.Select(r => r.Partner.Id).ToHashSet();
+            var gekoppeld = _allePartners
+                .Where(p => linked.Contains(p.Id))
+                .ToList();
             LstGekoppeld.ItemsSource = null;
-            LstGekoppeld.ItemsSource = _partnerRijen.Select(r => r.ToString()).ToList();
+            LstGekoppeld.ItemsSource = gekoppeld;
             TxtWijzigRol.Clear();
         }
 
-        private void LstGekoppeld_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LstPartners_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int idx = LstGekoppeld.SelectedIndex;
             if (idx < 0) { TxtWijzigRol.Clear(); return; }
@@ -235,7 +240,7 @@ namespace WpfAppProjectBeheeder
         {
             string zoek       = TxtPartnerZoek?.Text.Trim().ToLower() ?? "";
             var    linked     = _partnerRijen.Select(r => r.Partner.Id).ToHashSet();
-            var    gefilterd  = _allPartners
+            var    gefilterd  = _allePartners
                 .Where(p => !linked.Contains(p.Id))
                 .Where(p => string.IsNullOrEmpty(zoek) || p.Naam.ToLower().Contains(zoek))
                 .ToList();
@@ -339,6 +344,10 @@ namespace WpfAppProjectBeheeder
                 _project.Details.Add(nieuweDetail);
 
                 _service.UpdateProject(_project);
+                foreach (var gkp in GekoppeldePartners)
+                {
+
+                }
                 DialogResult = true;
                 Close();
             }

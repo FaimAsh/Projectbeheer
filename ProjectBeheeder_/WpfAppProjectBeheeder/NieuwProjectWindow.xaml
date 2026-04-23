@@ -244,7 +244,7 @@
                     <CheckBox Grid.Row="1" Grid.Column="1" Name="ChkBouwfirma" Grid.ColumnSpan="2"
                               Content="Bouwfirma" VerticalAlignment="Center"
                               IsEnabled="False"/>
-                    <Button Grid.Row="1" Grid.Column="3" Content="Verwijder" Margin="0 6 0 0" Width="80"
+                    <Button Grid.Row="1" Grid.Column="3" Content="Terug Zetten" Margin="0 6 0 0" Width="80"
                             Click="VerwijderKoppeling_Click"/>
                     <Button Grid.Row="1" Grid.Column="5" Content="Voeg toe" Margin="0 6 0 0" Width="80"
                             Click="VoegPartnerToe_Click"/>
