@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sql;
+﻿using iText.Signatures.Validation.Lotl;
+using Microsoft.Data.Sql;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -572,9 +573,9 @@ namespace ProjectBeheederDL
 
             string LocatieQuery = "UPDATE Locatie SET Gemeente=@Gemeente,Postcode=@Postcode,Straat=@Straat,Huisnummer=@Huisnummer,wijk=@wijk WHERE LocatieID = @LocatieID;";
             string ProjectQuery = "UPDATE Project SET Titel=@Titel,StartDatum=@StartDatum,Status=@Status,Beschrijving=@BeSchrijving,LocatieID=@LocatieID WHERE Projectid = @ProjectID AND FlagProject = @Flagproject;";
-            string StadDetails = " UPDATE StadDetail SET VergunningStatus = @VergunningStatus, ArchitecturaleWaarde=@ArchitecturaleWaarde,Toegankelijkheid=@Toegankelijkheid,Bezienswaardigheid=@Bezienswaardigheid,Infobordvoorzien=@Infobordvoorzien;";
-            string WonenDetails = "UPDATE InnovatiefwonenDetail SET AantalWooneenheden=@AantalWooneenheden,TypeWoonVorm=@TypeWoonVorm,RondLeidingMogelijk=@RondLeidingMogelijk,ShowWoningMogelijk=@ShowWoningMogelijk,ArchitecturaleScore=@ArchitecturaleScore,SamenwerkingErfgoed=@SamenwerkingErfgoed;";
-            string GroenDetails = "UPDATE GroenDetail SET Oppervlakte,@Oppervlakte,Biodiversiteitscore=@Biodiversiteitscore,AantalWandepaden=@AantalWandepaden,BeschikbareFaciliteiten=@BeschikbareFaciliteiten,ToeristischeRoute=@ToeristischeRoute,BezoekersBeoordeling=@BezoekersBeoordeling;";
+            string StadDetails = " UPDATE StadDetail SET VergunningStatus = @VergunningStatus, ArchitecturaleWaarde=@ArchitecturaleWaarde,Toegankelijkheid=@Toegankelijkheid,Bezienswaardigheid=@Bezienswaardigheid,Infobordvoorzien=@Infobordvoorzien WHERE ProjectID = @ProjectID;";
+            string WonenDetails = "UPDATE InnovatiefwonenDetail SET AantalWooneenheden=@AantalWooneenheden,TypeWoonVorm=@TypeWoonVorm,RondLeidingMogelijk=@RondLeidingMogelijk,ShowWoningMogelijk=@ShowWoningMogelijk,ArchitecturaleScore=@ArchitecturaleScore,SamenwerkingErfgoed=@SamenwerkingErfgoed WHERE ProjectID = @ProjectID;";
+            string GroenDetails = "UPDATE GroenDetail SET Oppervlakte=@Oppervlakte,Biodiversiteitscore=@Biodiversiteitscore,AantalWandepaden=@AantalWandepaden,BeschikbareFaciliteiten=@BeschikbareFaciliteiten,ToeristischeRoute=@ToeristischeRoute,BezoekersBeoordeling=@BezoekersBeoordeling WHERE ProjectID = @ProjectID;";
 
 
 
@@ -622,36 +623,49 @@ namespace ProjectBeheederDL
 
                     ProjectCmd.ExecuteNonQuery();
 
-                    StadDetailCmd.CommandText = StadDetails;
-                    StadDetailCmd.Parameters.AddWithValue("@VergunningStatus", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).VergunningStatus);
-                    StadDetailCmd.Parameters.AddWithValue("@ArchitecturaleWaarde", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).ArchitecturaleWaarde);
-                    StadDetailCmd.Parameters.AddWithValue("@Toegankelijkheid", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).Toegankelijkheid);
-                    StadDetailCmd.Parameters.AddWithValue("@Bezienswaardigheid", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).Bezienswaardigheid);
-                    StadDetailCmd.Parameters.AddWithValue("@Infobordvoorzien", ((StadDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(StadDetail))).InfoBordVoorzien);
+                    ProjectDetail detail = project.Details.FirstOrDefault();
 
-                    StadDetailCmd.ExecuteNonQuery();
+                    if (detail is StadDetail stad) {
 
-                    WonenDetailCmd.CommandText = WonenDetails;
-                    WonenDetailCmd.Parameters.AddWithValue("@AantalWooneenheden", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).AantalEenheden);
-                    WonenDetailCmd.Parameters.AddWithValue("@TypeWoonVorm", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).Woningtypes);
-                    WonenDetailCmd.Parameters.AddWithValue("@RondLeidingMogelijk", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).Rondleidingen);
-                    WonenDetailCmd.Parameters.AddWithValue("@ShowWoningMogelijk", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).Showwoningen);
-                    WonenDetailCmd.Parameters.AddWithValue("@ArchitecturaleScore", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).ArchitecturaleScore);
-                    WonenDetailCmd.Parameters.AddWithValue("@SamenwerkingErfgoed", ((WonenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(WonenDetail))).ErfgoedSamenwerking);
+                        StadDetailCmd.CommandText = StadDetails;
+                        StadDetailCmd.Parameters.AddWithValue("@ProjectID", project.Id);
+                        StadDetailCmd.Parameters.AddWithValue("@VergunningStatus", (int)stad.VergunningStatus);
+                        StadDetailCmd.Parameters.AddWithValue("@ArchitecturaleWaarde", stad.ArchitecturaleWaarde);
+                        StadDetailCmd.Parameters.AddWithValue("@Toegankelijkheid", (int)stad.Toegankelijkheid);
+                        StadDetailCmd.Parameters.AddWithValue("@Bezienswaardigheid", stad.Bezienswaardigheid);
+                        StadDetailCmd.Parameters.AddWithValue("@Infobordvoorzien", stad.InfoBordVoorzien);
 
-                    WonenDetailCmd.ExecuteNonQuery();
-
-                    GroenDetailCmd.CommandText = GroenDetails;
-                    GroenDetailCmd.Parameters.AddWithValue("@Oppervlakte", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).Oppervlakte);
-                    GroenDetailCmd.Parameters.AddWithValue("@Biodiversiteitscore", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).Biodiversiteit);
-                    GroenDetailCmd.Parameters.AddWithValue("@AantalWandepaden", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).Wandelpaden);
-                    GroenDetailCmd.Parameters.AddWithValue("@BeschikbareFaciliteiten", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).Faciliteiten);
-                    GroenDetailCmd.Parameters.AddWithValue("@ToeristischeRoute", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).ToeristischeRoute);
-                    GroenDetailCmd.Parameters.AddWithValue("@BezoekersBeoordeling", ((GroenDetail)project.Details.FirstOrDefault(d => d.GetType() == typeof(GroenDetail))).Beoordeling);
-
-                    GroenDetailCmd.ExecuteNonQuery();
+                        StadDetailCmd.ExecuteNonQuery();
 
 
+                    }
+                    else if (detail is WonenDetail wonen) {
+
+                        WonenDetailCmd.CommandText = WonenDetails;
+                        WonenDetailCmd.Parameters.AddWithValue("@ProjectID", project.Id);
+                        WonenDetailCmd.Parameters.AddWithValue("@AantalWooneenheden", wonen.AantalEenheden);
+                        WonenDetailCmd.Parameters.AddWithValue("@TypeWoonVorm", wonen.Woningtypes);
+                        WonenDetailCmd.Parameters.AddWithValue("@RondLeidingMogelijk", wonen.Rondleidingen);
+                        WonenDetailCmd.Parameters.AddWithValue("@ShowWoningMogelijk", wonen.Showwoningen);
+                        WonenDetailCmd.Parameters.AddWithValue("@ArchitecturaleScore", wonen.ArchitecturaleScore);
+                        WonenDetailCmd.Parameters.AddWithValue("@SamenwerkingErfgoed", wonen.ErfgoedSamenwerking);
+
+                        WonenDetailCmd.ExecuteNonQuery();
+                    }
+                    else if (detail is GroenDetail Groen) {
+
+                        GroenDetailCmd.CommandText = GroenDetails;
+                        GroenDetailCmd.Parameters.AddWithValue("@ProjectID", project.Id);
+                        GroenDetailCmd.Parameters.AddWithValue("@Oppervlakte", Groen.Oppervlakte);
+                        GroenDetailCmd.Parameters.AddWithValue("@Biodiversiteitscore", Groen.Biodiversiteit);
+                        GroenDetailCmd.Parameters.AddWithValue("@AantalWandepaden", Groen.Wandelpaden);
+                        GroenDetailCmd.Parameters.AddWithValue("@BeschikbareFaciliteiten", Groen.Faciliteiten);
+                        GroenDetailCmd.Parameters.AddWithValue("@ToeristischeRoute", Groen.ToeristischeRoute);
+                        GroenDetailCmd.Parameters.AddWithValue("@BezoekersBeoordeling", Groen.Beoordeling);
+
+                        GroenDetailCmd.ExecuteNonQuery();
+
+                    }
 
 
 
