@@ -219,10 +219,10 @@ namespace WpfAppProjectBeheeder
                 _partnerRijen[idx].Categorie =
                     ((ComboBoxItem)CmbWijzigCategorie.SelectedItem).Content.ToString()!;
 
-            int ProjectID = _project.Id;
-            int partnerId = _partnerRijen[idx].Partner.Id;
-            string nieuweRol = _partnerRijen[idx].Rol;
-            _service.UpdateRol(ProjectID, partnerId, nieuweRol);
+            //int ProjectID = _project.Id;
+            //int partnerId = _partnerRijen[idx].Partner.Id;
+            //string nieuweRol = _partnerRijen[idx].Rol;
+            //_service.UpdateRol(ProjectID, partnerId, nieuweRol);
 
             RefreshGekoppeld();
         }
