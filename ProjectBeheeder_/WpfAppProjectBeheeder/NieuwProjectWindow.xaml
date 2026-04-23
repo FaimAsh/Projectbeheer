@@ -248,6 +248,8 @@
                             Click="VerwijderKoppeling_Click"/>
                     <Button Grid.Row="1" Grid.Column="5" Content="Voeg toe" Margin="0 6 0 0" Width="80"
                             Click="VoegPartnerToe_Click"/>
+                    <Button Grid.Row="1" Grid.Column="1" Content="Verwijder" Margin="90 6 0 0" Width="80"
+         Click="VerwijderPartner_Click"/>
                 </Grid>
 
                 <Separator Grid.Row="4" Margin="0 2 0 0"/>

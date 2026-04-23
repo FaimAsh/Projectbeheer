@@ -163,6 +163,8 @@ namespace WpfAppProjectBeheeder {
 
         private void Info_Click(object sender, RoutedEventArgs e)
         {
+
+            Project lala;
             try
             {
                 var geselecteerdeProjecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
