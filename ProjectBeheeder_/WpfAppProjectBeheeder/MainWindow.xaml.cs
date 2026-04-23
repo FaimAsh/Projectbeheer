@@ -84,12 +84,12 @@ namespace WpfAppProjectBeheeder {
 
             if (ChkBouwfrma.IsChecked == true)
                 filter.Statussen.Add(ProjectStatus.Afgerond);
- 
+
             if (ChkBowfirma.IsChecked == true)
-                filter.Details.Add("Groen");
+                filter.Details.Add("Stad");
 
             if (ChkBuwfirma.IsChecked == true)
-                filter.Details.Add("Stad");
+                filter.Details.Add("Groen");
 
             if (ChkBouwfirma.IsChecked == true)
                 filter.Details.Add("Wonen");
