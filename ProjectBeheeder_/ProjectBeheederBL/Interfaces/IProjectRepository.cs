@@ -9,6 +9,16 @@ namespace ProjectBeheerderBL.Interfaces {
     public interface IProjectRepository {
         void AllesImporteren(Project project);
 
+        void KoppelingVerwijderen(ProjectPartner projectPartner);
+
+        List<ProjectPartner> GeefKoppeldePartners(int projectId);
+        
+        List<Partner> GeefPartners();
+
+        void PartnerKoppelingAanmaken(Partner KoppelPartner);
+
+        void PartnerAanmaken(Partner NieuwePartner);
+
         void ProjectVerwijderen(Project project);
         
         void PartnerVerwijderen(Partner partner);
@@ -16,11 +26,6 @@ namespace ProjectBeheerderBL.Interfaces {
         Project GeefProject(int id);
         
         void UpdateProject(Project project);
-
-        void PartnerAanmaken(Partner NieuwePartner);
-
-        List<Partner> GeefPartners();
-
 
         //FILTER/SEARCH
 

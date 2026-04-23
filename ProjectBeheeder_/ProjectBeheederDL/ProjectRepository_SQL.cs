@@ -300,7 +300,7 @@ namespace ProjectBeheederDL
         }
 
 
-        public void PartnerKoppeling(Partner KoppelPartner)
+        public void PartnerKoppelingAanmaken(Partner KoppelPartner)
         {
 
             string ExternePartnerQuery = "INSERT INTO Project_Partner (PartnerID,Rolomschrijving,FlagPartner) VALUES (@PartnerID,@Rolomschrijving,@FlagPartner);";
