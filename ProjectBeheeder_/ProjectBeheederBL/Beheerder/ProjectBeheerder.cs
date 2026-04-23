@@ -31,6 +31,8 @@ namespace ProjectBeheerderBL.Beheerder
 
         public List<Project> Search(ProjectFilter filter) => _repository.Search(filter);
 
+        public void UpdateRol(int ProjectID,int PartnerID, string Rolomschrijving) => _repository.UpdateRol(ProjectID,PartnerID,Rolomschrijving);
+
 
     }
 }
