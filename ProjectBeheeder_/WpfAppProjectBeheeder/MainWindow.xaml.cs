@@ -138,16 +138,25 @@ namespace WpfAppProjectBeheeder {
 
         private void VerwijderProject_Click(object sender, RoutedEventArgs e)
         {
-            if (DgProjecten.SelectedItem is not Project selected)
+            var geselecteerdeProjecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
+            if (geselecteerdeProjecten.Count == 0)
             {
-                MessageBox.Show("Selecteer een project.", "Geen selectie", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Selecteer een of meer projecten.", "Geen selectie", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            var res = MessageBox.Show($"Project '{selected.Titel}' verwijderen?", "Bevestigen",
+
+            string message = geselecteerdeProjecten.Count == 1
+                ? $"Project '{geselecteerdeProjecten[0].Titel}' verwijderen?"
+                : $"{geselecteerdeProjecten.Count} projecten verwijderen?";
+
+            var res = MessageBox.Show(message, "Bevestigen",
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (res == MessageBoxResult.Yes)
             {
-                try { _Beheerder.VerwijderProject(selected); LaadProjecten(); }
+                try {
+                    foreach (var project in geselecteerdeProjecten)
+                    { _Beheerder.VerwijderProject(project); }
+                    LaadProjecten(); }
                 catch (Exception ex) { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
             }
         }
@@ -156,12 +165,16 @@ namespace WpfAppProjectBeheeder {
         {
             try
             {
-                if (DgProjecten.SelectedItem is not Project geselecteerd)
+                var geselecteerdeProjecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
+                if (geselecteerdeProjecten.Count == 0)
                 {
-                    MessageBox.Show("Selecteer eerst een project.");
+                    MessageBox.Show("Selecteer eerst een of meer projecten.");
                     return;
                 }
-                new DetailProjectWindow(geselecteerd).ShowDialog();
+                foreach (var project in geselecteerdeProjecten)
+                {
+                    new DetailProjectWindow(project).ShowDialog();
+                }
             }
             catch (Exception ex)
             {
@@ -180,8 +193,8 @@ namespace WpfAppProjectBeheeder {
 
             try
             {
-                var projecten = DgProjecten.ItemsSource as List<Project>;
-                if (projecten == null)
+                var projecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
+                if (projecten.Count == null)
                 {
                     MessageBox.Show("Geen data.");
                     return;
@@ -204,8 +217,8 @@ namespace WpfAppProjectBeheeder {
             if (dlg.ShowDialog() != true) return;
             try
             {
-                var projecten = DgProjecten.ItemsSource as List<Project>;
-                if (projecten == null)
+                var projecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
+                if (projecten.Count == 0)
                 {
                     MessageBox.Show("Geen data.");
                     return;
