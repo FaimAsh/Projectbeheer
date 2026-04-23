@@ -15,6 +15,7 @@ namespace WpfAppProjectBeheeder
         public bool IsToegevoegd { get; set; }
         public string Display => $"{Partner.Naam}  ({Partner.PartnerType}){(IsToegevoegd ? "  ✓" : "")}";
         public PartnerWeergave(Partner p) { Partner = p; }
+        public bool IsOntkoppelt { get; set; }
     }
 
     public partial class NieuwProjectWindow : Window
@@ -69,6 +70,7 @@ namespace WpfAppProjectBeheeder
             LstPartners.ItemsSource = null;
             LstPartners.ItemsSource = gefilterd;
         }
+      
 
         private void VoegPartnerToe_Click(object sender, RoutedEventArgs e)
         {
@@ -93,6 +95,34 @@ namespace WpfAppProjectBeheeder
             ChkBouwfirma.IsChecked = false;
             RefreshLijst();
         }
+
+        private void VerwijderPartner_Click(object sender, RoutedEventArgs e) {
+
+
+           
+
+            if (LstPartners.SelectedItem is not PartnerWeergave pw)
+            {
+                MessageBox.Show("Selecteer een partner.", "Geen selectie",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (pw.IsOntkoppelt)
+            {
+                _partnerRijen.RemoveAll(r => (r.Partner == pw.Partner);
+                pw.IsToegevoegd = false;
+            
+            pw.IsToegevoegd = false;
+
+            RefreshLijst();
+        }
+    else
+    {
+        MessageBox.Show("Deze partner is nog niet toegevoegd aan het project.", "Niet gekoppeld",
+            MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+    }
+
 
         private void PartnerAanmaken_Click(object sender, RoutedEventArgs e)
         {

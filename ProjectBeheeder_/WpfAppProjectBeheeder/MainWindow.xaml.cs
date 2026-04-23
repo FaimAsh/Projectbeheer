@@ -154,6 +154,8 @@ namespace WpfAppProjectBeheeder {
 
         private void Info_Click(object sender, RoutedEventArgs e)
         {
+
+            Project lala;
             try
             {
                 if (DgProjecten.SelectedItem is not Project geselecteerd)
@@ -162,6 +164,7 @@ namespace WpfAppProjectBeheeder {
                     return;
                 }
                 new DetailProjectWindow(geselecteerd).ShowDialog();
+                
             }
             catch (Exception ex)
             {

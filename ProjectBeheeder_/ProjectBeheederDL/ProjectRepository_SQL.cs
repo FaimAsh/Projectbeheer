@@ -208,26 +208,26 @@ namespace ProjectBeheederDL
             }
         }
 
-        public void KoppelingVerwijderen(ProjectPartner projectPartner)
-        {
+        //public void KoppelingVerwijderen(ProjectPartner projectPartner)
+        //{
 
-            using (SqlConnection conn = new SqlConnection(_connectionstring))
-            using (SqlCommand cmd = conn.CreateCommand())
-            {
+        //    using (SqlConnection conn = new SqlConnection(_connectionstring))
+        //    using (SqlCommand cmd = conn.CreateCommand())
+        //    {
 
-                string sql = "UPDATE Project_Partner SET FlagPartner = @FlagPartner WHERE ProjectID=@ProjectID AND PartnerID=@PartnerID";
+        //        string sql = "UPDATE Project_Partner SET FlagPartner = @FlagPartner WHERE ProjectID=@ProjectID AND PartnerID=@PartnerID";
 
-                cmd.CommandText = sql;
-                cmd.Parameters.AddWithValue("@ProjectID", projectPartner.Project.Id);
-                cmd.Parameters.AddWithValue("@PartnerID", projectPartner.Partner.Id);
-                cmd.Parameters.AddWithValue("@FlagPartner", Enums.Flags.gone);
+        //        cmd.CommandText = sql;
+        //        cmd.Parameters.AddWithValue("@ProjectID", projectPartner.Project.Id);
+        //        cmd.Parameters.AddWithValue("@PartnerID", projectPartner.Partner.Id);
+        //        cmd.Parameters.AddWithValue("@FlagPartner", Enums.Flags.gone);
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+        //        conn.Open();
+        //        cmd.ExecuteNonQuery();
+        //    }
 
 
-        }
+        //}
 
         public List<ProjectPartner> GeefGeKoppeldePartners(int projectId)
         {

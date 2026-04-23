@@ -15,7 +15,7 @@ namespace ProjectBeheerderBL.Beheerder
             
         }
         public void AddProject(Project p) =>    _repository.AllesImporteren(p);
-        public void VerwijderKoppeling(ProjectPartner projectPartner) =>    _repository.KoppelingVerwijderen(projectPartner);
+        //public void VerwijderKoppeling(ProjectPartner projectPartner) =>    _repository.KoppelingVerwijderen(projectPartner);
         public List<ProjectPartner> GeefGeKoppeldePartners(int projectId) =>    _repository.GeefGeKoppeldePartners(projectId);
  
         public Project GeefProject(int id) =>    _repository.GeefProject(id);

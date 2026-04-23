@@ -9,7 +9,7 @@ namespace ProjectBeheerderBL.Interfaces {
     public interface IProjectRepository {
         void AllesImporteren(Project project);
 
-        void KoppelingVerwijderen(ProjectPartner projectPartner);
+       void KoppelingVerwijderen(ProjectPartner projectPartner);
 
         List<ProjectPartner> GeefGeKoppeldePartners(int projectId);
         
