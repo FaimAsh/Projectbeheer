@@ -837,7 +837,7 @@ namespace ProjectBeheederDL
 
             var rol = reader["Rolomschrijving"]?.ToString();
 
-            project.Partners.Add(new ProjectPartner(partner, rol));
+            project.Partners.Add(new ProjectPartner(project, partner, rol));
         }
 
         private void AddStadPartner(SqlDataReader reader, Project project, int projectId,
