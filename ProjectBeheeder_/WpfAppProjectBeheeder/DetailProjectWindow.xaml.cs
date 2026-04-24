@@ -77,9 +77,13 @@ namespace WpfAppProjectBeheeder
                         Rij("Innovatie score", wd.ArchitecturaleScore + "/10");
                         Rij("Erfgoed samenwerking", wd.ErfgoedSamenwerking ? "Ja" : "Nee");
                         break;
+
+
                 }
             }
+         
         }
+        
 
         private void Rij(string label, string waarde)
         {

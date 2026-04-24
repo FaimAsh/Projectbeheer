@@ -170,7 +170,9 @@ namespace WpfAppProjectBeheeder {
                     MessageBox.Show("Selecteer eerst een project.");
                     return;
                 }
-                new DetailProjectWindow(geselecteerd).ShowDialog();
+
+                Project compleetProject = _Beheerder.GeefProject(geselecteerd.Id);
+                new DetailProjectWindow(compleetProject).ShowDialog();
             }
             catch (Exception ex)
             {

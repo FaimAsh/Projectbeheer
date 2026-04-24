@@ -8,6 +8,7 @@ using ProjectBeheerderBL.DomeinDetails;
 using ProjectBeheerderBL.Interfaces;
 using System.Data;
 using System.Data.Common;
+using System.Net;
 using System.Reflection.PortableExecutable;
 using System.Transactions;
 using static ProjectBeheerderBL.Domein.Enums;
@@ -148,7 +149,7 @@ namespace ProjectBeheederDL
 
                             int idStadDetail = (int)cmdStadDetail.ExecuteScalar();
 
-
+                           
                             foreach (Partner firma in stad.Bouwfirmas)
                             {
                                 cmdBouwFirma.Parameters["@StadDetailID"].Value = idStadDetail;
@@ -507,11 +508,34 @@ namespace ProjectBeheederDL
                                  (bool)reader["InfobordVoorzien"]
                             );
 
-
+                            staddetail.Bouwfirmas = new List<Partner>();
                             project.Details.Add(staddetail);
                         }
                     }
+
+                    if(project.Details.OfType<StadDetail>().FirstOrDefault() is StadDetail stadDetail)
+                    {
+                        string BouwfirmaQuery = "SELECT p.PartnerID, p.Naam, p.TypePartner FROM StadsOntwikkeling_Partner sp INNER JOIN Partner p ON sp.PartnerID = p.PartnerID WHERE sp.StadDetailID = @StadDetailID;";
+                        using (SqlCommand cmdBouwFirma = conn.CreateCommand())
+                        {
+                            cmdBouwFirma.CommandText = BouwfirmaQuery;
+                            cmdBouwFirma.Parameters.AddWithValue("@StadDetailID", stadDetail.Id);
+                            using (SqlDataReader reader = cmdBouwFirma.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Partner bouwFirma = new Partner(
+                                        (int)reader["PartnerID"],
+                                        (string)reader["Naam"],
+                                        (Enums.PartnerType)reader["TypePartner"]
+                                    );
+                                    stadDetail.Bouwfirmas.Add(bouwFirma);
+                                }
+                            }
+                        }
+                    }
                 }
+                
 
                 string WonenQuery = "SELECT * FROM InnovatiefwonenDetail WHERE ProjectID = @ProjectId;";
                 using (SqlCommand cmd = conn.CreateCommand())
@@ -563,7 +587,35 @@ namespace ProjectBeheederDL
                         }
                     }
                 }
+                string PartnerQuery = "SELECT p.PartnerID, p.Naam, p.TypePartner, pp.Rolomschrijving FROM Project_Partner pp INNER JOIN Partner p ON pp.PartnerID = p.PartnerID WHERE pp.ProjectID = @id AND pp.FlagPartner = @FlagPartner;";
+
+                using (SqlCommand PartnerCmd = conn.CreateCommand()) {
+
+                    PartnerCmd.CommandText = PartnerQuery;
+                    PartnerCmd.Parameters.AddWithValue("@id", id);
+                    PartnerCmd.Parameters.AddWithValue("@FlagPartner", Enums.Flags.shown);
+
+                    using (SqlDataReader reader = PartnerCmd.ExecuteReader()) {
+
+                        while (reader.Read()) {
+
+                            Partner partner = new Partner((int)reader["PartnerID"],
+                                (string)reader["Naam"],
+                                (Enums.PartnerType)reader["TypePartner"]);
+
+
+                            string rol = (string)reader["Rolomschrijving"];
+
+                                ProjectPartner pp = new ProjectPartner(project, partner, rol);
+                            project.Partners.Add(pp);
+                        }
+                    }
+
+
+                }
+
             }
+
 
             return project;
         }
@@ -573,7 +625,7 @@ namespace ProjectBeheederDL
         //    string sql = "UPDATE Project_Partner SET Rolomschrijving=@Rolomschrijving WHERE ProjectID=@ProjectID AND PartnerID=@PartnerID;";
 
         //    using (SqlConnection conn = new SqlConnection(_connectionstring))
-        //    using (SqlCommand cmd = conn.CreateCommand()) {
+        //    using (SqlCommand cmdPP = conn.CreateCommand()) {
 
         //        conn.Open();
 
@@ -598,7 +650,11 @@ namespace ProjectBeheederDL
             string WonenDetails = "UPDATE InnovatiefwonenDetail SET AantalWooneenheden=@AantalWooneenheden,TypeWoonVorm=@TypeWoonVorm,RondLeidingMogelijk=@RondLeidingMogelijk,ShowWoningMogelijk=@ShowWoningMogelijk,ArchitecturaleScore=@ArchitecturaleScore,SamenwerkingErfgoed=@SamenwerkingErfgoed WHERE ProjectID = @ProjectID;";
             string GroenDetails = "UPDATE GroenDetail SET Oppervlakte=@Oppervlakte,Biodiversiteitscore=@Biodiversiteitscore,AantalWandelpaden=@AantalWandelpaden,BeschikbareFaciliteit=@BeschikbareFaciliteit,ToeristischeRoute=@ToeristischeRoute,BezoekersBeoordeling=@BezoekersBeoordeling WHERE ProjectID = @ProjectID;";
 
+            string DeletePartnersQuery = "DELETE FROM Project_Partner WHERE ProjectID = @ProjectID;";
+            string InsertPartnerQuery = "INSERT INTO Project_Partner (ProjectID, PartnerID, Rolomschrijving, FlagPartner) VALUES (@ProjectID, @PartnerID, @Rolomschrijving, @FlagPartner);";
 
+            string DBouwQuery = "DELETE FROM StadsOntwikkeling_Partner WHERE StadDetailID = @StadDetailID;";
+            string IBouwQuery = "INSERT INTO StadsOntwikkeling_Partner (StadDetailID, PartnerID) VALUES (@StadDetailID, @PartnerID);";
 
 
             using (SqlConnection conn = new SqlConnection(_connectionstring))
@@ -606,7 +662,11 @@ namespace ProjectBeheederDL
             using (SqlCommand LocatieCmd = conn.CreateCommand())
             using (SqlCommand StadDetailCmd = conn.CreateCommand())
             using (SqlCommand WonenDetailCmd = conn.CreateCommand())
-            using (SqlCommand GroenDetailCmd = conn.CreateCommand()) 
+            using (SqlCommand GroenDetailCmd = conn.CreateCommand())
+            using (SqlCommand DeletePartnersCmd = conn.CreateCommand())
+            using (SqlCommand InsertPartnerCmd = conn.CreateCommand())
+            using (SqlCommand DbouwCmd = conn.CreateCommand())
+            using (SqlCommand IBouwCmd = conn.CreateCommand())
                 
                 {
                 ProjectCmd.Parameters.AddWithValue("@FlagProject", Enums.Flags.shown);
@@ -620,9 +680,13 @@ namespace ProjectBeheederDL
 
                     LocatieCmd.Transaction = transaction;
                     ProjectCmd.Transaction = transaction;
-                    StadDetailCmd.Transaction =     transaction;
-                    WonenDetailCmd.Transaction = transaction;   
-                    GroenDetailCmd.Transaction = transaction;   
+                    StadDetailCmd.Transaction = transaction;
+                    WonenDetailCmd.Transaction = transaction;
+                    GroenDetailCmd.Transaction = transaction;
+                    DeletePartnersCmd.Transaction = transaction;
+                    InsertPartnerCmd.Transaction = transaction;
+                    DbouwCmd.Transaction = transaction;
+                    IBouwCmd.Transaction = transaction;
 
                     LocatieCmd.CommandText = LocatieQuery;
                     LocatieCmd.Parameters.AddWithValue("@LocatieID", project.Locatie.LocatieId);
@@ -644,6 +708,28 @@ namespace ProjectBeheederDL
 
                     ProjectCmd.ExecuteNonQuery();
 
+
+                    DeletePartnersCmd.CommandText = DeletePartnersQuery;
+                    DeletePartnersCmd.Parameters.AddWithValue("@ProjectID", project.Id);
+                    DeletePartnersCmd.ExecuteNonQuery();
+
+                    InsertPartnerCmd.CommandText = InsertPartnerQuery;
+                    InsertPartnerCmd.Parameters.Add("@ProjectID", System.Data.SqlDbType.Int);
+                    InsertPartnerCmd.Parameters.Add("@PartnerID", System.Data.SqlDbType.Int);
+                    InsertPartnerCmd.Parameters.Add("@Rolomschrijving", System.Data.SqlDbType.NVarChar);
+                    InsertPartnerCmd.Parameters.Add("@FlagPartner", System.Data.SqlDbType.Int);
+
+                    foreach (ProjectPartner pp in project.Partners) {
+                        InsertPartnerCmd.Parameters["@ProjectID"].Value = project.Id;
+                        InsertPartnerCmd.Parameters["@PartnerID"].Value = pp.Partner.Id;
+                        InsertPartnerCmd.Parameters["@Rolomschrijving"].Value = pp.RolBeschrijving;
+                        InsertPartnerCmd.Parameters["@FlagPartner"].Value = (int)Enums.Flags.shown;
+
+                        InsertPartnerCmd.ExecuteNonQuery();
+                    }
+
+
+
                     ProjectDetail detail = project.Details.FirstOrDefault();
 
                     if (detail is StadDetail stad) {
@@ -659,7 +745,19 @@ namespace ProjectBeheederDL
                         StadDetailCmd.ExecuteNonQuery();
 
 
+
+                        IBouwCmd.CommandText = IBouwQuery;
+                        IBouwCmd.Parameters.Add("@StadDetailID", System.Data.SqlDbType.Int);
+                        IBouwCmd.Parameters.Add("@PartnerID", System.Data.SqlDbType.Int);
+
+                        foreach (Partner bf in stad.Bouwfirmas) {
+                            IBouwCmd.Parameters["@StadDetailID"].Value = stad.Id;
+                            IBouwCmd.Parameters["@PartnerID"].Value = bf.Id;
+                            IBouwCmd.ExecuteNonQuery();
+                        }
                     }
+
+
                     else if (detail is WonenDetail wonen) {
 
                         WonenDetailCmd.CommandText = WonenDetails;
