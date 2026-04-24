@@ -11,11 +11,12 @@ namespace ProjectBeheerderBL.Domein
 
     public class Project
     {
-      
 
-        public Project(string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) {
 
-            
+        public Project(string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie)
+        {
+
+
             this.Titel = titel;
             this.StartDatum = startdatum;
             this.Beschrijving = beschrijving;
@@ -24,7 +25,8 @@ namespace ProjectBeheerderBL.Domein
         }
 
 
-        public Project(int id, string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) : this (titel,startdatum,beschrijving,projectStatus,locatie){
+        public Project(int id, string titel, DateTime startdatum, string beschrijving, ProjectStatus projectStatus, Locatie locatie) : this(titel, startdatum, beschrijving, projectStatus, locatie)
+        {
 
             this.Id = id;
         }
@@ -37,7 +39,27 @@ namespace ProjectBeheerderBL.Domein
         public Locatie Locatie { get; set; }
         public List<ProjectPartner> Partners { get; set; } = new List<ProjectPartner>();
         public List<ProjectDetail> Details { get; set; } = new List<ProjectDetail>();
+
+        public string DetailsSamengevat
+        {
+            get
+            {
+                if (Details == null || !Details.Any())
+                    return string.Empty;
+
+                return string.Join(", ", Details.Select(d => d.TypeNaam));
+            }
+        }
+
+        public string PartnersSamengevat
+        {
+            get
+            {
+                if (Partners == null || !Partners.Any())
+                    return string.Empty;
+
+                return string.Join(", ", Partners.Select(p => p.Partner.Naam));
+            }
+        }
     }
-
-
 }

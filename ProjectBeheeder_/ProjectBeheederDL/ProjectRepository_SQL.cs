@@ -736,10 +736,6 @@ namespace ProjectBeheederDL
             var hasStad = new HashSet<int>();
             var hasWonen = new HashSet<int>();
 
-            bool loadGroen = filter.Details.Contains("Groen");
-            bool loadStad = filter.Details.Contains("Stad");
-            bool loadWonen = filter.Details.Contains("Wonen");
-
             using var conn = new SqlConnection(_connectionstring);
             conn.Open();
 
@@ -758,14 +754,12 @@ namespace ProjectBeheederDL
                     projects[projectId] = project;
                 }
 
-                if (loadGroen)
-                    EnsureGroenDetail(reader, project, projectId, hasGroen);
+                EnsureGroenDetail(reader, project, projectId, hasGroen);
 
-                if (loadStad)
-                    EnsureStadDetail(reader, project, projectId, hasStad);
 
-                if (loadWonen)
-                    EnsureWonenDetail(reader, project, projectId, hasWonen);
+                EnsureStadDetail(reader, project, projectId, hasStad);
+
+                EnsureWonenDetail(reader, project, projectId, hasWonen);
 
                 AddProjectPartner(reader, project, projectId, projectPartnerIds);
                 AddStadPartner(reader, project, projectId, stadPartnerIds);
