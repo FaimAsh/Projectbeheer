@@ -14,11 +14,11 @@ namespace WpfAppProjectBeheeder
         public string  Rol          { get; set; }
         public string  Categorie    { get; set; } = "algemeen";
 
-        public PartnerRij(Partner partner, string rol, string kategorie = "algemeen")
+        public PartnerRij(Partner partner, string rol, string categorie = "algemeen")
         {
             Partner   = partner;
             Rol       = rol;
-            Categorie = kategorie;
+            Categorie = categorie;
         }
 
         public override string ToString() => Categorie == "bouwfirma"
@@ -47,7 +47,6 @@ namespace WpfAppProjectBeheeder
 
             _isStads = project.Details.Any(d => d is StadDetail);
 
-            // Set type combobox to current project type
             CmbType.SelectionChanged -= CmbType_SelectionChanged;
             string initType = project.Details.FirstOrDefault() switch
             {

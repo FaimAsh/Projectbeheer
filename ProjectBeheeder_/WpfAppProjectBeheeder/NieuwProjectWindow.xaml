@@ -41,7 +41,7 @@
                               Content="StadsOntwikkelingsProject" VerticalAlignment="Center"/>
                         <CheckBox Grid.Row="2" Grid.Column="1" Name="ChkGroen" Click="ProjectCheckbox_Click"
                               Content="Groene Ruimte-Project" VerticalAlignment="Center"/>
-                        <CheckBox Grid.Row="3" Grid.Column="1" Name="ChkWoon" Click="ProjectCheckbox_Click"
+                        <CheckBox Grid.Row="3" Grid.Column="1" Name="ChkWonen" Click="ProjectCheckbox_Click"
                               Content="Innovatief Wonen-Project" VerticalAlignment="Center"/>
                         <Label Grid.Row="0" Content="Titel:"/>
                         <TextBox Grid.Row="0" Grid.Column="1" Name="TxtTitel" VerticalContentAlignment="Center"/>
@@ -85,7 +85,7 @@
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Name="GbStads" Header="Stadsproject details" Margin="0 0 0 10">
+                <GroupBox Name="GbStads" Header="Stadsproject details" Margin="0 0 0 10" Visibility="Collapsed">
                     <Grid Margin="6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="180"/>
@@ -208,7 +208,7 @@
                          Margin="0 0 0 4" TextChanged="TxtPartnerZoek_TextChanged"/>
 
                 <!-- Main partner list -->
-                <ListBox Grid.Row="2" Name="LstPartners" Margin="0 0 0 4">
+                <ListBox Grid.Row="2" Name="LstPartners" Margin="0 0 0 4" SelectionChanged="LstPartners_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Display}"/>
