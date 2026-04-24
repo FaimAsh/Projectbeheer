@@ -742,7 +742,7 @@ namespace ProjectBeheederDL
 
                         StadDetailCmd.ExecuteNonQuery();
 
-<<<<<<< HEAD
+
 
 
                         IBouwCmd.CommandText = IBouwQuery;
@@ -753,34 +753,31 @@ namespace ProjectBeheederDL
                             IBouwCmd.Parameters["@StadDetailID"].Value = stad.Id;
                             IBouwCmd.Parameters["@PartnerID"].Value = bf.Id;
                             IBouwCmd.ExecuteNonQuery();
-=======
-                        int stadId;
-                        using (var cmdSid = conn.CreateCommand())
-                        {
-                            cmdSid.Transaction = transaction;
-                            cmdSid.CommandText = "SELECT StadDetailID FROM StadDetail WHERE ProjectID = @pid";
-                            cmdSid.Parameters.AddWithValue("@pid", project.Id);
-                            stadId = (int)cmdSid.ExecuteScalar();
-                        }
-                        using (var cmdDelB = conn.CreateCommand())
-                        {
-                            cmdDelB.Transaction = transaction;
-                            cmdDelB.CommandText = "DELETE FROM StadsOntwikkeling_Partner WHERE StadDetailID = @sid";
-                            cmdDelB.Parameters.AddWithValue("@sid", stadId);
-                            cmdDelB.ExecuteNonQuery();
-                        }
-                        foreach (var firma in stad.Bouwfirmas ?? new List<Partner>())
-                        {
-                            using var cmdB = conn.CreateCommand();
-                            cmdB.Transaction = transaction;
-                            cmdB.CommandText = "INSERT INTO StadsOntwikkeling_Partner (StadDetailID,PartnerID) VALUES (@sid,@pid)";
-                            cmdB.Parameters.AddWithValue("@sid", stadId);
-                            cmdB.Parameters.AddWithValue("@pid", firma.Id);
-                            cmdB.ExecuteNonQuery();
->>>>>>> ddd2de1c9e019ef108a0ed9961975c048c786c24
+
+                            int stadId;
+                            using (var cmdSid = conn.CreateCommand()) {
+                                cmdSid.Transaction = transaction;
+                                cmdSid.CommandText = "SELECT StadDetailID FROM StadDetail WHERE ProjectID = @pid";
+                                cmdSid.Parameters.AddWithValue("@pid", project.Id);
+                                stadId = (int)cmdSid.ExecuteScalar();
+                            }
+                            using (var cmdDelB = conn.CreateCommand()) {
+                                cmdDelB.Transaction = transaction;
+                                cmdDelB.CommandText = "DELETE FROM StadsOntwikkeling_Partner WHERE StadDetailID = @sid";
+                                cmdDelB.Parameters.AddWithValue("@sid", stadId);
+                                cmdDelB.ExecuteNonQuery();
+                            }
+                            foreach (var firma in stad.Bouwfirmas ?? new List<Partner>()) {
+                                using var cmdB = conn.CreateCommand();
+                                cmdB.Transaction = transaction;
+                                cmdB.CommandText = "INSERT INTO StadsOntwikkeling_Partner (StadDetailID,PartnerID) VALUES (@sid,@pid)";
+                                cmdB.Parameters.AddWithValue("@sid", stadId);
+                                cmdB.Parameters.AddWithValue("@pid", firma.Id);
+                                cmdB.ExecuteNonQuery();
+
+                            }
                         }
                     }
-
 
                     else if (detail is WonenDetail wonen) {
 

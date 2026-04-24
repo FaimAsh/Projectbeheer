@@ -162,43 +162,28 @@ namespace WpfAppProjectBeheeder {
             }
         }
 
-        private void Info_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
+        private void Info_Click(object sender, RoutedEventArgs e) {
+            try {
                 var geselecteerd = DgProjecten.SelectedItems.Cast<Project>().ToList();
-                if (geselecteerd.Count == 0)
-                {
-
-                    MessageBox.Show("Selecteer eerst een project.");
+                if (geselecteerd.Count == 0) {
+                    MessageBox.Show("Selecteer eerst een of meer projecten.");
                     return;
                 }
-<<<<<<< HEAD
 
-                Project compleetProject = _Beheerder.GeefProject(geselecteerd.Id);
-                new DetailProjectWindow(compleetProject).ShowDialog();
-=======
-                try
-                {
-                    var volledig = _Beheerder.GeefProject(geselecteerd.Id);
-                    var w = new DetailProjectWindow(volledig);
-                    if (w.ShowDialog() == true) LaadProjecten();
+                foreach (var project in geselecteerd) {
+                    var alles = _Beheerder.GeefProject(project.Id);
+                    new DetailProjectWindow(alles).ShowDialog();
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
->>>>>>> ddd2de1c9e019ef108a0ed9961975c048c786c24
             }
 
-            catch (Exception ex)
-            { MessageBox.Show(ex.Message); }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
-
         private void Partners_Click(object sender, RoutedEventArgs e)
             => new PartnerBeheerderWindow(_Beheerder).ShowDialog();
 
-
+        
         private void ExportCSV_Click(object sender, RoutedEventArgs e)
         {
             var projecten = DgProjecten.SelectedItems.Cast<Project>().ToList();

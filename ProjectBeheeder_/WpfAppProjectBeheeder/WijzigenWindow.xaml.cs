@@ -160,20 +160,8 @@ namespace WpfAppProjectBeheeder
 
         private void RefreshGekoppeld()
         {
-<<<<<<< HEAD
-
-            LstGekoppeld.ItemsSource = null;
-            LstGekoppeld.ItemsSource = _partnerRijen;
-            //var linked = _partnerRijen.Select(r => r.Partner.Id).ToHashSet();
-            //var gekoppeld = _allePartners
-            //    .Where(p => linked.Contains(p.Id))
-            //    .ToList();
-            //LstGekoppeld.ItemsSource = null;
-            //LstGekoppeld.ItemsSource = gekoppeld;
-=======
             LstGekoppeld.ItemsSource = null;
             LstGekoppeld.ItemsSource = _partnerRijen.Select(r => r.ToString()).ToList();
->>>>>>> ddd2de1c9e019ef108a0ed9961975c048c786c24
             TxtWijzigRol.Clear();
         }
 
