@@ -14,11 +14,11 @@ namespace WpfAppProjectBeheeder
         public string  Rol          { get; set; }
         public string  Categorie    { get; set; } = "algemeen";
 
-        public PartnerRij(Partner partner, string rol, string kategorie = "algemeen")
+        public PartnerRij(Partner partner, string rol, string categorie = "algemeen")
         {
             Partner   = partner;
             Rol       = rol;
-            Categorie = kategorie;
+            Categorie = categorie;
         }
 
         public override string ToString() => Categorie == "bouwfirma"
@@ -30,11 +30,10 @@ namespace WpfAppProjectBeheeder
     {
         private readonly ProjectBeheerder _service;
         private readonly Project          _project;
-        private readonly bool             _isStads;
 
-        private bool IsStads =>
-            (CmbType?.SelectedItem as ComboBoxItem)?.Content?.ToString() == "StadsProject";
-
+        private bool IsStads => ChkStad?.IsChecked == true;
+        private bool IsGroen => ChkGroen?.IsChecked == true;
+        private bool IsWonen => ChkWonen?.IsChecked == true;
         private List<Partner>    _allePartners  = new();
         private List<PartnerRij> _partnerRijen = new();
         private List<ProjectPartner> GekoppeldePartners = new();
@@ -45,28 +44,15 @@ namespace WpfAppProjectBeheeder
             _service = service;
             _project = project;
 
-            _isStads = project.Details.Any(d => d is StadDetail);
+            ChkStad.IsChecked = project.Details.Any(d => d is StadDetail);
+            ChkGroen.IsChecked = project.Details.Any(d => d is GroenDetail);
+            ChkWonen.IsChecked = project.Details.Any(d => d is WonenDetail);
 
-            // Set type combobox to current project type
-            CmbType.SelectionChanged -= CmbType_SelectionChanged;
-            string initType = project.Details.FirstOrDefault() switch
-            {
-                StadDetail  => "StadsProject",
-                GroenDetail => "GroenProject",
-                WonenDetail => "WonenProject",
-                _           => "StadsProject"
-            };
-            foreach (ComboBoxItem item in CmbType.Items)
-                if (item.Content.ToString() == initType) { CmbType.SelectedItem = item; break; }
-            CmbType.SelectionChanged += CmbType_SelectionChanged;
-
-            GbStads.Visibility = project.Details.Any(d => d is StadDetail) ? Visibility.Visible : Visibility.Collapsed;
-            GbGroen.Visibility = project.Details.Any(d => d is GroenDetail) ? Visibility.Visible : Visibility.Collapsed;
-            GbInno.Visibility  = project.Details.Any(d => d is WonenDetail) ? Visibility.Visible : Visibility.Collapsed;
+            UpdateVisibility();
 
             if (IsStads)
             {
-                LblKategorie.Visibility      = Visibility.Visible;
+                LblCategorie.Visibility      = Visibility.Visible;
                 CmbWijzigCategorie.Visibility = Visibility.Visible;
                 GridNieuweCategorie.Visibility = Visibility.Visible;
             }
@@ -75,15 +61,16 @@ namespace WpfAppProjectBeheeder
             LaadBeschikbarePartners();
         }
 
-        private void CmbType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string? type = (CmbType.SelectedItem as ComboBoxItem)?.Content?.ToString();
-            if (GbStads != null) GbStads.Visibility = type == "StadsProject" ? Visibility.Visible : Visibility.Collapsed;
-            if (GbGroen != null) GbGroen.Visibility = type == "GroenProject"  ? Visibility.Visible : Visibility.Collapsed;
-            if (GbInno  != null) GbInno.Visibility  = type == "WonenProject"  ? Visibility.Visible : Visibility.Collapsed;
+        private void ProjectCheckbox_Click(object sender, RoutedEventArgs e) => UpdateVisibility();
 
-            bool nowStads = type == "StadsProject";
-            if (LblKategorie      != null) LblKategorie.Visibility       = nowStads ? Visibility.Visible : Visibility.Collapsed;
+        private void UpdateVisibility()
+        {
+            if (GbStads != null) GbStads.Visibility = IsStads ? Visibility.Visible : Visibility.Collapsed;
+            if (GbGroen != null) GbGroen.Visibility = IsGroen ? Visibility.Visible : Visibility.Collapsed;
+            if (GbInno != null) GbInno.Visibility = IsWonen ? Visibility.Visible : Visibility.Collapsed;
+
+            bool nowStads = IsStads;
+            if (LblCategorie != null) LblCategorie.Visibility = nowStads ? Visibility.Visible : Visibility.Collapsed;
             if (CmbWijzigCategorie != null) CmbWijzigCategorie.Visibility = nowStads ? Visibility.Visible : Visibility.Collapsed;
             if (GridNieuweCategorie != null) GridNieuweCategorie.Visibility = nowStads ? Visibility.Visible : Visibility.Collapsed;
 
@@ -173,12 +160,8 @@ namespace WpfAppProjectBeheeder
 
         private void RefreshGekoppeld()
         {
-            var linked = _partnerRijen.Select(r => r.Partner.Id).ToHashSet();
-            var gekoppeld = _allePartners
-                .Where(p => linked.Contains(p.Id))
-                .ToList();
             LstGekoppeld.ItemsSource = null;
-            LstGekoppeld.ItemsSource = gekoppeld;
+            LstGekoppeld.ItemsSource = _partnerRijen.Select(r => r.ToString()).ToList();
             TxtWijzigRol.Clear();
         }
 
@@ -219,10 +202,10 @@ namespace WpfAppProjectBeheeder
                 _partnerRijen[idx].Categorie =
                     ((ComboBoxItem)CmbWijzigCategorie.SelectedItem).Content.ToString()!;
 
-            int ProjectID = _project.Id;
-            int partnerId = _partnerRijen[idx].Partner.Id;
-            string nieuweRol = _partnerRijen[idx].Rol;
-            _service.UpdateRol(ProjectID, partnerId, nieuweRol);
+            //int ProjectID = _project.Id;
+            //int partnerId = _partnerRijen[idx].Partner.Id;
+            //string nieuweRol = _partnerRijen[idx].Rol;
+            //_service.UpdateRol(ProjectID, partnerId, nieuweRol);
 
             RefreshGekoppeld();
         }
@@ -274,7 +257,7 @@ namespace WpfAppProjectBeheeder
 
             string kat = "algemeen";
             if (IsStads)
-                kat = ((ComboBoxItem)CmbNieuweKategorie.SelectedItem).Content.ToString()!;
+                kat = ((ComboBoxItem)CmbNieuweCategorie.SelectedItem).Content.ToString()!;
 
             _partnerRijen.Add(new PartnerRij(gekozen, TxtNieuweRol.Text.Trim(), kat));
             TxtNieuweRol.Clear();
@@ -286,80 +269,65 @@ namespace WpfAppProjectBeheeder
         {
             try
             {
-                string type = ((ComboBoxItem)CmbType.SelectedItem).Content.ToString()!;
-
-                // Update base fields
                 _project.Titel        = TxtTitel.Text;
                 _project.StartDatum   = DpStart.SelectedDate ?? _project.StartDatum;
                 _project.Beschrijving = TxtBeschrijving.Text ?? "";
                 _project.Status       = Enum.Parse<ProjectStatus>(
                     ((ComboBoxItem)CmbStatus.SelectedItem).Content.ToString()!, ignoreCase: true);
 
-                // Update locatie
                 _project.Locatie.Gemeente   = TxtGemeente.Text;
                 _project.Locatie.Postcode   = TxtPostCode.Text;
                 _project.Locatie.Straat     = TxtStraat.Text;
                 _project.Locatie.Huisnummer = TxtHuisNummer.Text;
                 _project.Locatie.Wijk       = TxtWijk.Text;
 
-                // update detail
-                ProjectDetail nieuweDetail;
-                switch (type)
+                _project.Details.Clear();
+                if (IsStads)
                 {
-                    case "StadsProject":
-                        var sd = new StadDetail(
-                            (_project.Details.FirstOrDefault() as StadDetail)?.Id,
-                            Enum.Parse<VergunningStatus>(((ComboBoxItem)CmbVergunning.SelectedItem).Content.ToString()!),
-                            ChkArchWaarde.IsChecked == true,
-                            Enum.Parse<Toegankelijkheid>(((ComboBoxItem)CmbToegang.SelectedItem).Content.ToString()!),
-                            ChkBeziens.IsChecked  == true,
-                            ChkInfobord.IsChecked  == true);
-                        sd.Bouwfirmas = _partnerRijen
-                            .Where(r => r.Categorie == "bouwfirma").Select(r => r.Partner).ToList();
-                        _project.Partners = _partnerRijen
-                            .Where(r => r.Categorie == "algemeen")
-                            .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
-                        nieuweDetail = sd;
-                        break;
-
-                    case "GroenProject":
-                        nieuweDetail = new GroenDetail(
-                            (_project.Details.FirstOrDefault() as GroenDetail)?.Id,
-                            decimal.Parse(TxtOppervlakte.Text), int.Parse(TxtBioScore.Text),
-                            int.Parse(TxtWandelpaden.Text),     TxtFaciliteiten.Text,
-                            ChkToerRoute.IsChecked == true,     int.Parse(TxtBeoordeling.Text));
-                        _project.Partners = _partnerRijen
-                            .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
-                        break;
-
-                    case "WonenProject":
-                        nieuweDetail = new WonenDetail(
-                            (_project.Details.FirstOrDefault() as WonenDetail)?.Id ?? 0,
-                            int.Parse(TxtEenheden.Text),  TxtWoningTypes.Text,
-                            ChkRondleiding.IsChecked == true, ChkShowwoning.IsChecked == true,
-                            int.Parse(TxtInnoScore.Text),     ChkErfgoed.IsChecked    == true);
-                        _project.Partners = _partnerRijen
-                            .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
-                        break;
-
-                    default: throw new Exception("Onbekend projecttype.");
+                    var sd = new StadDetail(
+                        _project.Details.OfType<StadDetail>().FirstOrDefault()?.Id,
+                        Enum.Parse<VergunningStatus>(((ComboBoxItem)CmbVergunning.SelectedItem).Content.ToString()!),
+                        ChkArchWaarde.IsChecked == true,
+                        Enum.Parse<Toegankelijkheid>(((ComboBoxItem)CmbToegang.SelectedItem).Content.ToString()!),
+                        ChkBeziens.IsChecked == true,
+                        ChkInfobord.IsChecked == true);
+                    sd.Bouwfirmas = _partnerRijen
+                        .Where(r => r.Categorie == "bouwfirma").Select(r => r.Partner).ToList();
+                    _project.Partners = _partnerRijen
+                        .Where(r => r.Categorie == "algemeen")
+                        .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
+                    _project.Details.Add(sd);
                 }
 
-                _project.Details.Clear();
-                _project.Details.Add(nieuweDetail);
+                if (IsGroen)
+                {
+                    _project.Details.Add(new GroenDetail(
+                        _project.Details.OfType<GroenDetail>().FirstOrDefault()?.Id,
+                        decimal.Parse(TxtOppervlakte.Text), int.Parse(TxtBioScore.Text),
+                        int.Parse(TxtWandelpaden.Text), TxtFaciliteiten.Text,
+                        ChkToerRoute.IsChecked == true, int.Parse(TxtBeoordeling.Text)));
+                    _project.Partners = _partnerRijen
+                        .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
+                }
+
+                if (IsWonen)
+                {
+                    _project.Details.Add(new WonenDetail(
+                        _project.Details.OfType<WonenDetail>().FirstOrDefault()?.Id ?? 0,
+                        int.Parse(TxtEenheden.Text), TxtWoningTypes.Text,
+                        ChkRondleiding.IsChecked == true, ChkShowwoning.IsChecked == true,
+                        int.Parse(TxtInnoScore.Text), ChkErfgoed.IsChecked == true));
+                    _project.Partners = _partnerRijen
+                        .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
+                }
 
                 _service.UpdateProject(_project);
-                foreach (var gkp in GekoppeldePartners)
-                {
 
-                }
                 DialogResult = true;
                 Close();
             }
             catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            { MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void Annuleer_Click(object sender, RoutedEventArgs e) { DialogResult = false; Close(); }

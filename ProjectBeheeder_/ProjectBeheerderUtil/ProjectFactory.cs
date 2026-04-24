@@ -17,7 +17,7 @@ namespace ProjectBeheerderUtil
                 
                 titel,
                 startDatum,
-                string.Empty,
+                beschrijving,
                 status,
                 locatie
             )

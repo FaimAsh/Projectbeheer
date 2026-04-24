@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectBeheerderBL.DomeinDetails {
+namespace ProjectBeheerderBL.DomeinDetails
+{
     public class WonenDetail : ProjectDetail
     {
-       
 
-        public WonenDetail(int aantalEenheden,string woningtypes, bool rondleiding, bool showwoning, int architecturaleScore, bool erfgoedSamenwerking ) {
-          
+
+        public WonenDetail(int aantalEenheden, string woningtypes, bool rondleiding, bool showwoning, int architecturaleScore, bool erfgoedSamenwerking)
+        {
+
             this.AantalEenheden = aantalEenheden;
             this.Woningtypes = woningtypes;
             this.Rondleidingen = rondleiding;
@@ -19,19 +21,22 @@ namespace ProjectBeheerderBL.DomeinDetails {
             this.ErfgoedSamenwerking = erfgoedSamenwerking;
         }
 
-        public WonenDetail(int id, int aantalEenheden, string woningtypes, bool rondleiding, bool showwoning, int architecturaleScore, bool erfgoedSamenwerking) : this(aantalEenheden, woningtypes, rondleiding, showwoning, architecturaleScore, erfgoedSamenwerking) {
+        public WonenDetail(int id, int aantalEenheden, string woningtypes, bool rondleiding, bool showwoning, int architecturaleScore, bool erfgoedSamenwerking) : this(aantalEenheden, woningtypes, rondleiding, showwoning, architecturaleScore, erfgoedSamenwerking)
+        {
 
             this.Id = id;
         }
 
 
         public int Id { get; set; }
-        public int AantalEenheden {  get; set; }
+        public int AantalEenheden { get; set; }
         public string Woningtypes { get; set; }
         public bool Rondleidingen { get; set; }
         public bool Showwoningen { get; set; }
         public int ArchitecturaleScore { get; set; }
         public bool ErfgoedSamenwerking { get; set; }
-     
+
+        public override string TypeNaam => "Wonen";
+
     }
 }

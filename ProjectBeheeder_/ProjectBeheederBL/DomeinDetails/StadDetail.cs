@@ -6,13 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using static ProjectBeheerderBL.Domein.Enums;
 
-namespace ProjectBeheerderBL.DomeinDetails {
-    public class StadDetail :ProjectDetail
+namespace ProjectBeheerderBL.DomeinDetails
+{
+    public class StadDetail : ProjectDetail
     {
-       
 
-        public StadDetail(VergunningStatus vergunningStatus, bool architecturaleWaarde, Toegankelijkheid toegankelijkheid, bool bezienswaardigheid, bool infobordenVoorzien) {
-            
+
+        public StadDetail(VergunningStatus vergunningStatus, bool architecturaleWaarde, Toegankelijkheid toegankelijkheid, bool bezienswaardigheid, bool infobordenVoorzien)
+        {
+
             this.VergunningStatus = vergunningStatus;
             this.ArchitecturaleWaarde = architecturaleWaarde;
             this.Toegankelijkheid = toegankelijkheid;
@@ -20,20 +22,23 @@ namespace ProjectBeheerderBL.DomeinDetails {
             this.InfoBordVoorzien = infobordenVoorzien;
         }
 
-        public StadDetail(int? id, VergunningStatus vergunningStatus, bool architecturaleWaarde, Toegankelijkheid toegankelijkheid, bool bezienswaardigheid, bool infobordenVoorzien) : this(vergunningStatus,architecturaleWaarde,toegankelijkheid,bezienswaardigheid,infobordenVoorzien) {
+        public StadDetail(int? id, VergunningStatus vergunningStatus, bool architecturaleWaarde, Toegankelijkheid toegankelijkheid, bool bezienswaardigheid, bool infobordenVoorzien) : this(vergunningStatus, architecturaleWaarde, toegankelijkheid, bezienswaardigheid, infobordenVoorzien)
+        {
 
-            this.Id = id;          
-          
+            this.Id = id;
+
         }
+
+        public override string TypeNaam => "Stad";
 
         public int? Id { get; set; }
         public VergunningStatus VergunningStatus { get; set; }
-        public bool ArchitecturaleWaarde {  get; set; }
+        public bool ArchitecturaleWaarde { get; set; }
         public Toegankelijkheid Toegankelijkheid { get; set; }
         public bool Bezienswaardigheid { get; set; }
 
-        public bool InfoBordVoorzien {  get; set; }
+        public bool InfoBordVoorzien { get; set; }
 
-        public List <Partner> Bouwfirmas { get; set; }
+        public List<Partner> Bouwfirmas { get; set; }
     }
 }
