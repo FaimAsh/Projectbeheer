@@ -14,23 +14,33 @@ namespace WpfAppProjectBeheeder
         {
             InitializeComponent();
             Title = $"Detail — {project.Titel}";
-            ToonDetails(project);
+            ToonInfo(project);
         }
 
-        private void ToonDetails(Project p)
+        private void ToonInfo(Project p)
         {
-            Rij("Type", p.GetType().Name);
+            string typeNaam = p.Details.FirstOrDefault() switch
+            {
+                StadDetail => "Stadsproject",
+                GroenDetail => "Groenproject",
+                WonenDetail => "Woonproject",
+                _ => "onbekend"
+            };
+            Rij("Type", typeNaam);
             Rij("Titel", p.Titel);
             Rij("Startdatum", p.StartDatum.ToString("dd/MM/yyyy"));
             Rij("Status", p.Status.ToString());
             Rij("Beschrijving", p.Beschrijving ?? "/");
 
+            if (p.Locatie != null)
+                Rij("Locatie", $"{p.Locatie.Straat} {p.Locatie.Huisnummer}, {p.Locatie.Postcode} {p.Locatie.Gemeente} ({p.Locatie.Wijk})");
+
             if (p.Partners != null && p.Partners.Count > 0)
             {
-                Rij("Partners", string.Join(", ",
-                    p.Partners
-                        .Where(pp => pp.Partner != null)
-                        .Select(pp => $"{pp.Partner.Naam} ({pp.RolBeschrijving})")));
+                Sep();
+                Rij("Partners", "");
+                foreach (var pp in p.Partners)
+                    Rij($"  {pp.Partner.Naam}", $"Type: {pp.Partner.PartnerType}  |  Rol: {pp.RolBeschrijving ?? "/"}");
             }
             else
             {
@@ -54,7 +64,9 @@ namespace WpfAppProjectBeheeder
 
                         if (sd.Bouwfirmas != null && sd.Bouwfirmas.Count > 0)
                         {
-                            Rij("Bouwfirmas", string.Join(", ", sd.Bouwfirmas.Select(b => b.Naam)));
+                            Rij("Bouwfirmas", "");
+                            foreach (var b in sd.Bouwfirmas)
+                                Rij($"  {b.Naam}", $"Type: {b.PartnerType}");
                         }
                         break;
 

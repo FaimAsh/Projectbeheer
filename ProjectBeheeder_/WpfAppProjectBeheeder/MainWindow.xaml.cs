@@ -109,6 +109,7 @@ namespace WpfAppProjectBeheeder {
             TxtPartner.Clear();
             DpVan.SelectedDate = null;
             DpTot.SelectedDate = null;
+            LaadProjecten();
         }
 
         private void DgProjecten_SelectionChanged(object sender, SelectionChangedEventArgs e){ }
@@ -161,27 +162,26 @@ namespace WpfAppProjectBeheeder {
             }
         }
 
-               private void Info_Click(object sender, RoutedEventArgs e)
+        private void Info_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var geselecteerdeProjecten = DgProjecten.SelectedItems.Cast<Project>().ToList();
-                if (geselecteerdeProjecten.Count == 0)
+                var geselecteerd = DgProjecten.SelectedItems.Cast<Project>().ToList();
+                if (geselecteerd.Count == 0)
                 {
                     MessageBox.Show("Selecteer eerst een of meer projecten.");
                     return;
                 }
 
-                foreach (var project in geselecteerdeProjecten)
+                foreach (var project in geselecteerd)
                 {
-                    new DetailProjectWindow(project).ShowDialog();
+                    var alles = _Beheerder.GeefProject(project.Id);
+                    new DetailProjectWindow(alles).ShowDialog();
                 }
             }
 
             catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            { MessageBox.Show(ex.Message); }
         }
 
         private void Partners_Click(object sender, RoutedEventArgs e)

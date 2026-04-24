@@ -184,6 +184,10 @@ namespace WpfAppProjectBeheeder
                         .Where(r => r.Categorie == "bouwfirma")
                         .Select(r => r.Partner).ToList();
                     project.Details.Add(stadDetail);
+
+                    project.Partners = _partnerRijen
+                        .Where(r => r.Categorie == "algemeen")
+                        .Select(r => new ProjectPartner(project, r.Partner, r.Rol)).ToList();
                 }
 
                 if (IsGroen)
@@ -192,6 +196,8 @@ namespace WpfAppProjectBeheeder
                             decimal.Parse(TxtOppervlakte.Text), int.Parse(TxtBioScore.Text),
                             int.Parse(TxtWandelpaden.Text), TxtFaciliteiten.Text,
                             ChkToerRoute.IsChecked == true, int.Parse(TxtBeoordeling.Text)));
+                    project.Partners = _partnerRijen
+                        .Select(r => new ProjectPartner(project, r.Partner, r.Rol)).ToList();
                 }
 
                 if (IsWonen)
@@ -200,15 +206,13 @@ namespace WpfAppProjectBeheeder
                         int.Parse(TxtEenheden.Text), TxtWoningTypes.Text,
                         ChkRondleiding.IsChecked == true, ChkShowwoning.IsChecked == true,
                         int.Parse(TxtInnoScore.Text), ChkErfgoed.IsChecked == true));
+                    project.Partners = _partnerRijen
+                        .Select(r => new ProjectPartner(project, r.Partner, r.Rol)).ToList();
                 }
-                project.Partners = _partnerRijen
-                .Select(r => new ProjectPartner(project, r.Partner, r.Rol)).ToList();
+                //project.Partners = _partnerRijen
+                //.Select(r => new ProjectPartner(project, r.Partner, r.Rol)).ToList();
 
-                if (_bestand != null)
-                { MessageBox.Show("Selecteer een partner.", "Geen selectie", MessageBoxButton.OK, MessageBoxImage.Warning); 
-                    return; }
-                else
-                { _service.AddProject(project); }
+                _service.AddProject(project); 
 
                 DialogResult = true;
                 Close();

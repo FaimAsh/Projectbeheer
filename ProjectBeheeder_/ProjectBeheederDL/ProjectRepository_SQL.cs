@@ -68,7 +68,7 @@ namespace ProjectBeheederDL
                 cmdGroenDetail.CommandText = GroenDetailQuery;
                 cmdGroenDetail.Parameters.Add(new SqlParameter("@Oppervlakte", System.Data.SqlDbType.Decimal));
                 cmdGroenDetail.Parameters.Add(new SqlParameter("@Biodiversiteitscore", System.Data.SqlDbType.Int));
-                cmdGroenDetail.Parameters.Add(new SqlParameter("@AantalwandelPaden", System.Data.SqlDbType.Int));
+                cmdGroenDetail.Parameters.Add(new SqlParameter("@Aantalwandelpaden", System.Data.SqlDbType.Int));
                 cmdGroenDetail.Parameters.Add(new SqlParameter("@BeschikbareFaciliteit", System.Data.SqlDbType.NVarChar));
                 cmdGroenDetail.Parameters.Add(new SqlParameter("@ToeristischeRoute", System.Data.SqlDbType.Bit));
                 cmdGroenDetail.Parameters.Add(new SqlParameter("@BezoekersBeoordeling", System.Data.SqlDbType.Int));
@@ -91,7 +91,7 @@ namespace ProjectBeheederDL
                 cmdLocatie.Parameters.Add(new SqlParameter("@Wijk", System.Data.SqlDbType.NVarChar));
 
                 cmdStadDetail.CommandText = StadDetailQuery;
-                cmdStadDetail.Parameters.Add(new SqlParameter("@Vergunningstatus", System.Data.SqlDbType.Int));
+                cmdStadDetail.Parameters.Add(new SqlParameter("@VergunningStatus", System.Data.SqlDbType.Int));
                 cmdStadDetail.Parameters.Add(new SqlParameter("@ArchitecturaleWaarde", System.Data.SqlDbType.Bit));
                 cmdStadDetail.Parameters.Add(new SqlParameter("@Toegankelijkheid", System.Data.SqlDbType.Int));
                 cmdStadDetail.Parameters.Add(new SqlParameter("@Bezienswaardigheid", System.Data.SqlDbType.Int));
@@ -106,7 +106,7 @@ namespace ProjectBeheederDL
                 cmdExternePartner.CommandText = ExternePartnerQuery;
                 cmdExternePartner.Parameters.Add(new SqlParameter("@ProjectID", System.Data.SqlDbType.Int));
                 cmdExternePartner.Parameters.Add(new SqlParameter("@PartnerID", System.Data.SqlDbType.Int));
-                cmdExternePartner.Parameters.Add(new SqlParameter("@RolOmschrijving", System.Data.SqlDbType.NVarChar));
+                cmdExternePartner.Parameters.Add(new SqlParameter("@Rolomschrijving", System.Data.SqlDbType.NVarChar));
                 cmdExternePartner.Parameters.Add(new SqlParameter("@FlagPartner", System.Data.SqlDbType.Int));
 
                 try
@@ -284,7 +284,7 @@ namespace ProjectBeheederDL
 
                             Partner partner1 = new Partner((int)reader["PartnerID"],
                                 (string)reader["Naam"],
-                                (Enums.PartnerType)reader["TypePartner"]
+                                (Enums.PartnerType)(int)reader["TypePartner"]
                                 );
 
                             partner.Add(partner1);
@@ -616,8 +616,6 @@ namespace ProjectBeheederDL
 
                 try {
 
-
-
                     LocatieCmd.Transaction = transaction;
                     ProjectCmd.Transaction = transaction;
                     StadDetailCmd.Transaction =     transaction;
@@ -658,7 +656,30 @@ namespace ProjectBeheederDL
 
                         StadDetailCmd.ExecuteNonQuery();
 
-
+                        int stadId;
+                        using (var cmdSid = conn.CreateCommand())
+                        {
+                            cmdSid.Transaction = transaction;
+                            cmdSid.CommandText = "SELECT StadDetailID FROM StadDetail WHERE ProjectID = @pid";
+                            cmdSid.Parameters.AddWithValue("@pid", project.Id);
+                            stadId = (int)cmdSid.ExecuteScalar();
+                        }
+                        using (var cmdDelB = conn.CreateCommand())
+                        {
+                            cmdDelB.Transaction = transaction;
+                            cmdDelB.CommandText = "DELETE FROM StadsOntwikkeling_Partner WHERE StadDetailID = @sid";
+                            cmdDelB.Parameters.AddWithValue("@sid", stadId);
+                            cmdDelB.ExecuteNonQuery();
+                        }
+                        foreach (var firma in stad.Bouwfirmas ?? new List<Partner>())
+                        {
+                            using var cmdB = conn.CreateCommand();
+                            cmdB.Transaction = transaction;
+                            cmdB.CommandText = "INSERT INTO StadsOntwikkeling_Partner (StadDetailID,PartnerID) VALUES (@sid,@pid)";
+                            cmdB.Parameters.AddWithValue("@sid", stadId);
+                            cmdB.Parameters.AddWithValue("@pid", firma.Id);
+                            cmdB.ExecuteNonQuery();
+                        }
                     }
                     else if (detail is WonenDetail wonen) {
 
