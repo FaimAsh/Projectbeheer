@@ -27,9 +27,6 @@ namespace ProjectBeheerderBL.Interfaces {
         
         void UpdateProject(Project project);
 
-        //void UpdateRol(int ProjectID,int PartnerID,string Rolomschrijving);
-
-        //FILTER/SEARCH
 
         List<Project> Search(ProjectFilter filter);
 

@@ -6,21 +6,48 @@
         mc:Ignorable="d"
         Title="Project wijzigen" Height="720" Width="940"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Window.Resources>
+       
+        <SolidColorBrush x:Key="PrimaryColor" Color="#2E86C1"/>
+        <SolidColorBrush x:Key="SecondaryColor" Color="#EAF2F8"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#28B463"/>
+        <SolidColorBrush x:Key="DangerColor" Color="#CB4335"/>
 
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Margin" Value="0 0 0 8"/>
+        </Style>
+
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>  <!-- content -->
             <RowDefinition Height="44"/> <!-- save/cancel -->
         </Grid.RowDefinitions>
 
-        <!-- ========== CONTENT: left form | right partners ========== -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="490"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- ===== LEFT: project fields (type locked, content editable) ===== -->
             <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="14">
 
@@ -189,7 +216,6 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <!-- ===== RIGHT: partner management ===== -->
             <GroupBox Grid.Column="1" Header="Partners" Margin="8 14 10 8">
                 <Grid Margin="6">
                     <Grid.RowDefinitions>

@@ -37,7 +37,7 @@ namespace WpfAppProjectBeheeder {
             InitializeComponent();
             LeesConfig();
             _Beheerder = new ProjectBeheerder(RepositoryFactory.GeefRepository(databaseType, connectionstring));
-            
+ 
             LaadProjecten();
         }
 
@@ -118,6 +118,7 @@ namespace WpfAppProjectBeheeder {
             var w = new NieuwProjectWindow(_Beheerder);
             if (w.ShowDialog() == true) LaadProjecten();
         }
+
         private void WijzigProject_Click(object sender, RoutedEventArgs e)
         {
             if (DgProjecten.SelectedItem is not Project geselecteerd)
@@ -174,10 +175,12 @@ namespace WpfAppProjectBeheeder {
                     return;
                 }
                 try
-                {
-                    var volledig = _Beheerder.GeefProject(geselecteerd.Id);
-                    var w = new DetailProjectWindow(volledig);
-                    if (w.ShowDialog() == true) LaadProjecten();
+                { foreach (var project in geselecteerd)
+                    {
+                        var volledig = _Beheerder.GeefProject(project.Id);
+                        var w = new DetailProjectWindow(volledig);
+                        if (w.ShowDialog() == true) LaadProjecten();
+                    }
                 }
                 catch (Exception ex)
                 {

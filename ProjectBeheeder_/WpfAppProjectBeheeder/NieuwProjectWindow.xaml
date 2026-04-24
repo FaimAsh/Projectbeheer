@@ -6,7 +6,40 @@
         mc:Ignorable="d"
         Title="Nieuw project" Height="680" Width="880"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Window.Resources>
+        <!-- ===== COLORS ===== -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#2E86C1"/>
+        <SolidColorBrush x:Key="SecondaryColor" Color="#EAF2F8"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#28B463"/>
+        <SolidColorBrush x:Key="DangerColor" Color="#CB4335"/>
 
+        <!-- ===== BUTTON STYLE ===== -->
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- ===== GROUPBOX STYLE ===== -->
+        <Style TargetType="GroupBox">
+            <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Margin" Value="0 0 0 8"/>
+        </Style>
+
+        <!-- ===== DATAGRID STYLE  ===== -->
+        <Style TargetType="DataGrid">
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#F4F6F7"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="530"/>
@@ -17,7 +50,7 @@
             <RowDefinition Height="44"/>
         </Grid.RowDefinitions>
 
-        <!-- ===== LEFT: project form (unchanged) ===== -->
+        <!-- ===== LEFT: project form ===== -->
         <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="14">
 

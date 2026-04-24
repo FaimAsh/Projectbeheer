@@ -1,4 +1,5 @@
 ﻿using ProjectBeheerderBL.Domein;
+using ProjectBeheerderBL.DomeinDetails;
 using ProjectBeheerderBL.Interfaces;
 using System.Text;
 using System.IO;
@@ -10,7 +11,7 @@ public class FileWriterCSV : IFileWriter
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine("Titel;Type;Status;Wijk;Partner;Startdatum");
+        sb.AppendLine("Titel;Type;Status;Wijk;Partner;Startdatum;Details");
 
         foreach (var p in projecten)
         {
@@ -24,7 +25,27 @@ public class FileWriterCSV : IFileWriter
 
             string start = p.StartDatum.ToString("dd/MM/yyyy");
 
-            sb.AppendLine($"{p.Titel};{type};{p.Status};{wijk};{partner};{start}");
+            string details = "/";
+
+            if (p.Details != null && p.Details.Any())
+            {
+                details = string.Join(" | ",
+                    p.Details.Select(d =>
+                    {
+                        if (d is StadDetail sd)
+                            return $"Stad: Vergunning={sd.VergunningStatus}, Architectuur={sd.ArchitecturaleWaarde}, Toegankelijkheid={sd.Toegankelijkheid}";
+
+                        if (d is GroenDetail gd)
+                            return $"Groen: Opp={gd.Oppervlakte}m², Bio={gd.Biodiversiteit}/10, Wandelpaden={gd.Wandelpaden}";
+
+                        if (d is WonenDetail wd)
+                            return $"Wonen: Eenheden={wd.AantalEenheden}, Types={wd.Woningtypes}, Showwoning={wd.Showwoningen}";
+
+                        return "";
+                    }).Where(x => !string.IsNullOrWhiteSpace(x)));
+            }
+
+            sb.AppendLine($"{p.Titel};{type};{p.Status};{wijk};{partner};{start};{details}");
         }
 
         File.WriteAllText(path, sb.ToString());

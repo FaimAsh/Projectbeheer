@@ -1,11 +1,10 @@
 ﻿<Window x:Class="WpfAppProjectBeheeder.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:WpfAppProjectBeheeder" mc:Ignorable="d" Language="nl-BE" Title="MainWindow" Height="640" Width="1060" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <!-- ===== COLORS ===== -->
         <SolidColorBrush x:Key="PrimaryColor" Color="#2E86C1"/>
         <SolidColorBrush x:Key="SecondaryColor" Color="#EAF2F8"/>
         <SolidColorBrush x:Key="AccentColor" Color="#28B463"/>
         <SolidColorBrush x:Key="DangerColor" Color="#CB4335"/>
-        <!-- ===== BUTTON STYLE ===== -->
+
         <Style TargetType="Button">
             <Setter Property="Margin" Value="4"/>
             <Setter Property="Padding" Value="6"/>
@@ -15,7 +14,7 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
-        <!-- ===== GROUPBOX STYLE ===== -->
+     
         <Style TargetType="GroupBox">
             <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
             <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
@@ -23,13 +22,13 @@
             <Setter Property="Padding" Value="6"/>
             <Setter Property="Margin" Value="0 0 0 8"/>
         </Style>
-        <!-- ===== DATAGRID STYLE ===== -->
+     
         <Style TargetType="DataGrid">
             <Setter Property="RowBackground" Value="White"/>
             <Setter Property="AlternatingRowBackground" Value="#F4F6F7"/>
             <Setter Property="GridLinesVisibility" Value="None"/>
         </Style>
-        <!-- ===== DATAGRID HEADER STYLE ===== -->
+    
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#2E86C1"/>
             <Setter Property="Foreground" Value="White"/>

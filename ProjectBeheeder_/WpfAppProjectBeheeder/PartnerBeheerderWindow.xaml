@@ -3,59 +3,94 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfAppProjectBeheeder"
         mc:Ignorable="d"
         Title="PartnerBeheerderWindow" Height="440" Width="580"
         WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="PrimaryColor" Color="#2E86C1"/>
+        <SolidColorBrush x:Key="SecondaryColor" Color="#EAF2F8"/>
+
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Margin" Value="0 0 0 8"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <!-- partner list -->
             <RowDefinition Height="Auto"/>
-            <!-- aanmaak verwijder -->
             <RowDefinition Height="40"/>
-            <!-- sluiten -->
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0" Header="Bestaande partners" Margin="0 0 0 8">
+        <!-- ===== LIST ===== -->
+        <GroupBox Grid.Row="0" Header="Bestaande partners">
             <ListBox Name="LstPartners" Margin="4"
-                 SelectionChanged="LstPartners_SelectionChanged"/>
+                     SelectionChanged="LstPartners_SelectionChanged"/>
         </GroupBox>
 
-        
-        <GroupBox Grid.Row="1" Header="Partner aanmaken / verwijderen" Margin="0 0 0 8">
-            <Grid Margin="6 8 6 6">
+        <GroupBox Grid.Row="1" Header="Partner aanmaken / verwijderen">
+            <Grid Margin="6">
+
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="45"/>
+                    <ColumnDefinition Width="60"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="45"/>
-                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="10"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
+
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="34"/>
-                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
 
-                <Label  Grid.Column="0" Content="Naam:"  VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" Name="TxtNaam"  VerticalContentAlignment="Center"
-                     Margin="0 0 8 0" TextChanged="TxtNaam_TextChanged"/>
-                <Label  Grid.Column="2" Content="Type:"  VerticalAlignment="Center"/>
-                <ComboBox Grid.Column="3" Name="CmbTypePartner" VerticalContentAlignment="Center">
-                    <ComboBoxItem Content="Bedrijf"      IsSelected="True"/>
+                <Label Grid.Column="0" Content="Naam:" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Name="TxtNaam"
+                         VerticalContentAlignment="Center"
+                         Margin="0 0 8 0"
+                         TextChanged="TxtNaam_TextChanged"/>
+
+                <Label Grid.Column="2" Content="Type:" VerticalAlignment="Center"/>
+
+                <ComboBox Grid.Column="3" Name="CmbTypePartner"
+                          VerticalContentAlignment="Center">
+                    <ComboBoxItem Content="Bedrijf" IsSelected="True"/>
                     <ComboBoxItem Content="Organisatie"/>
                     <ComboBoxItem Content="Burger"/>
                 </ComboBox>
-                <Button Grid.Column="5" Content="Aanmaken"
-                    Click="Aanmaken_Click"/>
 
-                <Button Grid.Column="5" Grid.Row="1" Content="Verwijder selectie"
-                    Click="Verwijder_Click"/>
+                <Button Grid.Column="5"
+                        Content="Aanmaken"
+                        Height="32"
+                        Click="Aanmaken_Click"/>
+
+                <Button Grid.Row="1" Grid.Column="5"
+                        Content="Verwijder selectie"
+                        Height="32"
+                        Click="Verwijder_Click"/>
             </Grid>
         </GroupBox>
 
-        <Button Grid.Row="2" Content="Sluiten" Width="90"
-            HorizontalAlignment="Right" Click="Sluiten_Click"/>
+        <Button Grid.Row="2"
+                Content="Sluiten"
+                Width="100"
+                HorizontalAlignment="Right"
+                Click="Sluiten_Click"/>
     </Grid>
 </Window>
