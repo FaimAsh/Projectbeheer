@@ -271,22 +271,22 @@ namespace WpfAppProjectBeheeder
         {
             try
             {
-                _project.Titel        = TxtTitel.Text;
-                _project.StartDatum   = DpStart.SelectedDate ?? _project.StartDatum;
+                _project.Titel = TxtTitel.Text;
+                _project.StartDatum = DpStart.SelectedDate ?? _project.StartDatum;
                 _project.Beschrijving = TxtBeschrijving.Text ?? "";
-                _project.Status       = Enum.Parse<ProjectStatus>(
+                _project.Status = Enum.Parse<ProjectStatus>(
                     ((ComboBoxItem)CmbStatus.SelectedItem).Content.ToString()!, ignoreCase: true);
 
-                _project.Locatie.Gemeente   = TxtGemeente.Text;
-                _project.Locatie.Postcode   = TxtPostCode.Text;
-                _project.Locatie.Straat     = TxtStraat.Text;
+                _project.Locatie.Gemeente = TxtGemeente.Text;
+                _project.Locatie.Postcode = TxtPostCode.Text;
+                _project.Locatie.Straat = TxtStraat.Text;
                 _project.Locatie.Huisnummer = TxtHuisNummer.Text;
-                _project.Locatie.Wijk       = TxtWijk.Text;
+                _project.Locatie.Wijk = TxtWijk.Text;
 
                 int? bestaandStadId = _project.Details.OfType<StadDetail>().FirstOrDefault()?.Id;
                 int? bestaandGroenId = _project.Details.OfType<GroenDetail>().FirstOrDefault()?.Id;
                 int bestaandWonenId = _project.Details.OfType<WonenDetail>().FirstOrDefault()?.Id ?? 0;
-                _project.Details.Clear();
+                //_project.Details.Clear();
                 if (IsStads)
                 {
                     var sd = new StadDetail(
@@ -325,7 +325,11 @@ namespace WpfAppProjectBeheeder
                     _project.Partners = _partnerRijen
                         .Select(r => new ProjectPartner(_project, r.Partner, r.Rol)).ToList();
                 }
-
+                foreach (var pp in _project.Partners) 
+                {
+                    foreach(var partners in _service.GeefGeKoppeldePartners(_project.Id))
+                    if(pp == partners) _service.VerwijderKoppeling(pp);
+                }
                 _service.UpdateProject(_project);
 
                 DialogResult = true;
