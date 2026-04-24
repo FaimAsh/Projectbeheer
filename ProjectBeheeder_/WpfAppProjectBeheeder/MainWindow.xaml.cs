@@ -188,14 +188,14 @@ namespace WpfAppProjectBeheeder {
                 }
             }
 
-            catch (Exception ex)
-            { MessageBox.Show(ex.Message); }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
-
         private void Partners_Click(object sender, RoutedEventArgs e)
             => new PartnerBeheerderWindow(_Beheerder).ShowDialog();
 
-
+        
         private void ExportCSV_Click(object sender, RoutedEventArgs e)
         {
             var projecten = DgProjecten.SelectedItems.Cast<Project>().ToList();

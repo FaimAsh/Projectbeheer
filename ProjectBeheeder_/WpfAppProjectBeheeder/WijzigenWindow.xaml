@@ -261,6 +261,9 @@
                                       Visibility="Collapsed">
                                 <ComboBoxItem Content="algemeen"  IsSelected="True"/>
                                 <ComboBoxItem Content="bouwfirma"/>
+                              
+
+
                             </ComboBox>
                         </Grid>
                         <Button Name="BtnVerwijderGekoppeld" Content="Verwijder gekoppelde partner"
@@ -296,7 +299,7 @@
                         <ComboBox Grid.Column="1" Name="CmbNieuweCategorie"
                                   VerticalContentAlignment="Center">
                             <ComboBoxItem Content="algemeen"  IsSelected="True"/>
-                            <ComboBoxItem Content="bouwfirma"/>
+                            <ComboBoxItem Content="bouwfirma" IsSelected="True"/>
                         </ComboBox>
                     </Grid>
 
