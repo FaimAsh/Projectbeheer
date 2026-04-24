@@ -724,110 +724,112 @@ namespace ProjectBeheederDL
                         InsertPartnerCmd.ExecuteNonQuery();
                     }
 
+                    if (!project.Details.Any(d => d is StadDetail)) {
+
+                        new SqlCommand("DELETE FROM StadsOntwikkeling_Partner WHERE StadDetailID IN (SELECT StadDetailID FROM StadDetail WHERE ProjectID = @pid);", conn, transaction) { Parameters = { new SqlParameter("@pid", project.Id) } }.ExecuteNonQuery();
+                        new SqlCommand("DELETE FROM StadDetail WHERE ProjectID = @pid;", conn, transaction) { Parameters = { new SqlParameter("@pid", project.Id) } }.ExecuteNonQuery();
+                    }
+                    if (!project.Details.Any(d => d is GroenDetail)) {
+                        new SqlCommand("DELETE FROM GroenDetail WHERE ProjectID = @pid;", conn, transaction) { Parameters = { new SqlParameter("@pid", project.Id) } }.ExecuteNonQuery();
+                    }
+                    if (!project.Details.Any(d => d is WonenDetail)) {
+                        new SqlCommand("DELETE FROM InnovatiefwonenDetail WHERE ProjectID = @pid;", conn, transaction) { Parameters = { new SqlParameter("@pid", project.Id) } }.ExecuteNonQuery();
+                    }
 
 
-                    ProjectDetail detail = project.Details.FirstOrDefault();
+                    //ProjectDetail detail = project.Details.FirstOrDefault();
+                    foreach (ProjectDetail detail in project.Details)
+                        if (detail is StadDetail stad) {
 
-                    if (detail is StadDetail stad) {
+                            StadDetailCmd.CommandText = StadDetails;
+                            StadDetailCmd.Parameters.AddWithValue("@ProjectID", project.Id);
+                            StadDetailCmd.Parameters.AddWithValue("@VergunningStatus", (int)stad.VergunningStatus);
+                            StadDetailCmd.Parameters.AddWithValue("@ArchitecturaleWaarde", stad.ArchitecturaleWaarde);
+                            StadDetailCmd.Parameters.AddWithValue("@Toegankelijkheid", (int)stad.Toegankelijkheid);
+                            StadDetailCmd.Parameters.AddWithValue("@Bezienswaardigheid", stad.Bezienswaardigheid);
+                            StadDetailCmd.Parameters.AddWithValue("@Infobordvoorzien", stad.InfoBordVoorzien);
 
-                        StadDetailCmd.CommandText = StadDetails;
-                        StadDetailCmd.Parameters.AddWithValue("@ProjectID", project.Id);
-                        StadDetailCmd.Parameters.AddWithValue("@VergunningStatus", (int)stad.VergunningStatus);
-                        StadDetailCmd.Parameters.AddWithValue("@ArchitecturaleWaarde", stad.ArchitecturaleWaarde);
-                        StadDetailCmd.Parameters.AddWithValue("@Toegankelijkheid", (int)stad.Toegankelijkheid);
-                        StadDetailCmd.Parameters.AddWithValue("@Bezienswaardigheid", stad.Bezienswaardigheid);
-                        StadDetailCmd.Parameters.AddWithValue("@Infobordvoorzien", stad.InfoBordVoorzien);
+                            int rijStad = StadDetailCmd.ExecuteNonQuery();
 
-                        StadDetailCmd.ExecuteNonQuery();
+                            if (rijStad == 0) {
+                                StadDetailCmd.CommandText = "INSERT INTO StadDetail (ProjectID, VergunningStatus, ArchitecturaleWaarde, Toegankelijkheid, Bezienswaardigheid, Infobordvoorzien) VALUES (@ProjectID, @VergunningStatus, @ArchitecturaleWaarde, @Toegankelijkheid, @Bezienswaardigheid, @Infobordvoorzien);";
+                                StadDetailCmd.ExecuteNonQuery();
+                            }
 
-                        int echteStadId = 0;
-                        using (SqlCommand cmdSid = conn.CreateCommand()) {
-                            cmdSid.Transaction = transaction;
-                            cmdSid.CommandText = "SELECT StadDetailID FROM StadDetail WHERE ProjectID = @pid";
-                            cmdSid.Parameters.AddWithValue("@pid", project.Id);
+                            int echteStadId = 0;
+                            using (SqlCommand cmdSid = conn.CreateCommand()) {
+                                cmdSid.Transaction = transaction;
+                                cmdSid.CommandText = "SELECT StadDetailID FROM StadDetail WHERE ProjectID = @pid";
+                                cmdSid.Parameters.AddWithValue("@pid", project.Id);
 
-                            object result = cmdSid.ExecuteScalar();
-                            if (result != null && result != DBNull.Value) {
-                                echteStadId = Convert.ToInt32(result);
+                                object result = cmdSid.ExecuteScalar();
+                                if (result != null && result != DBNull.Value) {
+                                    echteStadId = Convert.ToInt32(result);
+                                }
+                            }
+                            if (echteStadId > 0)
+                                DbouwCmd.CommandText = DBouwQuery;
+                            DbouwCmd.Parameters.AddWithValue("@StadDetailID", echteStadId);
+                            DbouwCmd.ExecuteNonQuery();
+
+
+
+
+
+                            IBouwCmd.CommandText = IBouwQuery;
+                            IBouwCmd.Parameters.Add("@StadDetailID", System.Data.SqlDbType.Int);
+                            IBouwCmd.Parameters.Add("@PartnerID", System.Data.SqlDbType.Int);
+
+
+
+                            foreach (Partner bf in stad.Bouwfirmas) {
+                                IBouwCmd.Parameters["@StadDetailID"].Value = stad.Id;
+                                IBouwCmd.Parameters["@PartnerID"].Value = bf.Id;
+                                IBouwCmd.ExecuteNonQuery();
                             }
                         }
-                        if (echteStadId > 0)
-                            DbouwCmd.CommandText = DBouwQuery;
-                        DbouwCmd.Parameters.AddWithValue("@StadDetailID", echteStadId);
-                        DbouwCmd.ExecuteNonQuery();
 
+                        else if (detail is WonenDetail wonen) {
 
+                            WonenDetailCmd.CommandText = WonenDetails;
+                            WonenDetailCmd.Parameters.AddWithValue("@ProjectID", project.Id);
+                            WonenDetailCmd.Parameters.AddWithValue("@AantalWooneenheden", wonen.AantalEenheden);
+                            WonenDetailCmd.Parameters.AddWithValue("@TypeWoonVorm", wonen.Woningtypes);
+                            WonenDetailCmd.Parameters.AddWithValue("@RondLeidingMogelijk", wonen.Rondleidingen);
+                            WonenDetailCmd.Parameters.AddWithValue("@ShowWoningMogelijk", wonen.Showwoningen);
+                            WonenDetailCmd.Parameters.AddWithValue("@ArchitecturaleScore", wonen.ArchitecturaleScore);
+                            WonenDetailCmd.Parameters.AddWithValue("@SamenwerkingErfgoed", wonen.ErfgoedSamenwerking);
 
+                            int rijWonen = WonenDetailCmd.ExecuteNonQuery();
 
-
-                        IBouwCmd.CommandText = IBouwQuery;
-                        IBouwCmd.Parameters.Add("@StadDetailID", System.Data.SqlDbType.Int);
-                        IBouwCmd.Parameters.Add("@PartnerID", System.Data.SqlDbType.Int);
-                       
-
-
-                        foreach (Partner bf in stad.Bouwfirmas) {
-                            IBouwCmd.Parameters["@StadDetailID"].Value = stad.Id;
-                            IBouwCmd.Parameters["@PartnerID"].Value = bf.Id;
-                            IBouwCmd.ExecuteNonQuery();
+                            if (rijWonen == 0) {
+                                WonenDetailCmd.CommandText = "INSERT INTO InnovatiefwonenDetail (ProjectID, AantalWooneenheden, TypeWoonVorm, RondLeidingMogelijk, ShowWoningMogelijk, ArchitecturaleScore, SamenwerkingErfgoed) VALUES (@ProjectID, @AantalWooneenheden, @TypeWoonVorm, @RondLeidingMogelijk, @ShowWoningMogelijk, @ArchitecturaleScore, @SamenwerkingErfgoed);";
+                                WonenDetailCmd.ExecuteNonQuery();
+                            }
                         }
-                    }
+                        else if (detail is GroenDetail Groen) {
+
+                            GroenDetailCmd.CommandText = GroenDetails;
+                            GroenDetailCmd.Parameters.AddWithValue("@ProjectID", project.Id);
+                            GroenDetailCmd.Parameters.AddWithValue("@Oppervlakte", Groen.Oppervlakte);
+                            GroenDetailCmd.Parameters.AddWithValue("@Biodiversiteitscore", Groen.Biodiversiteit);
+                            GroenDetailCmd.Parameters.AddWithValue("@AantalWandelpaden", Groen.Wandelpaden);
+                            GroenDetailCmd.Parameters.AddWithValue("@BeschikbareFaciliteit", Groen.Faciliteiten);
+                            GroenDetailCmd.Parameters.AddWithValue("@ToeristischeRoute", Groen.ToeristischeRoute);
+                            GroenDetailCmd.Parameters.AddWithValue("@BezoekersBeoordeling", Groen.Beoordeling);
+
+                            int rijGreon = GroenDetailCmd.ExecuteNonQuery();
+
+                            if (rijGreon == 0) {
+                                GroenDetailCmd.CommandText = "INSERT INTO GroenDetail (ProjectID, Oppervlakte, Biodiversiteitscore, AantalWandelpaden, BeschikbareFaciliteit, ToeristischeRoute, BezoekersBeoordeling) VALUES (@ProjectID, @Oppervlakte, @Biodiversiteitscore, @AantalWandelpaden, @BeschikbareFaciliteit, @ToeristischeRoute, @BezoekersBeoordeling);";
+                                GroenDetailCmd.ExecuteNonQuery();
+                            }
 
 
-                    //        int stadId;
-                    //        using (var cmdSid = conn.CreateCommand()) {
-                    //            cmdSid.Transaction = transaction;
-                    //            cmdSid.CommandText = "SELECT StadDetailID FROM StadDetail WHERE ProjectID = @pid";
-                    //            cmdSid.Parameters.AddWithValue("@pid", project.Id);
-                    //            stadId = (int)cmdSid.ExecuteScalar();
-                    //        }
-                    //        using (var cmdDelB = conn.CreateCommand()) {
-                    //            cmdDelB.Transaction = transaction;
-                    //            cmdDelB.CommandText = "DELETE FROM StadsOntwikkeling_Partner WHERE StadDetailID = @sid";
-                    //            cmdDelB.Parameters.AddWithValue("@sid", stadId);
-                    //            cmdDelB.ExecuteNonQuery();
-                    //        }
-                    //        foreach (var firma in stad.Bouwfirmas ?? new List<Partner>()) {
-                    //            using var cmdB = conn.CreateCommand();
-                    //            cmdB.Transaction = transaction;
-                    //            cmdB.CommandText = "INSERT INTO StadsOntwikkeling_Partner (StadDetailID,PartnerID) VALUES (@sid,@pid)";
-                    //            cmdB.Parameters.AddWithValue("@sid", stadId);
-                    //            cmdB.Parameters.AddWithValue("@pid", firma.Id);
-                    //            cmdB.ExecuteNonQuery();
 
-                    //        }
-                    //    }
-                    //}                                                              
-
-                    else if (detail is WonenDetail wonen) {
-
-                        WonenDetailCmd.CommandText = WonenDetails;
-                        WonenDetailCmd.Parameters.AddWithValue("@ProjectID", project.Id);
-                        WonenDetailCmd.Parameters.AddWithValue("@AantalWooneenheden", wonen.AantalEenheden);
-                        WonenDetailCmd.Parameters.AddWithValue("@TypeWoonVorm", wonen.Woningtypes);
-                        WonenDetailCmd.Parameters.AddWithValue("@RondLeidingMogelijk", wonen.Rondleidingen);
-                        WonenDetailCmd.Parameters.AddWithValue("@ShowWoningMogelijk", wonen.Showwoningen);
-                        WonenDetailCmd.Parameters.AddWithValue("@ArchitecturaleScore", wonen.ArchitecturaleScore);
-                        WonenDetailCmd.Parameters.AddWithValue("@SamenwerkingErfgoed", wonen.ErfgoedSamenwerking);
-
-                        WonenDetailCmd.ExecuteNonQuery();
-                    }
-                    else if (detail is GroenDetail Groen) {
-
-                        GroenDetailCmd.CommandText = GroenDetails;
-                        GroenDetailCmd.Parameters.AddWithValue("@ProjectID", project.Id);
-                        GroenDetailCmd.Parameters.AddWithValue("@Oppervlakte", Groen.Oppervlakte);
-                        GroenDetailCmd.Parameters.AddWithValue("@Biodiversiteitscore", Groen.Biodiversiteit);
-                        GroenDetailCmd.Parameters.AddWithValue("@AantalWandelpaden", Groen.Wandelpaden);
-                        GroenDetailCmd.Parameters.AddWithValue("@BeschikbareFaciliteit", Groen.Faciliteiten);
-                        GroenDetailCmd.Parameters.AddWithValue("@ToeristischeRoute", Groen.ToeristischeRoute);
-                        GroenDetailCmd.Parameters.AddWithValue("@BezoekersBeoordeling", Groen.Beoordeling);
-
-                        GroenDetailCmd.ExecuteNonQuery();
-
-                    }
-
-
+                        }
+                        
+                
 
 
                     transaction.Commit();
