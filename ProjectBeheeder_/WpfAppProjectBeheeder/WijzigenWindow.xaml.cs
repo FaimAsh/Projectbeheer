@@ -96,58 +96,60 @@ namespace WpfAppProjectBeheeder
             TxtHuisNummer.Text = _project.Locatie.Huisnummer;
             TxtWijk.Text       = _project.Locatie.Wijk;
 
-            var detail = _project.Details.FirstOrDefault();
-            switch (detail)
+            //var detail = _project.Details.FirstOrDefault();
+            foreach (var d in _project.Details)
             {
-                case StadDetail sd:
-                    GbStads.Visibility = Visibility.Visible;
-                    foreach (ComboBoxItem i in CmbVergunning.Items)
-                        if (i.Content.ToString() == sd.VergunningStatus.ToString())
-                        { CmbVergunning.SelectedItem = i; break; }
-                    ChkArchWaarde.IsChecked = sd.ArchitecturaleWaarde;
-                    foreach (ComboBoxItem i in CmbToegang.Items)
-                        if (i.Content.ToString() == sd.Toegankelijkheid.ToString())
-                        { CmbToegang.SelectedItem = i; break; }
-                    ChkBeziens.IsChecked  = sd.Bezienswaardigheid;
-                    ChkInfobord.IsChecked = sd.InfoBordVoorzien;
+                switch (d)
+                {
+                    case StadDetail sd:
+                        GbStads.Visibility = Visibility.Visible;
+                        foreach (ComboBoxItem i in CmbVergunning.Items)
+                            if (i.Content.ToString() == sd.VergunningStatus.ToString())
+                            { CmbVergunning.SelectedItem = i; break; }
+                        ChkArchWaarde.IsChecked = sd.ArchitecturaleWaarde;
+                        foreach (ComboBoxItem i in CmbToegang.Items)
+                            if (i.Content.ToString() == sd.Toegankelijkheid.ToString())
+                            { CmbToegang.SelectedItem = i; break; }
+                        ChkBeziens.IsChecked = sd.Bezienswaardigheid;
+                        ChkInfobord.IsChecked = sd.InfoBordVoorzien;
 
-                    _partnerRijen = _project.Partners
-                        .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving, "algemeen"))
-                        .ToList();
-                    if (sd.Bouwfirmas != null)
-                        foreach (var b in sd.Bouwfirmas)
-                            _partnerRijen.Add(new PartnerRij(b, "bouwfirma", "bouwfirma"));
-                    break;
+                        _partnerRijen = _project.Partners
+                            .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving, "algemeen"))
+                            .ToList();
+                        if (sd.Bouwfirmas != null)
+                            foreach (var b in sd.Bouwfirmas)
+                                _partnerRijen.Add(new PartnerRij(b, "bouwfirma", "bouwfirma"));
+                        break;
 
-                case GroenDetail gd:
-                    GbGroen.Visibility     = Visibility.Visible;
-                    TxtOppervlakte.Text    = gd.Oppervlakte.ToString();
-                    TxtBioScore.Text       = gd.Biodiversiteit.ToString();
-                    TxtWandelpaden.Text    = gd.Wandelpaden.ToString();
-                    TxtFaciliteiten.Text   = gd.Faciliteiten;
-                    ChkToerRoute.IsChecked = gd.ToeristischeRoute;
-                    TxtBeoordeling.Text    = gd.Beoordeling.ToString();
+                    case GroenDetail gd:
+                        GbGroen.Visibility = Visibility.Visible;
+                        TxtOppervlakte.Text = gd.Oppervlakte.ToString();
+                        TxtBioScore.Text = gd.Biodiversiteit.ToString();
+                        TxtWandelpaden.Text = gd.Wandelpaden.ToString();
+                        TxtFaciliteiten.Text = gd.Faciliteiten;
+                        ChkToerRoute.IsChecked = gd.ToeristischeRoute;
+                        TxtBeoordeling.Text = gd.Beoordeling.ToString();
 
-                    _partnerRijen = _project.Partners
-                        .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving))
-                        .ToList();
-                    break;
+                        _partnerRijen = _project.Partners
+                            .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving))
+                            .ToList();
+                        break;
 
-                case WonenDetail wd:
-                    GbInno.Visibility        = Visibility.Visible;
-                    TxtEenheden.Text         = wd.AantalEenheden.ToString();
-                    TxtWoningTypes.Text      = wd.Woningtypes;
-                    ChkRondleiding.IsChecked = wd.Rondleidingen;
-                    ChkShowwoning.IsChecked  = wd.Showwoningen;
-                    TxtInnoScore.Text        = wd.ArchitecturaleScore.ToString();
-                    ChkErfgoed.IsChecked     = wd.ErfgoedSamenwerking;
+                    case WonenDetail wd:
+                        GbInno.Visibility = Visibility.Visible;
+                        TxtEenheden.Text = wd.AantalEenheden.ToString();
+                        TxtWoningTypes.Text = wd.Woningtypes;
+                        ChkRondleiding.IsChecked = wd.Rondleidingen;
+                        ChkShowwoning.IsChecked = wd.Showwoningen;
+                        TxtInnoScore.Text = wd.ArchitecturaleScore.ToString();
+                        ChkErfgoed.IsChecked = wd.ErfgoedSamenwerking;
 
-                    _partnerRijen = _project.Partners
-                        .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving))
-                        .ToList();
-                    break;
+                        _partnerRijen = _project.Partners
+                            .Select(pp => new PartnerRij(pp.Partner, pp.RolBeschrijving))
+                            .ToList();
+                        break;
+                }
             }
-
             RefreshGekoppeld();
         }
 
@@ -281,11 +283,14 @@ namespace WpfAppProjectBeheeder
                 _project.Locatie.Huisnummer = TxtHuisNummer.Text;
                 _project.Locatie.Wijk       = TxtWijk.Text;
 
+                int? bestaandStadId = _project.Details.OfType<StadDetail>().FirstOrDefault()?.Id;
+                int? bestaandGroenId = _project.Details.OfType<GroenDetail>().FirstOrDefault()?.Id;
+                int bestaandWonenId = _project.Details.OfType<WonenDetail>().FirstOrDefault()?.Id ?? 0;
                 _project.Details.Clear();
                 if (IsStads)
                 {
                     var sd = new StadDetail(
-                        _project.Details.OfType<StadDetail>().FirstOrDefault()?.Id,
+                        bestaandStadId,
                         Enum.Parse<VergunningStatus>(((ComboBoxItem)CmbVergunning.SelectedItem).Content.ToString()!),
                         ChkArchWaarde.IsChecked == true,
                         Enum.Parse<Toegankelijkheid>(((ComboBoxItem)CmbToegang.SelectedItem).Content.ToString()!),
@@ -302,7 +307,7 @@ namespace WpfAppProjectBeheeder
                 if (IsGroen)
                 {
                     _project.Details.Add(new GroenDetail(
-                        _project.Details.OfType<GroenDetail>().FirstOrDefault()?.Id,
+                        bestaandGroenId,
                         decimal.Parse(TxtOppervlakte.Text), int.Parse(TxtBioScore.Text),
                         int.Parse(TxtWandelpaden.Text), TxtFaciliteiten.Text,
                         ChkToerRoute.IsChecked == true, int.Parse(TxtBeoordeling.Text)));
@@ -313,7 +318,7 @@ namespace WpfAppProjectBeheeder
                 if (IsWonen)
                 {
                     _project.Details.Add(new WonenDetail(
-                        _project.Details.OfType<WonenDetail>().FirstOrDefault()?.Id ?? 0,
+                        bestaandWonenId,
                         int.Parse(TxtEenheden.Text), TxtWoningTypes.Text,
                         ChkRondleiding.IsChecked == true, ChkShowwoning.IsChecked == true,
                         int.Parse(TxtInnoScore.Text), ChkErfgoed.IsChecked == true));
