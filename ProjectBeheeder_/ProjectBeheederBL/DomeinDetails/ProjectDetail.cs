@@ -8,6 +8,6 @@ namespace ProjectBeheerderBL.DomeinDetails
 {
     public abstract class ProjectDetail
     {
+        public abstract string TypeNaam { get; }
     }
 }
-  

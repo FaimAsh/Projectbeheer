@@ -1,13 +1,42 @@
-﻿<Window x:Class="WpfAppProjectBeheeder.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfAppProjectBeheeder"
-        mc:Ignorable="d"
-        Language="nl-BE"
-        Title="MainWindow" Height="640" Width="1060"
-        WindowStartupLocation="CenterScreen">
+﻿<Window x:Class="WpfAppProjectBeheeder.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:WpfAppProjectBeheeder" mc:Ignorable="d" Language="nl-BE" Title="MainWindow" Height="640" Width="1060" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <!-- ===== COLORS ===== -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#2E86C1"/>
+        <SolidColorBrush x:Key="SecondaryColor" Color="#EAF2F8"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#28B463"/>
+        <SolidColorBrush x:Key="DangerColor" Color="#CB4335"/>
+        <!-- ===== BUTTON STYLE ===== -->
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <!-- ===== GROUPBOX STYLE ===== -->
+        <Style TargetType="GroupBox">
+            <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Margin" Value="0 0 0 8"/>
+        </Style>
+        <!-- ===== DATAGRID STYLE ===== -->
+        <Style TargetType="DataGrid">
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#F4F6F7"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+        </Style>
+        <!-- ===== DATAGRID HEADER STYLE ===== -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#2E86C1"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="6"/>
+        </Style>
+    </Window.Resources>
     <DockPanel Margin="10">
         <GroupBox DockPanel.Dock="Top" Header="Zoeken &amp; Filteren" Margin="0 0 0 8">
             <Grid Margin="6">
@@ -28,58 +57,50 @@
                     <RowDefinition Height="35"/>
                     <RowDefinition Height="35"/>
                 </Grid.RowDefinitions>
-                    <Label Grid.Column="0" Content="Type:" Margin="50 0 0 0" VerticalAlignment="Center"/>
+                <Label Grid.Column="0" Content="Type:" Margin="50 0 0 0" VerticalAlignment="Center"/>
                 <Label Grid.Column="1" Content="StadsProject:" Margin="0 0 0 0" VerticalAlignment="Center"/>
                 <CheckBox Grid.Column="1" Grid.Row="0" Name="ChkBowfirma" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
                 <Label Grid.Column="1" Grid.Row="1" Content="GroenProject:" Margin="0 0 0 0" VerticalAlignment="Center"/>
                 <CheckBox Grid.Column="1" Grid.Row="1" Name="ChkBuwfirma" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
                 <Label Grid.Column="1" Grid.Row="2" Content="WoonProject:" Margin="0 0 0 0" VerticalAlignment="Center"/>
                 <CheckBox Grid.Column="1" Grid.Row="2" Name="ChkBouwfirma" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
-
-                    <Label Grid.Column="2" Content="Status:" VerticalAlignment="Center"/>
+                <Label Grid.Column="2" Content="Status:" VerticalAlignment="Center"/>
                 <Label Grid.Column="3" Content="Planning:" Margin="0 0 0 0" VerticalAlignment="Center"/>
                 <CheckBox Grid.Column="3" Grid.Row="0" Name="ChkBowfirm" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
                 <Label Grid.Column="3" Grid.Row="1" Content="Uitvoering:" Margin="0 0 0 0" VerticalAlignment="Center"/>
                 <CheckBox Grid.Column="3" Grid.Row="1" Name="ChkBuwfira" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
                 <Label Grid.Column="3" Grid.Row="2" Content="Afgerond:" Margin="0 0 0 0" VerticalAlignment="Center"/>
                 <CheckBox Grid.Column="3" Grid.Row="2" Name="ChkBouwfrma" Margin="60 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center" IsChecked="True"/>
-
-                    <Label Grid.Column="4" Content="Wijk:" VerticalAlignment="Center"/>
+                <Label Grid.Column="4" Content="Wijk:" VerticalAlignment="Center"/>
                 <TextBox Grid.Column="5" Name="TxtWijk" Width="100" Margin="0 0 10 0" VerticalAlignment="Center"/>
-
-                    <Label Grid.Row="1" Grid.Column="4" Content="Partner:" VerticalAlignment="Center"/>
+                <Label Grid.Row="1" Grid.Column="4" Content="Partner:" VerticalAlignment="Center"/>
                 <TextBox Grid.Row="1" Grid.Column="5" Name="TxtPartner" Width="100" Margin="0 0 10 0" VerticalAlignment="Center"/>
-                    <Label Grid.Column="6" Content="Van:" VerticalAlignment="Center"/>
+                <Label Grid.Column="6" Content="Van:" VerticalAlignment="Center"/>
                 <DatePicker Grid.Column="7" Name="DpVan" Width="120" Margin="0 0 6 0" VerticalAlignment="Center" Grid.ColumnSpan="1"/>
-                    <Label Grid.Row="1" Grid.Column="6" Content="Tot:" VerticalAlignment="Center"/>
+                <Label Grid.Row="1" Grid.Column="6" Content="Tot:" VerticalAlignment="Center"/>
                 <DatePicker Grid.Row="1" Grid.Column="7" Name="DpTot" Width="120" Margin="0 0 6 0" VerticalAlignment="Center" Grid.ColumnSpan="1"/>
                 <Button Grid.Column="11" Grid.Row="2" Content="Zoeken" Width="150" Click="Zoeken_Click"/>
                 <Button Grid.Column="9" Grid.Row="0" Content="Reset" Width="80" Height="35" Margin="0 0 0 0" Click="Reset_Click" Grid.RowSpan="2"/>
             </Grid>
         </GroupBox>
-        
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0 0 0 8" RenderTransformOrigin="0.729,0.709">
-            <Button Content="Nieuw"      Width="90" Click="NieuwProject_Click"/>
-            <Button Content="Wijzig"     Width="80" Margin="6 0" Click="WijzigProject_Click"/>
-            <Button Content="Verwijder"  Width="85" Click="VerwijderProject_Click"/>
-            <Button Content="Meer Info"     Width="85" Margin="6 0" Click="Info_Click"/>
-            <Button Content="Partners"   Width="90" Click="Partners_Click"/>
+            <Button Content="Nieuw" Width="90" Click="NieuwProject_Click" Background="{StaticResource AccentColor}"/>
+            <Button Content="Wijzig" Width="80" Margin="6 0" Click="WijzigProject_Click"/>
+            <Button Content="Verwijder" Width="85" Click="VerwijderProject_Click" Background="{StaticResource DangerColor}"/>
+            <Button Content="Meer Info" Width="85" Margin="6 0" Click="Info_Click"/>
+            <Button Content="Partners" Width="90" Click="Partners_Click"/>
             <Button Content="Export CSV" Width="90" Margin="16 0 0 0" Click="ExportCSV_Click"/>
             <Button Content="Export PDF" Width="90" Margin="6 0 0 0" Click="ExportPDF_Click"/>
         </StackPanel>
-
-        <DataGrid Name="DgProjecten" AutoGenerateColumns="False"
-                  IsReadOnly="True" SelectionMode="Extended"
-                  SelectionChanged="DgProjecten_SelectionChanged">
+        <DataGrid Name="DgProjecten" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Extended" SelectionChanged="DgProjecten_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
                 <DataGridTextColumn Header="Naam" Binding="{Binding Titel}" Width="3*"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="2*"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding DetailsSamengevat}" Width="2*"/>
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="2*"/>
-                <DataGridTextColumn Header="Wijk" Binding="{Binding Wijk}" Width="2*"/>
-                <DataGridTextColumn Header="Partner" Binding="{Binding Partner}" Width="2*"/>
+                <DataGridTextColumn Header="Wijk" Binding="{Binding Locatie.Wijk}" />
+                <DataGridTextColumn Header="Partner" Binding="{Binding PartnersSamengevat}" Width="2*"/>
                 <DataGridTextColumn Header="StartDatum" Binding="{Binding StartDatum, StringFormat=d}" Width="2*"/>
-                <DataGridTextColumn Header="EindDatum" Binding="{Binding EindDatum, StringFormat=d}" Width="2*"/>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

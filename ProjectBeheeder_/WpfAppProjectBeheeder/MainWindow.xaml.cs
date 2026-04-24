@@ -109,6 +109,7 @@ namespace WpfAppProjectBeheeder {
             TxtPartner.Clear();
             DpVan.SelectedDate = null;
             DpTot.SelectedDate = null;
+            LaadProjecten();
         }
 
         private void DgProjecten_SelectionChanged(object sender, SelectionChangedEventArgs e){ }
@@ -161,23 +162,37 @@ namespace WpfAppProjectBeheeder {
             }
         }
 
-               private void Info_Click(object sender, RoutedEventArgs e)
+        private void Info_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (DgProjecten.SelectedItem is not Project geselecteerd)
+                var geselecteerd = DgProjecten.SelectedItems.Cast<Project>().ToList();
+                if (geselecteerd.Count == 0)
                 {
+
                     MessageBox.Show("Selecteer eerst een project.");
                     return;
                 }
+<<<<<<< HEAD
 
                 Project compleetProject = _Beheerder.GeefProject(geselecteerd.Id);
                 new DetailProjectWindow(compleetProject).ShowDialog();
+=======
+                try
+                {
+                    var volledig = _Beheerder.GeefProject(geselecteerd.Id);
+                    var w = new DetailProjectWindow(volledig);
+                    if (w.ShowDialog() == true) LaadProjecten();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+>>>>>>> ddd2de1c9e019ef108a0ed9961975c048c786c24
             }
+
             catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            { MessageBox.Show(ex.Message); }
         }
 
         private void Partners_Click(object sender, RoutedEventArgs e)
@@ -209,8 +224,13 @@ namespace WpfAppProjectBeheeder {
 
             try
             {
+                List<Project> projectenvolledig = new List<Project>();
+                foreach (Project p in projecten)
+                {
+                    projectenvolledig.Add(_Beheerder.GeefProject(p.Id));
+                }
                 IFileWriter writer = new FileWriterCSV();
-                writer.Write(dlg.FileName, projecten);
+                writer.Write(dlg.FileName, projectenvolledig);
 
                 MessageBox.Show("CSV geëxporteerd.");
             }
@@ -245,8 +265,13 @@ namespace WpfAppProjectBeheeder {
 
             try
             {
+                List<Project> projectenvolledig = new List<Project>();
+                foreach(Project p in projecten)
+                {
+                   projectenvolledig.Add(_Beheerder.GeefProject(p.Id));
+                }
                 IFileWriter writer = new FileWriterPDF();
-                writer.Write(dlg.FileName, projecten);
+                writer.Write(dlg.FileName, projectenvolledig);
 
                 MessageBox.Show("PDF geëxporteerd.");
             }
