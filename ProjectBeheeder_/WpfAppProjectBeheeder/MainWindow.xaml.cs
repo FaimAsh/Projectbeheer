@@ -167,10 +167,20 @@ namespace WpfAppProjectBeheeder {
             {
                 if (DgProjecten.SelectedItem is not Project geselecteerd)
                 {
+
                     MessageBox.Show("Selecteer eerst een project.");
                     return;
                 }
-                new DetailProjectWindow(geselecteerd).ShowDialog();
+                try
+                {
+                    var volledig = _Beheerder.GeefProject(geselecteerd.Id);
+                    var w = new DetailProjectWindow(volledig);
+                    if (w.ShowDialog() == true) LaadProjecten();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             catch (Exception ex)
             {
@@ -207,8 +217,13 @@ namespace WpfAppProjectBeheeder {
 
             try
             {
+                List<Project> projectenvolledig = new List<Project>();
+                foreach (Project p in projecten)
+                {
+                    projectenvolledig.Add(_Beheerder.GeefProject(p.Id));
+                }
                 IFileWriter writer = new FileWriterCSV();
-                writer.Write(dlg.FileName, projecten);
+                writer.Write(dlg.FileName, projectenvolledig);
 
                 MessageBox.Show("CSV geëxporteerd.");
             }
@@ -243,8 +258,13 @@ namespace WpfAppProjectBeheeder {
 
             try
             {
+                List<Project> projectenvolledig = new List<Project>();
+                foreach(Project p in projecten)
+                {
+                   projectenvolledig.Add(_Beheerder.GeefProject(p.Id));
+                }
                 IFileWriter writer = new FileWriterPDF();
-                writer.Write(dlg.FileName, projecten);
+                writer.Write(dlg.FileName, projectenvolledig);
 
                 MessageBox.Show("PDF geëxporteerd.");
             }
